@@ -10,6 +10,20 @@ import sys
 SCRIPT_PATH, __ = os.path.split(sys.argv[0])
 
 
+def check_true(string):
+    """ Check if a true seems like a potentially true value
+
+    Return a boolean
+    """
+    print "String = " + string
+    string = string.lower()
+    print "string = " + string
+    if string in ['true', 'yes', '1', 'yep', 'yeah']:
+        return True
+    else:
+        return False
+
+
 def get_machines_config():
     """Load config file details into a named tuple """
 

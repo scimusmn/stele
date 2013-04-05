@@ -2,12 +2,12 @@
 
 """ Browser control system """
 
-from init import get_machines_config
+import time
+from init import get_machines_config, check_true
 from selenium import webdriver
 
-# We'll use these later
-from selenium.webdriver.common.keys import Keys
-import time
+# We'll use this later
+#from selenium.webdriver.common.keys import Keys
 
 CFG = get_machines_config()
 
@@ -25,7 +25,8 @@ def chrome_launch():
     options = webdriver.ChromeOptions()
     user_agent = '--user-agent="' + CFG['browser']['user_agent'] + '"'
     options.add_argument(user_agent)
-    if CFG['browser']['kiosk'] is True:
+
+    if check_true(CFG['browser']['kiosk']) is True:
         options.add_argument('--kiosk')
 
     # Launch Chrome in default location or with some alternate options
