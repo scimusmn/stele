@@ -3,7 +3,7 @@
 A control system for kiosked web browsers, built on top of Selenium, WebDriver, and Chrome.
 
 # Work in Progress
-This is an sketch and is not ready for production.
+This is a sketch and is not ready for production.
 
 # Installation
 ### 1. Install Python
