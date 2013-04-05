@@ -1,0 +1,5 @@
+# Browser details
+[browser]
+home_url: http://www.example.com
+kiosk: False
+user_agent: ""
