@@ -1,4 +1,4 @@
-<img style="float:right" alt="Image of a Maya stele at Copan" src="/media/copan.jpg" />
+<img align="right" alt="Image of a Maya stele at Copan" src="/media/copan.jpg" />
 # Stele
 A control system for kiosked web browsers, built on top of Selenium, WebDriver, and Chrome.
 
