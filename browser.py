@@ -16,7 +16,7 @@ def chrome_launch():
     """Launch the Chrome browser using Selenium and ChromeDriver
 
     This function launches Chrome with the CFG options and makes the
-    browser object (driver) gloabl so that this same browser instance
+    browser object (driver) global so that this same browser instance
     can be controlled by other functions based on other UDP messages
     """
     global driver
