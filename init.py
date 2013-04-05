@@ -14,7 +14,7 @@ def get_machines_config():
     """Load config file details into a named tuple """
 
     config = ConfigParser.ConfigParser()
-    config_file = SCRIPT_PATH + "/browser.cfg"
+    config_file = SCRIPT_PATH + "/cfg/browser.cfg"
     config.read(config_file)
 
     # TODO Cleanup these names
