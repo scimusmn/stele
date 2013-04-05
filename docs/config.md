@@ -21,6 +21,6 @@ Boolean. If True, Stele will launch Chrome with the --kiosk flag. This will make
     kiosk: True
 
 ### user_agent
-Replace the user agent with a custom string, using the Chrome --user-agent flag. This can be useful when custom web applications modify the theme of a site for specific custom kiosk viewers.
+Replace the user agent with a custom string, using the Chrome --user-agent flag. This is useful for identifying specific kiosks to custom web applications.
 
     user_agent: museum_kiosk computer_01
