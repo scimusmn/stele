@@ -1,5 +1,5 @@
-<img align="right" alt="Image of a Maya stele at Copan" src="/media/copan.png" />
 # Stele
+<img align="right" alt="Image of a Maya stele at Copan" src="/media/copan.png" />
 A control system for kiosked web browsers, built on top of Selenium, WebDriver, and Chrome.
 
 # Work in Progress
