@@ -48,8 +48,21 @@ def chrome_launch():
     driver.get(CFG['browser']['home_url'])
 
 
+def chrome_close():
+    """Exits the browser """
+    driver.close()
+
+
 def main():
+    """Launch the browser wait a bit then close
+
+    During development I'm just checking to see how the system opens and
+    operates. So I'm just launching an closing browser instances. This
+    obviously isn't how this will work in the long run.
+    """
     chrome_launch()
+    time.sleep(2)
+    chrome_close()
 
 
 if __name__ == '__main__':
