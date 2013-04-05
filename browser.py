@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 
-""" Browser control system """
+""" Browser control system for kiosks """
 
 import time
 import re
 from init import get_machines_config, check_true
 from selenium import webdriver
-
-# We'll use this later
-#from selenium.webdriver.common.keys import Keys
 
 CFG = get_machines_config()
 
