@@ -24,3 +24,15 @@ Boolean. If True, Stele will launch Chrome with the --kiosk flag. This will make
 Replace the user agent with a custom string, using the Chrome --user-agent flag. This is useful for identifying specific kiosks to custom web applications.
 
     user_agent: museum_kiosk computer_01
+
+### restrict_domain
+Prevent the user from navigating away from a specific URL or general domain. This only works if the restricted_domain_regex is set as well.
+
+    restrict_domain: True
+
+### restricted_domain_regex
+This is only evaluated if restrict_domain is set to True.
+
+Define a walled garden within which the user is allowed to browse. Ever X seconds the current URL is compared against this regular expression. If it fails the user will be directed back to the homepage.
+
+    restricted_domain_regex: .*google.com.*
