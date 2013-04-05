@@ -5,9 +5,9 @@ The config file should be located at cfg/browser.cfg
 
 ## Settings
 The config file consists of key value pairs like this:
-```
-key: value
-```
+
+    key: value
+
 Documention below explains each pair with an example configuration. Some settings activate others.
 
 ### home_url
