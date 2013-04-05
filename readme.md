@@ -22,7 +22,10 @@ $ git clone git@github.com:scimusmn/stele.git
 ```
 
 ### 5. Configure
-If you need to change any of the configurations you can edit the browser.cfg file, but some elements are still hard coded into the browser.py file. So this config isn't that changeable yet.
+```bash
+$ cp cfg/browser.cfg.default cfg/browser.cfg
+```
+Edit the config file to meet your needs.
 
 ### 6. Run chrome_kiosk
 ```bash
