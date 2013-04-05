@@ -88,9 +88,11 @@ def main():
     obviously isn't how this will work in the long run.
     """
     chrome_launch()
-    watch_browser(5)
-    time.sleep(2)
-    chrome_close()
+
+    if check_true(CFG['browser']['restrict_domain']) is True:
+        watch_browser(5)
+    #time.sleep(2)
+    #chrome_close()
 
 
 if __name__ == '__main__':
