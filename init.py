@@ -11,9 +11,11 @@ SCRIPT_PATH, __ = os.path.split(sys.argv[0])
 
 
 def check_true(string):
-    """ Check if a true seems like a potentially true value
+    """ Check if an English string seems to contain truth.
 
     Return a boolean
+
+    Default to returning a False value unless truth is found.
     """
     string = string.lower()
     if string in ['true', 'yes', '1', 'yep', 'yeah']:
