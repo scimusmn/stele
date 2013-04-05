@@ -3,3 +3,9 @@
 home_url: http://www.example.com
 kiosk: False
 user_agent: ""
+restrict_domain: False
+restricted_domain_regex: .*example.com.*
+#blacklist:
+    #http://www.elephants.com
+    #http://www.horses.com
+    #http://www.crawfish.com

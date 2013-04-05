@@ -3,6 +3,7 @@
 """ Browser control system """
 
 import time
+import re
 from init import get_machines_config, check_true
 from selenium import webdriver
 
@@ -48,6 +49,32 @@ def chrome_launch():
     driver.get(CFG['browser']['home_url'])
 
 
+def watch_browser(period):
+    """Poll the browser every 'period' and execute checks
+
+    TODO - Add a duration check
+    """
+    print "Watching the browser"
+    while 1:
+        check_domain()
+        time.sleep(period)
+
+
+def check_domain():
+    """Check that you are on the specified domain
+
+    If the user navigates away return to the homepage in the CFG.
+    """
+    current_url = driver.current_url
+    restricted_domain_regex = str(CFG['browser']['restricted_domain_regex'])
+    match = re.search(restricted_domain_regex, current_url)
+    if match:
+        pass
+    else:
+        # TODO write to a log here, so we can assess errant navigation
+        driver.get(CFG['browser']['home_url'])
+
+
 def chrome_close():
     """Exits the browser """
     driver.close()
@@ -61,6 +88,7 @@ def main():
     obviously isn't how this will work in the long run.
     """
     chrome_launch()
+    watch_browser(5)
     time.sleep(2)
     chrome_close()
 
