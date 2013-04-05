@@ -25,7 +25,7 @@ $ git clone git@github.com:scimusmn/stele.git
 ```bash
 $ cp cfg/browser.cfg.default cfg/browser.cfg
 ```
-Edit the config file to meet your needs.
+Read the [config documentation](https://github.com/scimusmn/stele/blob/master/docs/config.md) to learn how to setup your kiosk.
 
 ### 6. Run chrome_kiosk
 ```bash
