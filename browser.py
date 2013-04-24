@@ -21,8 +21,9 @@ def chrome_launch():
 
     # Chrome startup options
     options = webdriver.ChromeOptions()
-    user_agent = '--user-agent="' + CFG['browser']['user_agent'] + '"'
-    options.add_argument(user_agent)
+    if CFG['browser']['user_agent']:
+        user_agent = '--user-agent="' + CFG['browser']['user_agent'] + '"'
+        options.add_argument(user_agent)
 
     if check_true(CFG['browser']['kiosk']) is True:
         options.add_argument('--kiosk')
