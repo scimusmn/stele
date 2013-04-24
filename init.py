@@ -5,6 +5,7 @@
 import ConfigParser
 import collections
 import os
+import subprocess
 import sys
 
 SCRIPT_PATH, __ = os.path.split(sys.argv[0])
@@ -38,9 +39,24 @@ def get_machines_config():
                'kiosk': config.get("browser", "kiosk"),
                'user_agent': config.get("browser", "user_agent"),
                'restrict_domain': config.get("browser", "restrict_domain"),
-               'restricted_domain_regex': config.get("browser", "restricted_domain_regex"),
-              }
+               'restricted_domain_regex':
+               config.get("browser", "restricted_domain_regex")}
 
     cfg = {'browser': browser}
 
     return cfg
+
+
+def execute_shell_command(command):
+    """Parse shell commands and use subprocess to execute them
+
+    Args:
+        commands: a string of a command to be wrapped in the
+        Python subprocess calls
+    Returns:
+        Returns a tuple of the stdout and stderr
+    """
+    process = subprocess.Popen(command.split(' '),
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+    return process.communicate()
