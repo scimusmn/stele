@@ -11,7 +11,7 @@ from init import get_machines_config
 CFG = get_machines_config()
 
 
-def send_zabbix_message(key, value):
+def send_message(key, value):
     """Send Zabbix a message
 
     Args:

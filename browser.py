@@ -6,7 +6,7 @@ import time
 import re
 from init import get_machines_config, check_true
 from selenium import webdriver
-from zabbix import send_zabbix_message
+from zabbix import send_message
 
 CFG = get_machines_config()
 
@@ -72,7 +72,7 @@ def check_domain():
         # TODO write to a log here, so we can assess errant navigation
         driver.get(CFG['browser']['home_url'])
         # TODO actually pass the URL navigated to, to Zabbix
-        send_zabbix_message('nav.out_of_bounds', 'URL')
+        zabbix.send_message('nav.out_of_bounds', 'URL')
 
 
 def chrome_close():
