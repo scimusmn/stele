@@ -40,7 +40,10 @@ def get_machines_config():
                'user_agent': config.get("browser", "user_agent"),
                'restrict_domain': config.get("browser", "restrict_domain"),
                'restricted_domain_regex':
-               config.get("browser", "restricted_domain_regex")}
+               config.get("browser", "restricted_domain_regex"),
+               'zabbix': config.get("browser", "zabbix"),
+               'zabbix_agentd_cfg': config.get("browser", "zabbix_agentd_cfg"),
+               'zabbix_hostname': config.get("browser", "zabbix_hostname")}
 
     cfg = {'browser': browser}
 
