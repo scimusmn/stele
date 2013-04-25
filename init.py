@@ -61,5 +61,6 @@ def execute_shell_command(command):
     """
     process = subprocess.Popen(command.split(' '),
                                stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
+                               stderr=subprocess.PIPE,
+                               shell=True)
     return process.communicate()
