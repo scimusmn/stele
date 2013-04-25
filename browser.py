@@ -69,10 +69,9 @@ def check_domain():
     if match:
         pass
     else:
+        send_message('nav.out_of_bounds', current_url)
         # TODO write to a log here, so we can assess errant navigation
         driver.get(CFG['browser']['home_url'])
-        # TODO actually pass the URL navigated to, to Zabbix
-        send_message('nav.out_of_bounds', 'URL')
 
 
 def chrome_close():
