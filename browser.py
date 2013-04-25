@@ -69,7 +69,8 @@ def check_domain():
     if match:
         pass
     else:
-        send_message('nav.out_of_bounds', current_url)
+        send_message('nav.out_of_bounds_event', 1)
+        send_message('nav.out_of_bounds_url', current_url)
         # TODO write to a log here, so we can assess errant navigation
         driver.get(CFG['browser']['home_url'])
 
