@@ -5,6 +5,9 @@ kiosk: False
 user_agent: ""
 restrict_domain: False
 restricted_domain_regex: .*example.com.*
+zabbix: True
+zabbix_agentd_cfg: /etc/zabbix/zabbix_agentd.conf
+zabbix_hostname: example-machine
 #blacklist:
     #http://www.elephants.com
     #http://www.horses.com
