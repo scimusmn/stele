@@ -9,7 +9,7 @@ def install():
     """Install the Stele kiosk browser system"""
     cfg_src = 'cfg/browser.cfg.default'
     cfg_dst = 'cfg/browser.cfg'
-    if not os.path.exists(cfg_src, cfg_dst):
+    if not os.path.exists(cfg_dst):
         try:
             shutil.copy(cfg_src, cfg_dst)
             print 'The config file is ready for modification.'
