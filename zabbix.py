@@ -28,7 +28,7 @@ def send_message(key, value):
         key,
         value)
 
-    print
+    print 'Command is = ' + command
     output, error = init.execute_shell_command(command)
     if error != '':
         print "There was a problem: %s" % error
