@@ -22,7 +22,7 @@ def send_message(key, value):
         A boolean indicating if the commands were sent with (1) or
         without (0) any errors.
     """
-    command = 'zabbix_sender -c %s -s %s -k %s -o %d' % (
+    command = 'zabbix_sender -c %s -s %s -k %s -o %s' % (
         CFG['browser']['zabbix_agentd_cfg'],
         CFG['browser']['zabbix_hostname'],
         key,
