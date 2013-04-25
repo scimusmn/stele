@@ -6,4 +6,7 @@ import shutil
 
 def install():
     """Install the Stele kiosk browser system"""
-    shutil.copy('cfg/browser.cfg.default', 'cfg/browser.cfg')
+    try:
+        shutil.copy('cfg/browser.cfg.default', 'cfg/browser.cfg')
+    except:
+        print 'File was not copied.'
