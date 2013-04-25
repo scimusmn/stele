@@ -1,12 +1,12 @@
-import init
-import time
-
 """Zabbix notification tools
 
 Zabbix is a network and application monitorng tool. We use it to oversee the
 operations on multiple kiosks. These functions allow us to send Zabbix
 status updates about the kiosk operations for central monitoring.
 """
+
+import init
+import time
 
 
 def send_zabbix_message(command_type):
