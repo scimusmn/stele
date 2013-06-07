@@ -3,7 +3,7 @@
 home_url: http://www.example.com
 kiosk: False
 user_agent: ""
-ssl: False
+ignore_ssl_warning: False
 restrict_domain: False
 restricted_domain_regex: .*example.com.*
 #blacklist:
