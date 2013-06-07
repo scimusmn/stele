@@ -27,9 +27,6 @@ def chrome_launch():
     if check_true(CFG['browser']['kiosk']) is True:
         options.add_argument('--kiosk')
 
-    if check_true(CFG['browser']['ignore_ssl_warning']) is True:
-        options.add_argument('--ignore-certificate-errors')
-
     # Launch Chrome in default location or with some alternate options
     # for common Windows paths
     try:
