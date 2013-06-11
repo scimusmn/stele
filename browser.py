@@ -27,6 +27,8 @@ def chrome_launch():
     if check_true(CFG['browser']['kiosk']) is True:
         options.add_argument('--kiosk')
 
+    options.add_argument('--allow-file-access-from-files')
+
     # Launch Chrome in default location or with some alternate options
     # for common Windows paths
     try:
