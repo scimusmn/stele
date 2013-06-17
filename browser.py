@@ -28,6 +28,7 @@ def chrome_launch():
         options.add_argument('--kiosk')
 
     options.add_argument('--allow-file-access-from-files')
+    options.add_argument('--enable-logging --v=1')
 
     # Launch Chrome in default location or with some alternate options
     # for common Windows paths
