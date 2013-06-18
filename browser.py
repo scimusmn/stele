@@ -6,9 +6,11 @@ import time
 import re
 from init import get_machines_config, check_true
 from selenium import webdriver
-
 CFG = get_machines_config()
 
+if check_true(CFG['browser']['delay']) is True:
+  from time import sleep
+  sleep(20)
 
 def chrome_launch():
     """Launch the Chrome browser using Selenium and ChromeDriver

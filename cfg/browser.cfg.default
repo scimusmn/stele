@@ -1,5 +1,6 @@
 # Browser details
 [browser]
+delay: False
 home_url: http://www.example.com
 kiosk: False
 user_agent: ""

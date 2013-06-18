@@ -34,7 +34,8 @@ def get_machines_config():
     # TODO Cleanup these names
     cfg = collections.namedtuple('Config', ['key', 'value'])
 
-    browser = {'home_url': config.get("browser", "home_url"),
+    browser = {'delay': config.get("browser", "delay"),
+               'home_url': config.get("browser", "home_url"),
                'kiosk': config.get("browser", "kiosk"),
                'user_agent': config.get("browser", "user_agent"),
                'restrict_domain': config.get("browser", "restrict_domain"),
