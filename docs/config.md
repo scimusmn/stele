@@ -13,6 +13,8 @@ Documention below explains each pair with an example configuration. Some setting
 ### delay
 Boolean. If True, Stele will pause for 3 minutes before launching Chrome. This is useful when we run a local webserver which needs to start up before loading the kiosk start page.
 
+    delay: True
+
 ### home_url
 The homepage to load when the browser boots.
 
