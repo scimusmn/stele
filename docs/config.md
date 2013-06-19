@@ -10,6 +10,9 @@ The config file consists of key value pairs like this:
 
 Documention below explains each pair with an example configuration. Some settings activate others.
 
+### delay
+Boolean. If True, Stele will pause for 3 minutes before launching Chrome. This is useful when we run a local webserver which needs to start up before loading the kiosk start page.
+
 ### home_url
 The homepage to load when the browser boots.
 
