@@ -29,6 +29,10 @@ def chrome_launch():
     if check_true(CFG['browser']['kiosk']) is True:
         options.add_argument('--kiosk')
 
+    # TODO - Make sure this is the same flag added onto the Maya PCs
+    if check_true(CFG['browser']['touch']) is True:
+        options.add_argument('--touch-events')
+
     options.add_argument('--allow-file-access-from-files')
     options.add_argument('--enable-logging --v=1')
 

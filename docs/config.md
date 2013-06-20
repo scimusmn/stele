@@ -21,12 +21,17 @@ The homepage to load when the browser boots.
     home_url: http://www.smm.org
 
 ### kiosk
-Boolean. If True, Stele will launch Chrome with the --kiosk flag. This will make Chrome full screen and also prevent some things like the Windows bar OS X dock from displaying, depending on you OS.
+Boolean. If True, Stele will launch Chrome with the `--kiosk` flag. This will make Chrome full screen and also prevent some things like the Windows bar OS X dock from displaying, depending on you OS.
 
     kiosk: True
 
+### touch 
+Boolean. If True, Stele will launch Chrome with the `--touch-events` flag. This enables support for touch events.
+
+    touch: True
+    
 ### user_agent
-Replace the user agent with a custom string, using the Chrome --user-agent flag. This is useful for identifying specific kiosks to custom web applications.
+Replace the user agent with a custom string, using the Chrome `--user-agent` flag. This is useful for identifying specific kiosks to custom web applications.
 
     user_agent: museum_kiosk computer_01
 

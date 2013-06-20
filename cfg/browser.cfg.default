@@ -3,6 +3,7 @@
 delay: False
 home_url: http://www.example.com
 kiosk: False
+touch: False
 user_agent: ""
 restrict_domain: False
 restricted_domain_regex: .*example.com.*

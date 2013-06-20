@@ -37,6 +37,7 @@ def get_machines_config():
     browser = {'delay': config.get("browser", "delay"),
                'home_url': config.get("browser", "home_url"),
                'kiosk': config.get("browser", "kiosk"),
+               'touch': config.get("browser", "touch"),
                'user_agent': config.get("browser", "user_agent"),
                'restrict_domain': config.get("browser", "restrict_domain"),
                'restricted_domain_regex': config.get("browser", "restricted_domain_regex"),
