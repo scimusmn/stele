@@ -9,8 +9,7 @@ from selenium import webdriver
 CFG = get_machines_config()
 
 if check_true(CFG['browser']['delay']) is True:
-  from time import sleep
-  sleep(180)
+    time.sleep(180)
 
 
 if check_true(CFG['browser']['custom_check']) is True:
