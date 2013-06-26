@@ -5,6 +5,8 @@ home_url: http://www.example.com
 kiosk: False
 touch: False
 user_agent: ""
+custom_check: False
+custom_check_period: 5
 restrict_domain: False
 restricted_domain_regex: .*example.com.*
 #blacklist:
