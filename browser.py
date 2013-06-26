@@ -9,6 +9,15 @@ from selenium import webdriver
 
 CFG = get_machines_config()
 
+if check_true(CFG['browser']['custom_check']) is True:
+    from custom import custom_check
+
+
+def header(txt):
+    """Decorate a string to make it stand out as a header. """
+    wrapper = "------------------------------------------------------"
+    return wrapper + "\n" + txt + "\n" + wrapper
+
 
 def chrome_launch():
     """Launch the Chrome browser using Selenium and ChromeDriver
@@ -44,6 +53,20 @@ def chrome_launch():
 
     # Visit the homepage
     driver.get(CFG['browser']['home_url'])
+
+
+def check_browser(period):
+    """Run custom checks on the browser """
+    counter = 0
+    print header('Running custom checks')
+    print 'Parent custom checkes will be run every %d seconds' % period
+    while 1:
+        base_handle = driver.current_window_handle
+        check_counter = custom_check(CFG, driver, counter, base_handle)
+        counter = check_counter
+        counter += 1
+        print counter
+        time.sleep(period)
 
 
 def watch_browser(period):
@@ -84,10 +107,16 @@ def main():
     operates. So I'm just launching an closing browser instances. This
     obviously isn't how this will work in the long run.
     """
+    print 'Launching Chrome'
     chrome_launch()
 
-    if check_true(CFG['browser']['restrict_domain']) is True:
-        watch_browser(5)
+    if check_true(CFG['browser']['custom_check']) is True:
+        period = float(CFG['browser']['custom_check_period'])
+        check_browser(period)
+
+    #if check_true(CFG['browser']['restrict_domain']) is True:
+        #watch_browser(5)
+
     #time.sleep(2)
     #chrome_close()
 
