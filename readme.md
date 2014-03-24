@@ -2,9 +2,6 @@
 <img align="right" alt="Image of a Maya stele at Copan" src="/media/copan.png" />
 A control system for kiosked web browsers, built on top of Selenium, WebDriver, and Chrome.
 
-### Work in Progress
-This is a sketch and is not ready for production.
-
 ### Installation
 #### 1. Install Python
 #### 2. Install the Selenium Python wrapper
