@@ -102,6 +102,9 @@ def check_domain():
         pass
     else:
         # TODO write to a log here, so we can assess errant navigation
+        print 'sending you back home'
+        print 'regex' + restricted_domain_regex
+        print 'current' + current_url
         driver.get(CFG['browser']['home_url'])
 
 
@@ -124,8 +127,8 @@ def main():
         period = float(CFG['browser']['custom_check_period'])
         check_browser(period)
 
-    #if check_true(CFG['browser']['restrict_domain']) is True:
-        #watch_browser(5)
+    if check_true(CFG['browser']['restrict_domain']) is True:
+        watch_browser(2)
 
     #time.sleep(2)
     #chrome_close()
