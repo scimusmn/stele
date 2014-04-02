@@ -112,6 +112,7 @@ def check_domain():
 
     If the user navigates away return to the homepage in the CFG.
     """
+    # TODO - Add exception handling here for the NoSuchWindowException
     current_url = driver.current_url
     restricted_domain_regex = str(CFG['browser']['restricted_domain_regex'])
     match = re.search(restricted_domain_regex, current_url)
