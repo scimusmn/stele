@@ -87,6 +87,7 @@ def watch_browser(period):
     print "Watching the browser"
     while 1:
         check_domain()
+        check_windows()
         time.sleep(period)
 
 
@@ -106,6 +107,25 @@ def check_domain():
         print 'RegEx' + restricted_domain_regex
         print 'Current' + current_url
         driver.get(CFG['browser']['home_url'])
+
+
+def check_windows():
+    """Check that you only have one window or tab open
+
+    For now we only ever want one window open.
+    This will check the window handles and close all but the first one.
+    TODO: Allow a customizable number of windows/tabs.
+    """
+    while len(driver.window_handles) != 1:
+        windows = driver.window_handles
+        first_window = windows[0]
+        last_window = windows[-1]
+        current_window = driver.current_window_handle
+
+        print 'You have %d windows open.' % len(windows)
+        driver.switch_to_window(last_window)
+        driver.close()
+        driver.switch_to_window(first_window)
 
 
 def chrome_close():
@@ -128,9 +148,8 @@ def main():
         check_browser(period)
 
     if check_true(CFG['browser']['restrict_domain']) is True:
-        watch_browser(2)
+        watch_browser(0)
 
-    #time.sleep(2)
     #chrome_close()
 
 
