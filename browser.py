@@ -102,9 +102,9 @@ def check_domain():
         pass
     else:
         # TODO write to a log here, so we can assess errant navigation
-        print 'sending you back home'
-        print 'regex' + restricted_domain_regex
-        print 'current' + current_url
+        print 'Sending you back home'
+        print 'RegEx' + restricted_domain_regex
+        print 'Current' + current_url
         driver.get(CFG['browser']['home_url'])
 
 
