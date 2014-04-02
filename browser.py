@@ -2,15 +2,31 @@
 
 """ Browser control system for kiosks """
 
+import glob
+import logging
+import logging.handlers
 import time
 import re
 from init import get_machines_config, check_true
 from selenium import webdriver
 CFG = get_machines_config()
 
+# Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+LOG_FILENAME = 'logging_rotatingfile_example.out'
+# Set up a specific logger with our desired output level
+my_logger = logging.getLogger('MyLogger')
+my_logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+# Add the log message handler to the logger
+handler = logging.handlers.RotatingFileHandler(
+    LOG_FILENAME, maxBytes=2000, backupCount=10)
+handler.setFormatter(formatter)
+my_logger.addHandler(handler)
+
 if check_true(CFG['browser']['delay']) is True:
     time.sleep(180)
-
 
 if check_true(CFG['browser']['custom_check']) is True:
     from custom import custom_check
@@ -84,7 +100,7 @@ def watch_browser(period):
 
     TODO - Add a duration check
     """
-    print "Watching the browser"
+    my_logger.debug('Watching the browser')
     while 1:
         check_domain()
         check_windows()
@@ -103,9 +119,8 @@ def check_domain():
         pass
     else:
         # TODO write to a log here, so we can assess errant navigation
-        print 'Sending you back home'
-        print 'RegEx' + restricted_domain_regex
-        print 'Current' + current_url
+        my_logger.info('URL out of bounds: %s' % current_url)
+        my_logger.debug('RegEx boundary pattern: %s' % restricted_domain_regex)
         driver.get(CFG['browser']['home_url'])
 
 
@@ -121,8 +136,7 @@ def check_windows():
         first_window = windows[0]
         last_window = windows[-1]
         current_window = driver.current_window_handle
-
-        print 'You have %d windows open.' % len(windows)
+        my_logger.info('Closing extra windows: %d windows open' % len(windows))
         driver.switch_to_window(last_window)
         driver.close()
         driver.switch_to_window(first_window)
@@ -140,7 +154,7 @@ def main():
     operates. So I'm just launching an closing browser instances. This
     obviously isn't how this will work in the long run.
     """
-    print 'Launching Chrome'
+    my_logger.info('Launching Chrome')
     chrome_launch()
 
     if check_true(CFG['browser']['custom_check']) is True:
