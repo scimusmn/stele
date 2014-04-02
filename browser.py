@@ -14,7 +14,7 @@ CFG = get_machines_config()
 # Logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-LOG_FILENAME = 'logging_rotatingfile_example.out'
+LOG_FILENAME = 'log/stele.log'
 # Set up a specific logger with our desired output level
 my_logger = logging.getLogger('MyLogger')
 my_logger.setLevel(logging.DEBUG)
