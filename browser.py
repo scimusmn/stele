@@ -83,8 +83,10 @@ def chrome_launch():
     # Visit the homepage
     driver.get(CFG['browser']['home_url'])
 
+    return driver
 
-def check_browser(period):
+
+def check_browser(driver, period):
     """Run custom checks on the browser """
     counter = 0
     print header('Running custom checks')
@@ -98,19 +100,19 @@ def check_browser(period):
         time.sleep(period)
 
 
-def watch_browser(period):
+def watch_browser(driver, period):
     """Poll the browser every 'period' and execute checks
 
     TODO - Add a duration check
     """
     my_logger.debug('Watching the browser')
     while 1:
-        check_domain()
-        check_windows()
+        check_domain(driver)
+        check_windows(driver)
         time.sleep(period)
 
 
-def check_domain():
+def check_domain(driver):
     """Check that you are on the specified domain
 
     If the user navigates away return to the homepage in the CFG.
@@ -128,7 +130,7 @@ def check_domain():
         driver.get(CFG['browser']['home_url'])
 
 
-def check_windows():
+def check_windows(driver):
     """Check that you only have one window or tab open
 
     For now we only ever want one window open.
@@ -139,14 +141,13 @@ def check_windows():
         windows = driver.window_handles
         first_window = windows[0]
         last_window = windows[-1]
-        current_window = driver.current_window_handle
         my_logger.warn('Closing extra windows: %d windows open' % len(windows))
         driver.switch_to_window(last_window)
         driver.close()
         driver.switch_to_window(first_window)
 
 
-def chrome_close():
+def chrome_close(driver):
     """Exits the browser """
     driver.close()
 
@@ -159,16 +160,20 @@ def main():
     obviously isn't how this will work in the long run.
     """
     my_logger.info('Launching Chrome')
-    chrome_launch()
+    driver = chrome_launch()
 
     if check_true(CFG['browser']['custom_check']) is True:
         period = float(CFG['browser']['custom_check_period'])
-        check_browser(period)
+        check_browser(driver, period)
 
     if check_true(CFG['browser']['restrict_domain']) is True:
-        watch_browser(0)
+        watch_browser(driver, 0)
 
-    #chrome_close()
+    #
+    # TODO
+    # Create a clean quit key command
+    #
+    #chrome_close(driver)
 
 
 if __name__ == '__main__':
