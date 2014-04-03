@@ -12,14 +12,15 @@ from selenium import webdriver
 #
 # Logging
 #
+# Init
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-LOG_FILENAME = 'log/stele.log'
-# Set up a specific logger with our desired output level
+# Logger settings
 my_logger = logging.getLogger('MyLogger')
 my_logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-# Add the log message handler to the logger
+# Logger handler
+LOG_FILENAME = 'log/stele.log'
 handler = logging.handlers.RotatingFileHandler(
     LOG_FILENAME, maxBytes=2000, backupCount=10)
 handler.setFormatter(formatter)
