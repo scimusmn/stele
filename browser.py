@@ -45,6 +45,10 @@ def chrome_launch():
     This function launches Chrome with the CFG options and makes the
     browser object (driver) global so that this same browser instance
     can be controlled by other functions based on other UDP messages
+
+    Returns:
+        The selenium webdriver object, which can be referenced
+        for browser control
     """
     global driver
 
@@ -85,7 +89,11 @@ def chrome_launch():
 
 
 def check_browser(driver, period):
-    """Run custom checks on the browser """
+    """Run custom checks on the browser
+
+    TODO: flesh this out. This doesn't currently do much, since I haven't
+    writen the custom_checks module
+    """
     counter = 0
     print 'Parent custom checkes will be run every %d seconds' % period
     while 1:
@@ -100,7 +108,12 @@ def check_browser(driver, period):
 def watch_browser(driver, period):
     """Poll the browser every 'period' and execute checks
 
-    TODO - Add a duration check
+    This function operates in an infinite loop.
+    TODO: add some KeyboardInterrupt exception handling.
+
+    Args:
+        driver: The selenium webdriver object
+        period: A string indicating how long to wait every loop
     """
     my_logger.debug('Watching the browser')
     while 1:
@@ -113,6 +126,9 @@ def check_domain(driver):
     """Check that you are on the specified domain
 
     If the user navigates away return to the homepage in the CFG.
+
+    Args:
+        driver: The selenium webdriver object
     """
     # TODO - Add exception handling here for the NoSuchWindowException
 
@@ -147,6 +163,9 @@ def check_windows(driver):
     For now we only ever want one window open.
     This will check the window handles and close all but the first one.
     TODO: Allow a customizable number of windows/tabs.
+
+    Args:
+        driver: The selenium webdriver object
     """
     while len(driver.window_handles) != 1:
         windows = driver.window_handles
