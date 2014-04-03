@@ -3,7 +3,7 @@
 """ Browser control system for kiosks """
 
 import logging
-import logging.handlers
+from logging.handlers import TimedRotatingFileHandler
 import time
 import re
 from init import get_machines_config, check_true
@@ -17,11 +17,15 @@ from selenium import webdriver
 LOG_FILENAME = 'log/stele.log'
 my_logger = logging.getLogger(__name__)
 my_logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
-# Logger handler
-handler = logging.handlers.RotatingFileHandler(
-    LOG_FILENAME, maxBytes=2000, backupCount=10)
+# Rotate logs daily. Keep 30 days.
+handler = TimedRotatingFileHandler(
+    LOG_FILENAME,
+    when="d",
+    interval=1,
+    backupCount=30)
+
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 handler.setFormatter(formatter)
 my_logger.addHandler(handler)
 
