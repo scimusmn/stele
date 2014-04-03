@@ -15,8 +15,8 @@ from selenium import webdriver
 
 # Logger settings
 LOG_FILENAME = 'log/stele.log'
-my_logger = logging.getLogger(__name__)
-my_logger.setLevel(logging.DEBUG)
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
 # Rotate logs daily. Keep 30 days.
 handler = TimedRotatingFileHandler(
@@ -27,7 +27,7 @@ handler = TimedRotatingFileHandler(
 
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 handler.setFormatter(formatter)
-my_logger.addHandler(handler)
+log.addHandler(handler)
 
 #
 # Custom imports based on configuration
@@ -115,7 +115,7 @@ def watch_browser(driver, period):
         driver: The selenium webdriver object
         period: A string indicating how long to wait every loop
     """
-    my_logger.debug('Watching the browser')
+    log.debug('Watching the browser')
     while 1:
         check_domain(driver)
         check_windows(driver)
@@ -142,7 +142,7 @@ def check_domain(driver):
         raise
     except Exception, e:
         print e
-        my_logger.warn('Couldn\'t get current URL', exc_info=True)
+        log.warn('Couldn\'t get current URL', exc_info=True)
         current_url = ''
 
     # Check current url against whitelist pattern
@@ -152,8 +152,8 @@ def check_domain(driver):
         pass
     else:
         # TODO write to a log here, so we can assess errant navigation
-        my_logger.warn('URL out of bounds: %s' % current_url)
-        my_logger.debug('RegEx boundary pattern: %s' % restricted_domain_regex)
+        log.warn('URL out of bounds: %s' % current_url)
+        log.debug('RegEx boundary pattern: %s' % restricted_domain_regex)
         driver.get(CFG['browser']['home_url'])
 
 
@@ -171,7 +171,7 @@ def check_windows(driver):
         windows = driver.window_handles
         first_window = windows[0]
         last_window = windows[-1]
-        my_logger.warn('Closing extra windows: %d windows open' % len(windows))
+        log.warn('Closing extra windows: %d windows open' % len(windows))
         driver.switch_to_window(last_window)
         driver.close()
         driver.switch_to_window(first_window)
