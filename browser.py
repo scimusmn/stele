@@ -12,15 +12,14 @@ from selenium import webdriver
 #
 # Logging
 #
-# Init
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+
 # Logger settings
-my_logger = logging.getLogger('MyLogger')
+LOG_FILENAME = 'log/stele.log'
+my_logger = logging.getLogger(__name__)
 my_logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+
 # Logger handler
-LOG_FILENAME = 'log/stele.log'
 handler = logging.handlers.RotatingFileHandler(
     LOG_FILENAME, maxBytes=2000, backupCount=10)
 handler.setFormatter(formatter)
@@ -124,7 +123,7 @@ def check_domain():
         pass
     else:
         # TODO write to a log here, so we can assess errant navigation
-        my_logger.info('URL out of bounds: %s' % current_url)
+        my_logger.warn('URL out of bounds: %s' % current_url)
         my_logger.debug('RegEx boundary pattern: %s' % restricted_domain_regex)
         driver.get(CFG['browser']['home_url'])
 
@@ -141,7 +140,7 @@ def check_windows():
         first_window = windows[0]
         last_window = windows[-1]
         current_window = driver.current_window_handle
-        my_logger.info('Closing extra windows: %d windows open' % len(windows))
+        my_logger.warn('Closing extra windows: %d windows open' % len(windows))
         driver.switch_to_window(last_window)
         driver.close()
         driver.switch_to_window(first_window)
