@@ -35,12 +35,6 @@ if check_true(CFG['browser']['custom_check']) is True:
     from custom import custom_check
 
 
-def header(txt):
-    """Decorate a string to make it stand out as a header. """
-    wrapper = "------------------------------------------------------"
-    return wrapper + "\n" + txt + "\n" + wrapper
-
-
 def chrome_launch():
     """Launch the Chrome browser using Selenium and ChromeDriver
 
@@ -89,7 +83,6 @@ def chrome_launch():
 def check_browser(driver, period):
     """Run custom checks on the browser """
     counter = 0
-    print header('Running custom checks')
     print 'Parent custom checkes will be run every %d seconds' % period
     while 1:
         base_handle = driver.current_window_handle
