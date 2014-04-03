@@ -118,7 +118,21 @@ def check_domain(driver):
     If the user navigates away return to the homepage in the CFG.
     """
     # TODO - Add exception handling here for the NoSuchWindowException
-    current_url = driver.current_url
+
+    # Try to get the current window's URL.
+    # We handle exceptions here, because web driver seems to loose the ability
+    # to handle the current window sporadically, especially after the system
+    # has closed previous windows.
+    try:
+        current_url = driver.current_url
+    except (SystemExit, KeyboardInterrupt):
+        raise
+    except Exception, e:
+        print e
+        my_logger.warn('Couldn\'t get current URL', exc_info=True)
+        current_url = ''
+
+    # Check current url against whitelist pattern
     restricted_domain_regex = str(CFG['browser']['restricted_domain_regex'])
     match = re.search(restricted_domain_regex, current_url)
     if match:
