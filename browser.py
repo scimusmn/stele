@@ -2,7 +2,6 @@
 
 """ Browser control system for kiosks """
 
-import glob
 import logging
 import logging.handlers
 import time
