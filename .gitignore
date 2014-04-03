@@ -1,5 +1,5 @@
 *.pyc
 cfg/*.cfg
 custom/*.py
-log/*.log
+log/*.log*
 chromedriver.log
