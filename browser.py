@@ -183,13 +183,9 @@ def chrome_close(driver):
 
 
 def main():
-    """Launch the browser wait a bit then close
+    """Launch the browser and run checks """
 
-    During development I'm just checking to see how the system opens and
-    operates. So I'm just launching an closing browser instances. This
-    obviously isn't how this will work in the long run.
-    """
-    my_logger.info('Launching Chrome')
+    log.info('Launching the browser')
     driver = chrome_launch()
 
     if check_true(CFG['browser']['custom_check']) is True:
