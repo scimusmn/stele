@@ -8,9 +8,10 @@ import time
 import re
 from init import get_machines_config, check_true
 from selenium import webdriver
-CFG = get_machines_config()
 
+#
 # Logging
+#
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 LOG_FILENAME = 'log/stele.log'
@@ -24,9 +25,12 @@ handler = logging.handlers.RotatingFileHandler(
 handler.setFormatter(formatter)
 my_logger.addHandler(handler)
 
+#
+# Custom imports based on configuration
+#
+CFG = get_machines_config()
 if check_true(CFG['browser']['delay']) is True:
     time.sleep(180)
-
 if check_true(CFG['browser']['custom_check']) is True:
     from custom import custom_check
 
