@@ -154,6 +154,7 @@ def check_domain(driver):
         # TODO write to a log here, so we can assess errant navigation
         log.warn('URL out of bounds: %s' % current_url)
         log.debug('RegEx boundary pattern: %s' % restricted_domain_regex)
+        log.debug('Current windows: %s' % driver.window_handles)
         driver.get(CFG['browser']['home_url'])
 
 
