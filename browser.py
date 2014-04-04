@@ -88,23 +88,6 @@ def chrome_launch():
     return driver
 
 
-def check_browser(driver, period):
-    """Run custom checks on the browser
-
-    TODO: flesh this out. This doesn't currently do much, since I haven't
-    writen the custom_checks module
-    """
-    counter = 0
-    print 'Parent custom checkes will be run every %d seconds' % period
-    while 1:
-        base_handle = driver.current_window_handle
-        check_counter = custom_check(CFG, driver, counter, base_handle)
-        counter = check_counter
-        counter += 1
-        print counter
-        time.sleep(period)
-
-
 def watch_browser(driver, period):
     """Poll the browser every 'period' and execute checks
 
@@ -188,10 +171,6 @@ def main():
 
     log.info('Launching the browser')
     driver = chrome_launch()
-
-    if check_true(CFG['browser']['custom_check']) is True:
-        period = float(CFG['browser']['custom_check_period'])
-        check_browser(driver, period)
 
     if check_true(CFG['browser']['restrict_domain']) is True:
         watch_browser(driver, 0)
