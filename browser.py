@@ -100,6 +100,8 @@ def watch_browser(driver, period):
     """
     log.debug('Watching the browser')
     while 1:
+        # TODO
+        # get window information here, and then pass it to the functions
         check_domain(driver)
         check_windows(driver)
         time.sleep(period)
