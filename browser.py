@@ -70,7 +70,8 @@ def chrome_launch():
     try:
         driver = webdriver.Chrome(chrome_options=options)
     except webdriver.chrome.webdriver.WebDriverException:
-        chrome_paths = ('c:\Program Files\chromedriver.exe',
+        chrome_paths = ('/opt/boxen/homebrew/bin/chromedriver',
+                        'c:\Program Files\chromedriver.exe',
                         'c:\Program Files (x86)\chromedriver.exe')
         for chrome_path in chrome_paths:
             try:
