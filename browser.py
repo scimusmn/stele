@@ -50,8 +50,6 @@ def chrome_launch():
         The selenium webdriver object, which can be referenced
         for browser control
     """
-    global driver
-
     # Chrome startup options
     options = webdriver.ChromeOptions()
     user_agent = '--user-agent="' + CFG['browser']['user_agent'] + '"'
