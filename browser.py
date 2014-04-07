@@ -6,7 +6,7 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 import time
 import re
-from init import get_machines_config, check_true
+from init import get_stele_dir, get_machines_config, check_true
 from selenium import webdriver
 
 #
@@ -14,7 +14,7 @@ from selenium import webdriver
 #
 
 # Logger settings
-LOG_FILENAME = 'log/stele.log'
+LOG_FILENAME = get_stele_dir() + '/log/stele.log'
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
