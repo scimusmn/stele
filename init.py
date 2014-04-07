@@ -5,9 +5,13 @@
 import ConfigParser
 import collections
 import os
-import sys
 
-SCRIPT_PATH, __ = os.path.split(sys.argv[0])
+
+def get_stele_dir():
+    """Return the current script directory """
+    init_path = os.path.realpath(__file__)
+    stele_dir = os.path.dirname(init_path)
+    return stele_dir
 
 
 def check_true(string):
@@ -28,7 +32,8 @@ def get_machines_config():
     """Load config file details into a named tuple """
 
     config = ConfigParser.ConfigParser()
-    config_file = SCRIPT_PATH + "/cfg/browser.cfg"
+    stele_dir = get_stele_dir()
+    config_file = stele_dir + "/cfg/browser.cfg"
     config.read(config_file)
 
     # TODO Cleanup these names
