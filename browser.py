@@ -65,6 +65,7 @@ def chrome_launch():
     options.add_argument('--enable-logging --v=1')
     options.add_argument('--disable-accelerated-video-decode')
     options.add_argument('--disable-infobars')
+    options.add_argument('--silent-debugger-extension-api')
 
     # Launch Chrome in default location or with some alternate options
     # for common Windows paths
