@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Setup the SOS system for communication on the network """
+""" Get configuration data on browser start """
 
 import ConfigParser
 import collections
