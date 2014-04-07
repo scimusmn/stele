@@ -15,7 +15,7 @@ def get_stele_dir():
 
 
 def check_true(string):
-    """ Check if an English string seems to contain truth.
+    """Check if an English string seems to contain truth.
 
     Return a boolean
 
