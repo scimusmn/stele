@@ -67,6 +67,9 @@ def chrome_launch():
     options.add_argument('--disable-infobars')
     options.add_argument('--silent-debugger-extension-api')
 
+    # Prevent Chrome security messages
+    options.add_argument('--test-type')
+
     # Launch Chrome in default location or with some alternate options
     # for common Windows paths
     try:
