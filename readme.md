@@ -31,3 +31,6 @@ $ ./browser.py
 ```
 ### What's a Stele?
 (http://en.wikipedia.org/wiki/Stele)
+
+# Status
+This project may soon be deprecated. We are evaluating using [node-webkit](https://github.com/rogerwang/node-webkit) as a browser control mechanism.
