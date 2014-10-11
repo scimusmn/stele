@@ -123,7 +123,11 @@ def check_domain(driver):
     # to handle the current window sporadically, especially after the system
     # has closed previous windows.
     try:
+        windows = driver.window_handles
+        print windows
+        first_window = windows[0]
         current_url = driver.current_url
+        driver.switch_to_window(first_window)
     except (SystemExit, KeyboardInterrupt):
         raise
     except Exception, e:
