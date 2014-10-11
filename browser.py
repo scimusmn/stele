@@ -145,7 +145,11 @@ def check_domain(driver):
         log.warn('URL out of bounds: %s' % current_url)
         log.debug('RegEx boundary pattern: %s' % restricted_domain_regex)
         log.debug('Current windows: %s' % driver.window_handles)
-        driver.get(CFG['browser']['home_url'])
+        try:
+            driver.get(CFG['browser']['home_url'])
+        except e:
+            z = e
+            log.warn(z)
 
 
 def check_windows(driver):
@@ -176,11 +180,13 @@ def chrome_close(driver):
 def main():
     """Launch the browser and run checks """
 
+    stele_dir = get_stele_dir()
+    print stele_dir
     log.info('Launching the browser')
     driver = chrome_launch()
 
     if check_true(CFG['browser']['restrict_domain']) is True:
-        watch_browser(driver, 0)
+        watch_browser(driver, .5)
 
     #
     # TODO
