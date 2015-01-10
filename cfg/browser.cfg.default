@@ -1,6 +1,7 @@
 # Browser details
 [browser]
 delay: False
+delay_seconds: 5
 home_url: http://www.example.com
 kiosk: False
 touch: False

@@ -34,7 +34,12 @@ log.addHandler(handler)
 #
 CFG = get_machines_config()
 if check_true(CFG['browser']['delay']) is True:
-    time.sleep(180)
+    print (
+        'Waiting ' +
+        CFG['browser']['delay_seconds'] +
+        ' seconds before launching.')
+
+    time.sleep(float(CFG['browser']['delay_seconds']))
 if check_true(CFG['browser']['custom_check']) is True:
     from custom import custom_check
 

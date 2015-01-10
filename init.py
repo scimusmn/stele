@@ -40,6 +40,7 @@ def get_machines_config():
     cfg = collections.namedtuple('Config', ['key', 'value'])
 
     browser = {'delay': config.get("browser", "delay"),
+               'delay_seconds': config.get("browser", "delay_seconds"),
                'home_url': config.get("browser", "home_url"),
                'kiosk': config.get("browser", "kiosk"),
                'touch': config.get("browser", "touch"),
