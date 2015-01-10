@@ -11,7 +11,9 @@ $ sudo pip install selenium
 ```
 
 #### 3. Install ChromeDriver
-Download and install the [appropriate version of ChromeDriver for your OS](http://chromedriver.storage.googleapis.com/index.html)
+Download the [appropriate version of ChromeDriver for your OS](http://chromedriver.storage.googleapis.com/index.html).
+
+Unpack the download and then move the chromesriver script to somewhere in your PATH. `/usr/local/bin` is a good spot.
 
 #### 4. Download stele
 ```bash
