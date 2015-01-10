@@ -15,7 +15,7 @@ Download and install the [appropriate version of ChromeDriver for your OS](http:
 
 #### 4. Download stele
 ```bash
-$ git clone git@github.com:scimusmn/stele.git
+$ git clone https://github.com/scimusmn/stele.git
 ```
 
 #### 5. Configure
