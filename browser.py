@@ -200,7 +200,7 @@ def main():
     # TODO
     # Create a clean quit key command
     #
-    #chrome_close(driver)
+    # chrome_close(driver)
 
 
 if __name__ == '__main__':
