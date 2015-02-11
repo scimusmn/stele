@@ -66,6 +66,9 @@ def chrome_launch():
     if check_true(CFG['browser']['touch']) is True:
         options.add_argument('--touch-events')
 
+    if check_true(CFG['browser']['camera']) is True:
+        options.add_argument('--use-fake-ui-for-media-stream')
+
     options.add_argument('--allow-file-access-from-files')
     options.add_argument('--enable-logging --v=1')
     options.add_argument('--disable-accelerated-video-decode')

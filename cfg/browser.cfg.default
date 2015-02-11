@@ -5,6 +5,7 @@ delay_seconds: 5
 home_url: http://www.example.com
 kiosk: False
 touch: False
+camera: True
 user_agent: ""
 custom_check: False
 custom_check_period: 5
