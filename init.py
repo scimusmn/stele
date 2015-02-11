@@ -45,6 +45,7 @@ def get_machines_config():
         'home_url': config.get("browser", "home_url"),
         'kiosk': config.get("browser", "kiosk"),
         'touch': config.get("browser", "touch"),
+        'camera': config.get("browser", "camera"),
         'custom_check': config.get("browser", "custom_check"),
         'custom_check_period': config.get("browser", "custom_check_period"),
         'user_agent': config.get("browser", "user_agent"),
