@@ -72,6 +72,9 @@ def chrome_launch():
     options.add_argument('--allow-file-access-from-files')
     options.add_argument('--enable-logging --v=1')
     options.add_argument('--disable-accelerated-video-decode')
+    # Prevent infobars from appearing
+    # This stops the yellow warning bar from appearing and complaining about
+    # being offline or Chrome not being able to update itself.
     options.add_argument('--disable-infobars')
     options.add_argument('--silent-debugger-extension-api')
 
