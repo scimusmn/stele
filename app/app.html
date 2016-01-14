@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Muse Electron Boilerplate</title>
+
+    <link href="./stylesheets/app.css" rel="stylesheet" type="text/css">
+
+    <script src="vendor/electron_boilerplate/context_menu.js"></script>
+    <script src="vendor/electron_boilerplate/external_links.js"></script>
+
+  <!--
+  Require jQuery and define its variables before loading any of our code.
+  This ensure that jQuery is avaiable for any of the 3rd party modules.
+  https://github.com/atom/electron/issues/345
+  -->
+  <script type="text/javascript" src="vendor/jquery/dist/jquery.js" onload="window.$ = window.jQuery = module.exports;"></script>
+
+  <!-- Main application code -->
+  <script src="app.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="greet"></h1>
+        <p class="subtitle">
+            Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
+        </p>
+        <p class="subtitle">
+            You are in <strong id="env-name"></strong> environment.
+        </p>
+    </div>
+
+</body>
+</html>

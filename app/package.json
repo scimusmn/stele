@@ -1,0 +1,12 @@
+{
+  "name": "muse-electron-boilerplate",
+  "productName": "Muse Electron Boilerplate",
+  "identifier": "org.smm.muse-electron-boilerplate",
+  "description": "Starter for your Electron kiosk application.",
+  "version": "0.0.1",
+  "author": "Science Museum of Minnesota",
+  "main": "background.js",
+  "dependencies": {
+    "fs-jetpack": "^0.7.0"
+  }
+}
