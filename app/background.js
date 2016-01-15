@@ -6,6 +6,8 @@
  * any windows that you can see on screen, but we can open windows from here.
  */
 
+import jetpack from 'fs-jetpack';
+
 // Base electron modules
 import { app, BrowserWindow } from 'electron';
 
@@ -16,8 +18,17 @@ import devHelper from './vendor/electron_boilerplate/dev_helper';
 // in config/env_xxx.json file.
 import env from './env';
 
-var mainWindow;
+// Read kiosk configuration
+var config = jetpack.read('/usr/local/etc/kiosk/config.json', 'json');
+if (config == null) {
+  console.log('No config file found');
+  var configError = true;
+};
 
+console.log(config);
+console.log(config.url);
+
+var mainWindow;
 app.on('ready', function() {
 
   mainWindow = new BrowserWindow({
@@ -52,7 +63,11 @@ app.on('ready', function() {
   if (env.name === 'test') {
     mainWindow.loadURL('file://' + __dirname + '/spec.html');
   } else {
-    mainWindow.loadURL('file://' + __dirname + '/app.html');
+    if (!configError) {
+      mainWindow.loadURL(config.url);
+    } else {
+      mainWindow.loadURL('file://' + __dirname + '/config-error.html');
+    }
   }
 
 });
