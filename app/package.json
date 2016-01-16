@@ -1,9 +1,9 @@
 {
-  "name": "muse-electron-boilerplate",
-  "productName": "Muse Electron Boilerplate",
-  "identifier": "org.smm.muse-electron-boilerplate",
-  "description": "Starter for your Electron kiosk application.",
-  "version": "0.0.1",
+  "name": "electron-wrapper",
+  "productName": "Electron wrapper",
+  "identifier": "org.smm.electron-wrapper",
+  "description": "Electron wrapper that loads a URL from a separate config file.",
+  "version": "0.0.2",
   "author": "Science Museum of Minnesota",
   "main": "background.js",
   "dependencies": {
