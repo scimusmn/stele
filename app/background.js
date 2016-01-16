@@ -18,15 +18,7 @@ import devHelper from './vendor/electron_boilerplate/dev_helper';
 // in config/env_xxx.json file.
 import env from './env';
 
-// Read kiosk configuration
-var config = jetpack.read('/usr/local/etc/kiosk/config.json', 'json');
-if (config == null) {
-  console.log('No config file found');
-  var configError = true;
-};
-
-console.log(config);
-console.log(config.url);
+import os from 'os';
 
 var mainWindow;
 app.on('ready', function() {
@@ -60,17 +52,51 @@ app.on('ready', function() {
     mainWindow.openDevTools();
   }
 
+  /**
+   * Open the app
+   */
   if (env.name === 'test') {
     mainWindow.loadURL('file://' + __dirname + '/spec.html');
   } else {
-    if (!configError) {
-      mainWindow.loadURL(config.url);
-    } else {
-      mainWindow.loadURL('file://' + __dirname + '/config-error.html');
-    }
+    var configFile = '/usr/local/etc/kiosk/config.json';
+    loadWindowConfigFile(configFile);
   }
 
 });
+
+function loadWindowConfigFile(configFile) {
+  var configFileObj = jetpack.read(configFile, 'json');
+  console.log('configFileObj: ', configFileObj);
+  if (configFileObj !== null) {
+    loadWindowUptimeDelay(configFileObj);
+  } else {
+    console.log('Config file [' + configFile + '] not present.');
+    mainWindow.loadURL('file://' + __dirname + '/config-error.html');
+  }
+}
+
+function loadWindowUptimeDelay(configFileObj) {
+  // Seconds since launch, when it will be safe to load the URL
+  var nominalUptime = 300;
+
+  // Seconds to wait if we are not in the nominal uptime window
+  var launchDelay = 60;
+
+  console.log('os.uptime(): ', os.uptime());
+  console.log('nominalUptime: ', nominalUptime);
+
+  if (os.uptime() > nominalUptime) {
+    console.log('Launching immediately');
+    mainWindow.loadURL(configFileObj.url);
+  } else {
+    console.log('Delaying launch ' + launchDelay + ' seconds');
+    mainWindow.loadURL('file://' + __dirname + '/launch-delay.html');
+    setTimeout(function() {
+      mainWindow.loadURL(configFileObj.url);
+    }, launchDelay * 1000);
+  }
+
+}
 
 app.on('window-all-closed', function() {
   app.quit();
