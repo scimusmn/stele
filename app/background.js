@@ -21,7 +21,7 @@ import env from './env';
 import os from 'os';
 
 var mainWindow;
-app.on('ready', function() {
+app.on('ready', function () {
 
   mainWindow = new BrowserWindow({
     x: 0,
@@ -39,7 +39,7 @@ app.on('ready', function() {
    * and then issuing a call to go into kiosk mode after a few milliseconds.
    */
   if (env.name == 'production') {
-    setTimeout(function() {
+    setTimeout(function () {
       mainWindow.setKiosk(true);
     }, 100);
   }
@@ -91,13 +91,13 @@ function loadWindowUptimeDelay(configFileObj) {
   } else {
     console.log('Delaying launch ' + launchDelay + ' seconds');
     mainWindow.loadURL('file://' + __dirname + '/launch-delay.html');
-    setTimeout(function() {
+    setTimeout(function () {
       mainWindow.loadURL(configFileObj.url);
     }, launchDelay * 1000);
   }
 
 }
 
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
   app.quit();
 });
