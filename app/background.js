@@ -9,7 +9,10 @@
 import jetpack from 'fs-jetpack';
 
 // Base electron modules
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
+
+var childProcess = require('child_process');
+var promisedExec = childProcess.exec;
 
 // Development helper for showing Chromium Dev Tools
 import devHelper from './vendor/electron_boilerplate/dev_helper';
@@ -60,6 +63,23 @@ app.on('ready', function () {
   } else {
     var configFile = '/usr/local/etc/kiosk/config.json';
     loadWindowConfigFile(configFile);
+  }
+
+  /**
+   * Keyboard shortcuts
+   *
+   * Ctrl or Command + f will switch you to the Finder.
+   * We use the "switch to Finder" approach instead of a quit, because in most
+   * of our Electron setups we have a launchd process that will relaunch the
+   * app on quit. For maintenance, we probably just need to be able to get
+   * to the Finder while the application remains running in the background.
+   */
+  const ret = globalShortcut.register('CommandOrControl+F', () => {
+    console.log('Switching to Finder');
+    promisedExec('open -a Finder');
+  });
+  if (!ret) {
+    console.log('Keyboard registration failed');
   }
 
 });
