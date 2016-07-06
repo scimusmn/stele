@@ -1,4 +1,5 @@
 # electron-wrapper
+
 Wrapper application for the [Electron runtime](http://electron.atom.io), focused on museum kiosk use.
 
 This app is meant to serve as a kiosk wrapper that simply views an existing and separate web application.
@@ -10,8 +11,8 @@ This app is meant to serve as a kiosk wrapper that simply views an existing and 
     mkdir -p /usr/local/src # Just a recommended location
     cd /usr/local/src
     git clone https://github.com/scimusmn/electron-wrapper.git
-
-You shouldn't need to install any node modules, since we track them as part of this git repo.
+    cd electron-wrapper
+    npm install
 
 ## Define the startup page
 When the app launches it will navigate to a local or remote web path. Define this destination with a config file.
