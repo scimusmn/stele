@@ -9,6 +9,6 @@ var releaseForOs = {
   windows: require('./release_windows'),
 };
 
-gulp.task('release', ['build'], function() {
+gulp.task('release', ['build'], function () {
   return releaseForOs[utils.os()]();
 });
