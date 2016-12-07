@@ -37,7 +37,7 @@ A local server port
 Once you setup the app you can run it in two modes, development or production.
 
 ## Dev mode
-In dev mode the application will not launch fullscreen and the Chrome developer console/inspector will automatically display.
+In dev mode the application will not launch full-screen and the Chrome developer console/inspector will automatically display.
 
 To launch in dev mode:
 
