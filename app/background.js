@@ -11,8 +11,8 @@ import jetpack from 'fs-jetpack';
 // Base electron modules
 import { app, BrowserWindow, globalShortcut } from 'electron';
 
-var childProcess = require('child_process');
-var promisedExec = childProcess.exec;
+let childProcess = require('child_process');
+let promisedExec = childProcess.exec;
 
 // Development helper for showing Chromium Dev Tools
 import devHelper from './vendor/electron_boilerplate/dev_helper';
@@ -23,7 +23,7 @@ import env from './env';
 
 import os from 'os';
 
-var mainWindow;
+let mainWindow;
 app.on('ready', function () {
 
   mainWindow = new BrowserWindow({
@@ -61,7 +61,7 @@ app.on('ready', function () {
   if (env.name === 'test') {
     mainWindow.loadURL('file://' + __dirname + '/spec.html');
   } else {
-    var configFile = '/usr/local/etc/kiosk/config.json';
+    const configFile = '/usr/local/etc/kiosk/config.json';
     loadWindowConfigFile(configFile);
   }
 
@@ -85,7 +85,7 @@ app.on('ready', function () {
 });
 
 function loadWindowConfigFile(configFile) {
-  var configFileObj = jetpack.read(configFile, 'json');
+  const configFileObj = jetpack.read(configFile, 'json');
   console.log('configFileObj: ', configFileObj);
   if (configFileObj !== null) {
     loadWindowUptimeDelay(configFileObj);
@@ -97,10 +97,10 @@ function loadWindowConfigFile(configFile) {
 
 function loadWindowUptimeDelay(configFileObj) {
   // Seconds since launch, when it will be safe to load the URL
-  var nominalUptime = 300;
+  const nominalUptime = 300;
 
   // Seconds to wait if we are not in the nominal uptime window
-  var launchDelay = 60;
+  const launchDelay = 60;
 
   console.log('os.uptime(): ', os.uptime());
   console.log('nominalUptime: ', nominalUptime);
