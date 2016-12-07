@@ -34,7 +34,7 @@ app.on('ready', function () {
   });
 
   /**
-   * Hack to make fullscreen kiosk mode actually work.
+   * Hack to make full-screen kiosk mode actually work.
    *
    * There is an active bug with Electron, kiosk mode, and Yosemite.
    * https://github.com/atom/electron/issues/1054
