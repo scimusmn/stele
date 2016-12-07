@@ -74,12 +74,19 @@ app.on('ready', function () {
    * app on quit. For maintenance, we probably just need to be able to get
    * to the Finder while the application remains running in the background.
    */
-  const ret = globalShortcut.register('CommandOrControl+F', () => {
+  const retQuit = globalShortcut.register('CommandOrControl+F', () => {
     console.log('Switching to Finder');
     promisedExec('open -a Finder');
   });
-  if (!ret) {
-    console.log('Keyboard registration failed');
+  if (!retQuit) {
+    console.log('Quit keyboard registration failed');
+  }
+  const retReload = globalShortcut.register('CommandOrControl+R', () => {
+    console.log('Reload the page');
+    mainWindow.reload();
+  });
+  if (!retReload) {
+    console.log('Reload keyboard registration failed');
   }
 
 });
