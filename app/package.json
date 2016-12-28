@@ -3,7 +3,7 @@
   "productName": "Electron wrapper",
   "identifier": "org.smm.electron-wrapper",
   "description": "Electron wrapper that loads a URL from a separate config file.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Science Museum of Minnesota",
   "main": "background.js",
   "dependencies": {
