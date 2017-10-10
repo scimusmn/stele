@@ -62,19 +62,20 @@ app.on('ready', function () {
   if (env.name === 'test') {
     mainWindow.loadURL('file://' + __dirname + '/spec.html');
   } else {
+    var configFile = '';
     switch (process.platform) {
       case 'win32': {
-        const configFile = '/usr/local/etc/kiosk/config.json';
+        configFile = '/usr/local/etc/kiosk/config.json';
         break;
       }
 
       case 'darwin': {
-        const configFile = '/usr/local/etc/kiosk/config.json';
+        configFile = '/usr/local/etc/kiosk/config.json';
         break;
       }
 
       default: {
-        const configFile = '/usr/local/etc/kiosk/config.json';
+        configFile = '/usr/local/etc/kiosk/config.json';
       }
     }
     loadWindowConfigFile(configFile);
