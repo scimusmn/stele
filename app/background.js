@@ -58,10 +58,25 @@ app.on('ready', function () {
   /**
    * Open the app
    */
+  console.log(`This platform is ${process.platform}`);
   if (env.name === 'test') {
     mainWindow.loadURL('file://' + __dirname + '/spec.html');
   } else {
-    const configFile = '/usr/local/etc/kiosk/config.json';
+    switch (process.platform) {
+      case 'win32': {
+        const configFile = '/usr/local/etc/kiosk/config.json';
+        break;
+      }
+
+      case 'darwin': {
+        const configFile = '/usr/local/etc/kiosk/config.json';
+        break;
+      }
+
+      default: {
+        const configFile = '/usr/local/etc/kiosk/config.json';
+      }
+    }
     loadWindowConfigFile(configFile);
   }
 
