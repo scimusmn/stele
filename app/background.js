@@ -62,7 +62,7 @@ app.on('ready', function () {
   if (env.name === 'test') {
     mainWindow.loadURL('file://' + __dirname + '/spec.html');
   } else {
-    var configFile = '';
+    let configFile = '';
     switch (process.platform) {
       case 'win32': {
         configFile = '/usr/local/etc/kiosk/config.json';
