@@ -41,7 +41,7 @@ app.on('ready', function () {
   // This hack makes kiosk mode actually work by waiting for the app to launch
   // and then issuing a call to go into kiosk mode after a few milliseconds.
   //
-  if (env.name == 'production') {
+  if (env.name === 'production') {
     setTimeout(function () {
       mainWindow.setKiosk(true);
     }, 100);
