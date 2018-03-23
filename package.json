@@ -1,7 +1,6 @@
 {
   "devDependencies": {
     "asar": "^0.7.2",
-    "electron": "^1.6.11",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-less": "^3.0.3",
@@ -21,5 +20,8 @@
     "release": "gulp release --env=production",
     "start": "node ./tasks/start",
     "test": "node ./tasks/start --env=test"
+  },
+  "dependencies": {
+    "electron": "^1.8.4"
   }
 }
