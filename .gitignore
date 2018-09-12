@@ -1,9 +1,12 @@
-*.log
+node_modules
 .DS_Store
 Thumbs.db
+*.log
 
-/app/spec.js
-/build/
-/releases/
-/tmp/
-node_modules
+/dist
+/temp
+
+# ignore everything in 'app' folder what had been generated from 'src' folder
+/app/app.js
+/app/background.js
+/app/**/*.map

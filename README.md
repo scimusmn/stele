@@ -59,10 +59,10 @@ This will save a new `.dmg` installer in `releases`.
 When running the application you can use a few keyboard shortcuts to control the program. This can be useful
 when debugging a kiosk application in an exhibit.
 
-| Shortcut | Action | Linux | Windows | Mac OS |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Ctrl/Cmd + R | Reload the current page | X | X | X |
-| Ctrl/Cmd + F  | Open Finder | O | O | X |
+| Shortcut | Action | Windows | Linux | Mac OS |
+| ------------- | ------------- | --- | --- | --- |
+| Ctrl/Cmd+R  | Reload page  | X | X | X |
+| Ctrl/Cmd+F  | Open Finder  | O | O | X |
 
 # Credit
 This is a fork of [szwacz's great electron-boilerplate](https://github.com/szwacz/electron-boilerplate). Our internal needs are just unique/different enough, that it make sense to set up our own version.

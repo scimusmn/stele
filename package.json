@@ -1,27 +1,54 @@
 {
-  "devDependencies": {
-    "asar": "^0.7.2",
-    "fs-jetpack": "^0.7.0",
-    "gulp": "^3.9.0",
-    "gulp-less": "^3.0.3",
-    "gulp-util": "^3.0.6",
-    "q": "^1.4.1",
-    "rollup": "^0.21.0",
-    "tree-kill": "^0.1.1",
-    "yargs": "^3.15.0"
-  },
-  "optionalDependencies": {
-    "appdmg": "^0.3.2",
-    "rcedit": "^0.3.0"
+  "name": "electron-wrapper",
+  "productName": "Electron Wrapper",
+  "description": "Kiosk app wrapper for museum media exhibits",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Science Museum of Minnesota",
+  "main": "app/background.js",
+  "build": {
+    "appId": "org.smm.electron-wrapper",
+    "files": [
+      "app/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "publish": null
   },
   "scripts": {
-    "postinstall": "cd app && npm install",
-    "build": "gulp build",
-    "release": "gulp release --env=production",
-    "start": "node ./tasks/start",
-    "test": "node ./tasks/start --env=test"
+    "postinstall": "electron-builder install-app-deps",
+    "preunit": "webpack --config=build/webpack.unit.config.js --env=test --display=none",
+    "unit": "electron-mocha temp/specs.js --renderer --require source-map-support/register",
+    "pree2e": "webpack --config=build/webpack.app.config.js --env=test --display=none && webpack --config=build/webpack.e2e.config.js --env=test --display=none",
+    "e2e": "mocha temp/e2e.js --require source-map-support/register",
+    "test": "npm run unit && npm run e2e",
+    "start": "node build/start.js",
+    "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
   },
   "dependencies": {
-    "electron": "^1.8.4"
+    "fs-jetpack": "^2.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "babel-loader": "^8.0.0-beta.4",
+    "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.3",
+    "chai": "^4.1.0",
+    "css-loader": "^1.0.0",
+    "electron": "2.0.2",
+    "electron-builder": "^20.15.1",
+    "electron-mocha": "^6.0.4",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "mocha": "^5.2.0",
+    "source-map-support": "^0.5.6",
+    "spectron": "^3.8.0",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.4",
+    "webpack-merge": "^4.1.3",
+    "webpack-node-externals": "^1.7.2"
   }
 }
