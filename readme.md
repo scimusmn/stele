@@ -1,38 +1,60 @@
-### Stele
-<img align="right" alt="Image of a Maya stele at Copan" src="/media/copan.png" />
-A control system for kiosked web browsers, built on top of Selenium, WebDriver, and Chrome.
+# Stele
 
-### Installation
-#### 1. Install Python
-#### 2. Install the Selenium Python wrapper
+Wrapper application for the [Electron runtime](http://electron.atom.io), focused on museum kiosk use.
 
-```bash
-$ sudo pip install selenium
-```
+This app is meant to serve as a kiosk wrapper that simply views an existing and separate web application.
 
-#### 3. Install ChromeDriver
-Download the [appropriate version of ChromeDriver for your OS](http://chromedriver.storage.googleapis.com/index.html).
+# Setup
 
-Unpack the download and then move the chromesriver script to somewhere in your PATH. `/usr/local/bin` is a good spot.
+Clone the repo and run `npm install`
 
-#### 4. Download stele
-```bash
-$ git clone https://github.com/scimusmn/stele.git
-```
+## Define the startup page
+When the app launches it will navigate to a local or remote web path. Define this destination with a config file.
 
-#### 5. Configure
-```bash
-$ cp cfg/browser.cfg.default cfg/browser.cfg
-```
-Read the [config documentation](https://github.com/scimusmn/stele/blob/master/docs/config.md) to learn how to setup your kiosk.
+    mkdir -p /usr/local/etc/kiosk
+    cp /usr/local/src/electron-wrapper/config/kiosk.config.example.json /usr/local/etc/kiosk/config.json
 
-#### 6. Run chrome_kiosk
-```bash
-$ chmod +x browser.py
-$ ./browser.py
-```
-### What's a Stele?
-(http://en.wikipedia.org/wiki/Stele)
+Edit the example kiosk file to define a URL for the kiosk to launch.
 
-# Status
-This project may soon be deprecated. We are evaluating using [node-webkit](https://github.com/rogerwang/node-webkit) as a browser control mechanism.
+### URL examples:
+
+A remote URL on the internet
+    http://www.example.org
+
+A static file on the local filesystem
+    file:///Users/exhibits/src/app-dir/index.html
+
+A local server port
+    http://localhost:3000
+
+# Usage
+Once you setup the app you can run it in two modes, development or production.
+
+## Dev mode
+In dev mode the application will not launch full-screen and the Chrome developer console/inspector will automatically display.
+
+To launch in dev mode:
+
+    npm start
+
+## Production mode
+In production mode we will build the wrapper into an app which we will run from the /Applications directory. In this mode the app will display fullscreen, preventing you from switching to an other application, viewing the dock, or the menubar. The console/inspector is not available in the production mode.
+
+### Build production app
+If you've made changes to the application and are ready to release a new version, first change the version number in the `/app/package.json` file. Then build the application with:
+
+    npm run release
+
+This will save a OS specific installer in `dist`.
+
+# Keyboard shortcuts
+When running the application you can use a few keyboard shortcuts to control the program. This can be useful
+when debugging a kiosk application in an exhibit.
+
+| Shortcut | Action | Windows | Linux | Mac OS |
+| ------------- | ------------- | --- | --- | --- |
+| Ctrl/Cmd+R  | Reload page  | X | X | X |
+| Ctrl/Cmd+F  | Open Finder  | O | O | X |
+
+# Credit
+This is a fork of [szwacz's great electron-boilerplate](https://github.com/szwacz/electron-boilerplate). Our internal needs are just unique/different enough, that it make sense to set up our own version.
