@@ -1,4 +1,4 @@
-# electron-wrapper
+# Stele
 
 Wrapper application for the [Electron runtime](http://electron.atom.io), focused on museum kiosk use.
 
@@ -6,13 +6,7 @@ This app is meant to serve as a kiosk wrapper that simply views an existing and 
 
 # Setup
 
-## Get the source code
-
-    mkdir -p /usr/local/src # Just a recommended location
-    cd /usr/local/src
-    git clone https://github.com/scimusmn/electron-wrapper.git
-    cd electron-wrapper
-    npm install
+Clone the repo and run `npm install`
 
 ## Define the startup page
 When the app launches it will navigate to a local or remote web path. Define this destination with a config file.
@@ -41,7 +35,6 @@ In dev mode the application will not launch full-screen and the Chrome developer
 
 To launch in dev mode:
 
-    cd /usr/local/src/electron-wrapper/
     npm start
 
 ## Production mode
@@ -50,10 +43,9 @@ In production mode we will build the wrapper into an app which we will run from 
 ### Build production app
 If you've made changes to the application and are ready to release a new version, first change the version number in the `/app/package.json` file. Then build the application with:
 
-    cd /usr/local/src/electron-wrapper/
     npm run release
 
-This will save a new `.dmg` installer in `releases`.
+This will save a OS specific installer in `dist`.
 
 # Keyboard shortcuts
 When running the application you can use a few keyboard shortcuts to control the program. This can be useful
