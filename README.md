@@ -1,6 +1,7 @@
 # Stele
 
 <img align="right" alt="Image of a Maya stele at Copan" src="/media/copan.png" />
+
 Wrapper application for the [Electron runtime](http://electron.atom.io), focused on museum kiosk use.
 
 This app is meant to serve as a kiosk wrapper that simply views an existing and separate web application.
@@ -19,14 +20,11 @@ Edit the example kiosk file to define a URL for the kiosk to launch.
 
 ### URL examples:
 
-A remote URL on the internet
-    http://www.example.org
+A remote URL on the internet `http://www.example.org`
 
-A static file on the local filesystem
-    file:///Users/exhibits/src/app-dir/index.html
+A static file on the local filesystem: `file:///Users/exhibits/src/app-dir/index.html`
 
-A local server port
-    http://localhost:3000
+A local server port `http://localhost:3000`
 
 # Usage
 Once you setup the app you can run it in two modes, development or production.
