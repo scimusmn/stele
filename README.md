@@ -1,5 +1,6 @@
 # Stele
 
+<img align="right" alt="Image of a Maya stele at Copan" src="/media/copan.png" />
 Wrapper application for the [Electron runtime](http://electron.atom.io), focused on museum kiosk use.
 
 This app is meant to serve as a kiosk wrapper that simply views an existing and separate web application.
