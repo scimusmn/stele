@@ -55,5 +55,7 @@ when debugging a kiosk application in an exhibit.
 | Ctrl/Cmd+R  | Reload page  | X | X | X |
 | Ctrl/Cmd+F  | Open Finder  | O | O | X |
 
-# Credit
-This is a fork of [szwacz's great electron-boilerplate](https://github.com/szwacz/electron-boilerplate). Our internal needs are just unique/different enough, that it make sense to set up our own version.
+## Credit
+### Upstream
+This project's structure was initially generated using [szwacz's great electron-boilerplate](https://github.com/szwacz/electron-boilerplate).
+
