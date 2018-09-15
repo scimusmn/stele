@@ -56,6 +56,13 @@ when debugging a kiosk application in an exhibit.
 | Ctrl/Cmd+F  | Open Finder  | O | O | X |
 
 ## Credit
+### What's a Stele?
+> A stele (/ˈstiːli/ STEE-lee) is a stone or wooden slab, generally taller than it is wide, erected in the ancient world as a monument.
+
+https://en.wikipedia.org/wiki/Stele
+
+We initially began developing this software during the production of the Science Museum of Minnesota's exhibit on the Maya people, "[Maya: Hidden Worlds Revealed](https://www.smm.org/exhibitrental/maya-hidden-worlds-revealed)." Our physical kiosks for that exhibit drew upon the design of the Maya stelae, inspiring the software name.
+
 ### Upstream
 This project's structure was initially generated using [szwacz's great electron-boilerplate](https://github.com/szwacz/electron-boilerplate).
 
