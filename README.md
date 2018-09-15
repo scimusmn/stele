@@ -1,6 +1,6 @@
 # Stele
 
-<img align="right" alt="Image of a Maya stele at Copan" src="/media/copan.png" />
+<img align="right" alt="Image of a Maya stele at Copan, by Frederick Catherwood" src="/resources/copan.png" />
 
 Wrapper application for the [Electron runtime](http://electron.atom.io), focused on museum kiosk use.
 
