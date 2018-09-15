@@ -4,7 +4,7 @@
 
 Wrapper application for the [Electron runtime](http://electron.atom.io), focused on museum kiosk use.
 
-This app is meant to serve as a kiosk wrapper that simply views an existing and separate web application.
+This app is meant to serve as a kiosk wrapper that simply views an existing web application.
 
 # Setup
 
@@ -29,7 +29,7 @@ A local server port `http://localhost:3000`
 # Usage
 Once you setup the app you can run it in two modes, development or production.
 
-## Dev mode
+## Development mode
 In dev mode the application will not launch full-screen and the Chrome developer console/inspector will automatically display.
 
 To launch in dev mode:
@@ -37,7 +37,9 @@ To launch in dev mode:
     npm start
 
 ## Production mode
-In production mode we will build the wrapper into an app which we will run from the /Applications directory. In this mode the app will display fullscreen, preventing you from switching to an other application, viewing the dock, or the menubar. The console/inspector is not available in the production mode.
+In production mode the application is compiled for the appropriate operating system. When this compiled binary is run, the application will display fullscreen, preventing you from switching to an other application, viewing the dock, or the menubar. The console/inspector is not available in the production mode.
+
+**WARNING**: Running the application in production can lock you out of your computer unless you have a remote way to quit the Stele application. We're working on keyboard shortcuts for Linux and Windows, to allow you to exit the application. On macOS, use the [keyboard shortcut](#keyboard-shortcuts) to switch to the Finder, when you need to exit the application.
 
 ### Build production app
 If you've made changes to the application and are ready to release a new version, first change the version number in the `/app/package.json` file. Then build the application with:
@@ -45,6 +47,8 @@ If you've made changes to the application and are ready to release a new version
     npm run release
 
 This will save a OS specific installer in `dist`.
+
+We also inlcude [binaries for each OS in the latest release](https://github.com/scimusmn/stele/releases/latest).
 
 # Keyboard shortcuts
 When running the application you can use a few keyboard shortcuts to control the program. This can be useful
