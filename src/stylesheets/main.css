@@ -1,3 +1,8 @@
+/*
+ * Style for internal status and error pages
+ *
+ * This style will not affect your app pages loaded in the config.
+ */
 html,
 body {
   width: 100%;
