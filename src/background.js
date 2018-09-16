@@ -3,24 +3,25 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import path from "path";
-import url from "url";
-import { app, Menu, globalShortcut } from "electron";
-import jetpack from "fs-jetpack";
+import path from 'path';
+import url from 'url';
+import { app, Menu, globalShortcut } from 'electron';
+import jetpack from 'fs-jetpack';
 import os from 'os';
-import { devMenuTemplate } from "./menu/dev_menu_template";
-import { editMenuTemplate } from "./menu/edit_menu_template";
-import createWindow from "./helpers/window";
-let childProcess = require('child_process');
-let promisedExec = childProcess.exec;
-
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
-import env from "env";
+import env from 'env';
+import { devMenuTemplate } from './menu/dev_menu_template';
+import { editMenuTemplate } from './menu/edit_menu_template';
+import createWindow from './helpers/window';
+
+const childProcess = require('child_process');
+
+const promisedExec = childProcess.exec;
 
 const setApplicationMenu = () => {
   const menus = [editMenuTemplate];
-  if (env.name !== "production") {
+  if (env.name !== 'production') {
     menus.push(devMenuTemplate);
   }
   Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
@@ -40,9 +41,9 @@ function loadWindowUptimeDelay(window, configFileObj) {
     console.log('Launching immediately');
     window.loadURL(configFileObj.url);
   } else {
-    console.log('Delaying launch ' + launchDelay + ' seconds');
-    window.loadURL('file://' + __dirname + '/launch-delay.html?delay=' + launchDelay);
-    setTimeout(function() {
+    console.log(`Delaying launch ${launchDelay} seconds`);
+    window.loadURL(`file://${__dirname}/launch-delay.html?delay=${launchDelay}`);
+    setTimeout(() => {
       window.loadURL(configFileObj.url);
     }, launchDelay * 1000);
   }
@@ -56,13 +57,13 @@ function loadWindowConfigFile(window, configFile) {
   if (configFileObj !== null) {
     loadWindowUptimeDelay(window, configFileObj);
   } else {
-    console.log('Config file [' + configFile + '] not present.');
+    console.log(`Config file [${configFile}] not present.`);
     window.loadURL(
       url.format({
-        pathname: path.join(__dirname, "config-error.html"),
-        protocol: "file:",
-        slashes: true
-      })
+        pathname: path.join(__dirname, 'config-error.html'),
+        protocol: 'file:',
+        slashes: true,
+      }),
     );
   }
 }
@@ -70,17 +71,17 @@ function loadWindowConfigFile(window, configFile) {
 // Save userData in separate folders for each environment.
 // Thanks to this you can use production and development versions of the app
 // on same machine like those are two separate apps.
-if (env.name !== "production") {
-  const userDataPath = app.getPath("userData");
-  app.setPath("userData", `${userDataPath} (${env.name})`);
+if (env.name !== 'production') {
+  const userDataPath = app.getPath('userData');
+  app.setPath('userData', `${userDataPath} (${env.name})`);
 }
 
-app.on("ready", () => {
+app.on('ready', () => {
   setApplicationMenu();
 
-  const mainWindow = createWindow("main", {
+  const mainWindow = createWindow('main', {
     width: 400,
-    height: 600
+    height: 600,
   });
 
   //
@@ -97,10 +98,9 @@ app.on("ready", () => {
   //
   loadWindowConfigFile(mainWindow, '/usr/local/etc/kiosk/config.json');
 
-  if (env.name === "development") {
+  if (env.name === 'development') {
     mainWindow.openDevTools();
   }
-
 
   //
   // Keyboard shortcuts
@@ -117,9 +117,8 @@ app.on("ready", () => {
     console.log('Switching to Finder');
     promisedExec('open -a Finder');
   });
-
 });
 
-app.on("window-all-closed", () => {
+app.on('window-all-closed', () => {
   app.quit();
 });
