@@ -12,7 +12,6 @@ import os from 'os';
 // in config/env_xxx.json file.
 import env from 'env';
 import { devMenuTemplate } from './menu/dev_menu_template';
-import { editMenuTemplate } from './menu/edit_menu_template';
 import createWindow from './helpers/window';
 
 const childProcess = require('child_process');
@@ -20,11 +19,10 @@ const childProcess = require('child_process');
 const promisedExec = childProcess.exec;
 
 const setApplicationMenu = () => {
-  const menus = [editMenuTemplate];
   if (env.name !== 'production') {
-    menus.push(devMenuTemplate);
+    const menus = [devMenuTemplate];
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
   }
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
 //
