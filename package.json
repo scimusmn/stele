@@ -2,7 +2,7 @@
   "name": "stele",
   "productName": "Stele",
   "description": "Kiosk app wrapper for museum media exhibits",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "private": true,
   "author": "Science Museum of Minnesota",
   "main": "app/background.js",
