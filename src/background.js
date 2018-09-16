@@ -113,7 +113,7 @@ app.on('ready', () => {
   //
   // TODO: Make this work on Windows and Linux
   //
-  const retQuit = globalShortcut.register('CommandOrControl+F', () => {
+  globalShortcut.register('CommandOrControl+F', () => {
     console.log('Switching to Finder');
     promisedExec('open -a Finder');
   });
