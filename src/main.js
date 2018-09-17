@@ -77,32 +77,34 @@ if (env.name !== 'production') {
 }
 
 app.on('ready', () => {
-  settings.set('appFocus', {
-    url: null,
-  });
+  //
+  // Define default settings
+  //
+  settings.set('appFocus', { url: null });
   const theUrl = settings.get('appFocus.url');
 
+  //
+  // Define app menus
+  //
   setApplicationMenu();
 
-  const mainWindow = createWindow('main', {
-    width: 400,
-    height: 600,
-  });
+  //
+  // Open a window, with an initial default size
+  //
+  // The createWindow function will save the window position and size
+  // from session to session. More windows can be configured by
+  // providing more unique names in the first argument.
+  //
+  const mainWindow = createWindow('main', { width: 800, height: 600 });
+
+  // //
+  // // Open window with configured URL
+  // //
+  // loadWindowConfigFile(mainWindow, '/usr/local/etc/kiosk/config.json');
 
   //
-  // Kiosk mode
+  // Load Chrome dev tools in development mode
   //
-  // Enable fullscreen kiosk mode in production
-  //
-  if (env.name === 'production') {
-    mainWindow.setKiosk(true);
-  }
-
-  //
-  // Open window with configured URL
-  //
-  loadWindowConfigFile(mainWindow, '/usr/local/etc/kiosk/config.json');
-
   if (env.name === 'development') {
     mainWindow.openDevTools();
   }
@@ -122,6 +124,15 @@ app.on('ready', () => {
     console.log('Switching to Finder');
     promisedExec('open -a Finder');
   });
+
+  //
+  // Kiosk mode
+  //
+  // Enable fullscreen kiosk mode in production
+  //
+  if (env.name === 'production') {
+    mainWindow.setKiosk(true);
+  }
 });
 
 app.on('window-all-closed', () => {
