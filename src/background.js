@@ -14,6 +14,8 @@ import env from 'env';
 import { devMenuTemplate } from './menu/dev_menu_template';
 import createWindow from './helpers/window';
 
+const settings = require('electron-settings');
+
 const childProcess = require('child_process');
 
 const promisedExec = childProcess.exec;
@@ -75,6 +77,11 @@ if (env.name !== 'production') {
 }
 
 app.on('ready', () => {
+  settings.set('appFocus', {
+    url: null,
+  });
+  const theUrl = settings.get('appFocus.url');
+
   setApplicationMenu();
 
   const mainWindow = createWindow('main', {
