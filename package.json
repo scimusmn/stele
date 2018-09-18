@@ -20,7 +20,7 @@
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "start": "webpack --mode development",
+    "start": "node scripts/start.js",
     "build": "webpack --mode production",
     "release": "webpack --config=scripts/webpack.app.config.js --env=production && electron-builder"
   },
