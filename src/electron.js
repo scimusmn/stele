@@ -102,7 +102,13 @@ app.on('ready', () => {
   // from session to session. More windows can be configured by
   // providing more unique names in the first argument.
   //
-  const mainWindow = createWindow('main', { width: 800, height: 600 });
+  const mainWindow = createWindow('main', {
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: false,
+    },
+  });
 
   //
   // Open window with configured URL
