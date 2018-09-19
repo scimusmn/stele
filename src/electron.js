@@ -46,7 +46,13 @@ function loadWindowUptimeDelay(window, configFileObj) {
 
   if (os.uptime() > nominalUptime) {
     console.log('Launching immediately');
-    window.loadURL(configFileObj.url);
+    window.loadURL(
+      url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file:',
+        slashes: true,
+      }),
+    );
   } else {
     console.log(`Delaying launch ${launchDelay} seconds`);
     window.loadURL(`file://${__dirname}/launch-delay.html?delay=${launchDelay}`);
