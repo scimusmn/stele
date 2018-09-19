@@ -1,8 +1,12 @@
+//
+// Electron main process
+//
 // This is main process of Electron, started as first thing when your
 // app starts. It runs through entire life of your application.
-// It doesn't have any windows which you can see on screen, but we can open
-// window from here.
-
+// Windows are launched from here depending on the application state
+// These windows browse to the internal React app, or your configured
+// external web content.
+//
 import path from 'path';
 import url from 'url';
 import { app, Menu, globalShortcut } from 'electron';
@@ -10,7 +14,6 @@ import jetpack from 'fs-jetpack';
 import os from 'os';
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
-import env from 'env';
 import { devMenuTemplate } from './menu/dev_menu_template';
 import createWindow from './helpers/window';
 
@@ -19,6 +22,10 @@ const settings = require('electron-settings');
 const childProcess = require('child_process');
 
 const promisedExec = childProcess.exec;
+
+const env = {
+  name: 'development',
+};
 
 const setApplicationMenu = () => {
   if (env.name !== 'production') {
@@ -81,7 +88,7 @@ app.on('ready', () => {
   // Define default settings
   //
   settings.set('appFocus', { url: null });
-  const theUrl = settings.get('appFocus.url');
+  // const theUrl = settings.get('appFocus.url');
 
   //
   // Define app menus
@@ -97,10 +104,10 @@ app.on('ready', () => {
   //
   const mainWindow = createWindow('main', { width: 800, height: 600 });
 
-  // //
-  // // Open window with configured URL
-  // //
-  // loadWindowConfigFile(mainWindow, '/usr/local/etc/kiosk/config.json');
+  //
+  // Open window with configured URL
+  //
+  loadWindowConfigFile(mainWindow, '/usr/local/etc/kiosk/config.json');
 
   //
   // Load Chrome dev tools in development mode

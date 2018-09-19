@@ -1,7 +1,7 @@
 const childProcess = require('child_process');
 const electron = require('electron');
 const webpack = require('webpack');
-const config = require('./webpack.config');
+const config = require('../config/webpack.config');
 
 const compiler = webpack(config);
 let electronStarted = false;
