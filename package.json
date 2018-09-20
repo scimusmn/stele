@@ -9,7 +9,7 @@
   "build": {
     "appId": "org.smm.electron-wrapper",
     "files": [
-      "app/**/*",
+      "dist/**/*",
       "node_modules/**/*",
       "package.json"
     ],
@@ -19,10 +19,10 @@
     "publish": null
   },
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
     "start": "node scripts/start.js",
+    "build": "webpack --config=config/webpack.config.prod.js --env=production",
     "release": "webpack --config=config/webpack.config.prod.js --env=production && electron-builder",
-    "build": "webpack --mode production"
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "electron-settings": "^3.2.0",
