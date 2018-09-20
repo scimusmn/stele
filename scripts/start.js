@@ -6,7 +6,7 @@
 const childProcess = require('child_process');
 const electron = require('electron');
 const webpack = require('webpack');
-const config = require('../config/webpack.config.base');
+const config = require('../config/webpack.config.dev');
 
 const env = 'development';
 const compiler = webpack(config(env));
