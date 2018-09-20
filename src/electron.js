@@ -12,8 +12,13 @@ import url from 'url';
 import { app, Menu, globalShortcut } from 'electron';
 import jetpack from 'fs-jetpack';
 import os from 'os';
-// Special module holding environment variables which you declared
-// in config/env_xxx.json file.
+
+// This module won't resolve since it comes from webpack's > resolve > alias
+// This alias allows us to load environment variables from the config > env_*.json files.
+// Tell eslint to ignore this unresolved module
+/* eslint-disable import/no-unresolved */
+import env from '@environment';
+
 import { devMenuTemplate } from './menu/dev_menu_template';
 import createWindow from './helpers/window';
 
@@ -22,10 +27,6 @@ const settings = require('electron-settings');
 const childProcess = require('child_process');
 
 const promisedExec = childProcess.exec;
-
-const env = {
-  name: 'development',
-};
 
 const setApplicationMenu = () => {
   if (env.name !== 'production') {

@@ -77,6 +77,20 @@ module.exports = env => ({
     ],
   },
 
+  //
+  // Load environment variables
+  //
+  // Load variables from env_<environment>.json files
+  // in this directory. These variables will be available for use
+  // in the compiled application as an import, @environment.
+  //
+  resolve: {
+    alias: {
+      '@environment': path.join(__dirname, `./env_${env}.json`),
+    },
+    // extensions: ['.js', '.jsx', '.json'],
+  },
+
   plugins: [
     //
     // Build the index.html file in our dist folder
