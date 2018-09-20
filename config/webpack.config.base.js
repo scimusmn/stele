@@ -87,7 +87,7 @@ module.exports = env => ({
     //
     new HtmlWebpackPlugin({
       inject: false,
-      template: 'public/index.html',
+      template: 'src/index.html',
     }),
     new ExtractTextPlugin({
       filename: 'bundle.css',
