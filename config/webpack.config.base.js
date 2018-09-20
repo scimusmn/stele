@@ -95,8 +95,4 @@ module.exports = env => ({
     }),
   ],
 
-  resolve: {
-    extensions: ['.js', '.json', '.jsx'],
-  },
-
 });
