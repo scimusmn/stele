@@ -1,6 +1,7 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 module.exports = env => ({
   //
@@ -93,6 +94,7 @@ module.exports = env => ({
       disable: false,
       allChunks: true,
     }),
+    new FriendlyErrorsWebpackPlugin({ clearConsole: env === 'development' }),
   ],
 
 });
