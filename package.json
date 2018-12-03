@@ -1,28 +1,51 @@
 {
   "name": "stele",
-  "productName": "Stele",
-  "description": "Kiosk app wrapper for museum media exhibits",
   "version": "2.0.0-alpha.2",
   "private": true,
+  "description": "Kiosk app wrapper for museum media exhibits",
   "author": "Science Museum of Minnesota",
   "main": "dist/electron.js",
-  "build": {
-    "appId": "org.smm.electron-wrapper",
-    "files": [
-      "dist/**/*",
-      "node_modules/**/*",
-      "package.json"
-    ],
-    "directories": {
-      "buildResources": "resources"
-    },
-    "publish": null
-  },
   "scripts": {
-    "start": "node scripts/start.js",
     "build": "webpack --config=config/webpack.config.prod.js --env=production",
+    "postinstall": "electron-builder install-app-deps",
     "release": "webpack --config=config/webpack.config.prod.js --env=production && electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "start": "node scripts/start.js"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "jest": true
+    },
+    "extends": "airbnb",
+    "parser": "babel-eslint",
+    "plugins": [
+      "import",
+      "jsx-a11y",
+      "react"
+    ],
+    "rules": {
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": true,
+          "optionalDependencies": false,
+          "peerDependencies": false
+        }
+      ],
+      "no-console": 0,
+      "react/forbid-prop-types": [
+        0
+      ],
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ]
+    }
   },
   "dependencies": {
     "electron-settings": "^3.2.0",
@@ -59,40 +82,17 @@
     "webpack-merge": "^4.1.4",
     "webpack-node-externals": "^1.7.2"
   },
-  "eslintConfig": {
-    "extends": "airbnb",
-    "parser": "babel-eslint",
-    "plugins": [
-      "import",
-      "jsx-a11y",
-      "react"
+  "build": {
+    "appId": "org.smm.electron-wrapper",
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "package.json"
     ],
-    "env": {
-      "browser": true,
-      "jest": true
+    "directories": {
+      "buildResources": "resources"
     },
-    "rules": {
-      "import/no-extraneous-dependencies": [
-        "error",
-        {
-          "devDependencies": true,
-          "optionalDependencies": false,
-          "peerDependencies": false
-        }
-      ],
-      "no-console": 0,
-      "react/forbid-prop-types": [
-        0
-      ],
-      "react/jsx-filename-extension": [
-        1,
-        {
-          "extensions": [
-            ".js",
-            ".jsx"
-          ]
-        }
-      ]
-    }
-  }
+    "publish": null
+  },
+  "productName": "Stele"
 }
