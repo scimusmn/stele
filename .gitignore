@@ -9,7 +9,7 @@ node_modules
 *.log
 
 # Don't include the built application
-/dist
+dist
 
 # Built production files
 src/main.prod.js
