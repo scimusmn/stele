@@ -49,6 +49,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
+
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
@@ -78,7 +79,7 @@ app.on('ready', async () => {
     }
   });
 
-  ipcMain.on('special-object', (event, arg) => {
+  ipcMain.on('ipc-test-channel', (event, arg) => {
     console.log(event);
     console.log('----^ ^ ^ ^ ^ event ^ ^ ^ ^ ^----');
     console.log(arg);
