@@ -32,7 +32,8 @@ const installExtensions = async () => {
 
   return Promise.all(
     extensions.map(name => installer.default(installer[name], forceDownload))
-  ).catch(console.log);
+  )
+    .catch(console.log);
 };
 
 /**
@@ -82,8 +83,7 @@ app.on('ready', async () => {
     console.log('----^ ^ ^ ^ ^ event ^ ^ ^ ^ ^----');
     console.log(arg);
     console.log('----^ ^ ^ ^ ^ arg ^ ^ ^ ^ ^----');
-    console.log('get arrrrround');
-  })
+  });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
