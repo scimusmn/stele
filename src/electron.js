@@ -9,7 +9,9 @@
 //
 import path from 'path';
 import url from 'url';
-import { app, Menu, globalShortcut } from 'electron';
+import {
+  app, Menu, globalShortcut, ipcMain,
+} from 'electron';
 import jetpack from 'fs-jetpack';
 import os from 'os';
 
@@ -96,6 +98,10 @@ app.on('ready', () => {
   //
   settings.set('appFocus', { url: null });
   // const theUrl = settings.get('appFocus.url');
+
+  ipcMain.on('update-notify-value', () => {
+    console.log('updating from ipc');
+  });
 
   //
   // Define app menus

@@ -1,10 +1,20 @@
-node_modules
+# MacOS system files
 .DS_Store
 Thumbs.db
+
+# Don't include node modules in project
+node_modules
+
+# Log files
 *.log
 
+# Don't include the built application
 /dist
-/temp
+
+# Built production files
+src/main.prod.js
+src/main.prod.js.map
+dll
 
 # ignore everything in 'app' folder what had been generated from 'src' folder
 /app/app.js
