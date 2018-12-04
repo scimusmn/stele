@@ -9,7 +9,7 @@
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
 import { app, BrowserWindow, ipcMain } from 'electron';
-// import MenuBuilder from './menu';
+import settings from 'electron-settings';
 
 let mainWindow = null;
 
@@ -46,6 +46,11 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
+  //
+  // Define default settings
+  //
+  settings.set('appFocus', { url: null });
+
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
@@ -75,6 +80,7 @@ app.on('ready', async () => {
     }
   });
 
+  // Respond to IPC commands from the client app
   ipcMain.on('ipc-test-channel', (event, arg) => {
     console.log(event);
     console.log('----^ ^ ^ ^ ^ event ^ ^ ^ ^ ^----');
