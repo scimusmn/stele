@@ -11,6 +11,7 @@
 import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
 import settings from 'electron-settings';
 import childProcess from 'child_process';
+import _ from 'lodash';
 import MenuBuilder from './menu';
 
 const promisedExec = childProcess.exec;
@@ -51,9 +52,16 @@ app.on('window-all-closed', () => {
 
 app.on('ready', async () => {
   //
-  // Define default settings
+  // Lookup settings
   //
-  settings.set('appFocus', { url: null });
+  // Default the app to the settings input page if app values aren't set.
+  //
+  const kioskSettings = settings.getAll();
+  const mainWindowURL = _.get(
+    kioskSettings,
+    'kiosk.displayHome',
+    `file://${__dirname}/index.html`
+  );
 
   if (
     process.env.NODE_ENV === 'development' ||
@@ -68,7 +76,7 @@ app.on('ready', async () => {
     height: 728
   });
 
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
+  mainWindow.loadURL(mainWindowURL);
 
   // @TODO: Use 'ready-to-show' event
   //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
@@ -84,12 +92,12 @@ app.on('ready', async () => {
     }
   });
 
-  // Respond to IPC commands from the client app
-  ipcMain.on('ipc-test-channel', (event, arg) => {
-    console.log(event);
-    console.log('----^ ^ ^ ^ ^ event ^ ^ ^ ^ ^----');
-    console.log(arg);
-    console.log('----^ ^ ^ ^ ^ arg ^ ^ ^ ^ ^----');
+  //
+  // Update settings from the client using IPC
+  //
+  ipcMain.on('updateSettings', (_, arg) => {
+    console.log('setting settings');
+    settings.set('kiosk', { displayHome: arg.url });
   });
 
   //
@@ -107,7 +115,6 @@ app.on('ready', async () => {
     console.log('Switching to Finder');
     promisedExec('open -a Finder');
   });
-
 
   mainWindow.on('closed', () => {
     mainWindow = null;
