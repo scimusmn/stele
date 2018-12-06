@@ -94,12 +94,12 @@ app.on('ready', async () => {
     `file://${__dirname}/index.html`
   );
 
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-  ) {
-    await installExtensions();
-  }
+  // if (
+  //   process.env.NODE_ENV === 'development' ||
+  //   process.env.DEBUG_PROD === 'true'
+  // ) {
+  //   await installExtensions();
+  // }
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -117,10 +117,18 @@ app.on('ready', async () => {
     }
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
-    } else {
-      mainWindow.show();
-      mainWindow.focus();
-    }
+    } else if (process.env.NODE_ENV === 'development') {
+        mainWindow.showInactive();
+        if (process.env.HOT_RUN !== 'True') {
+          mainWindow.focus();
+          process.env.HOT_RUN = 'True';
+        } else {
+          mainWindow.blur();
+        }
+      } else {
+        mainWindow.focus();
+        mainWindow.show();
+      }
   });
 
   //
