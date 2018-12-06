@@ -1,12 +1,15 @@
 import React from 'react';
-import Settings from '../Settings';
+import { HashRouter as Router } from 'react-router-dom';
+import AppRoutes from './AppRouter';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (
-    <div>
-      <Settings />
-    </div>
+    <Router>
+      <AppRoutes />
+    </Router>
   );
 }
 
 export default App;
+

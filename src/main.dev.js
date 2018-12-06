@@ -12,6 +12,9 @@ import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
 import settings from 'electron-settings';
 import childProcess from 'child_process';
 import _ from 'lodash';
+import os from 'os';
+import path from 'path';
+import url from 'url';
 import MenuBuilder from './menu';
 
 const promisedExec = childProcess.exec;
@@ -41,6 +44,34 @@ const installExtensions = async () => {
   )
     .catch(console.log);
 };
+
+//
+// Delay app loading until the system has been up for a few seconds
+//
+function loadWindowUptimeDelay(window, configFileObj) {
+  // Seconds since launch, when it will be safe to load the URL
+  const nominalUptime = 300;
+
+  // Seconds to wait if we are not in the nominal uptime window
+  const launchDelay = 60;
+
+  if (os.uptime() > nominalUptime) {
+    console.log('Launching immediately');
+    window.loadURL(
+      url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file:',
+        slashes: true,
+      }),
+    );
+  } else {
+    console.log(`Delaying launch ${launchDelay} seconds`);
+    // window.loadURL(`file://${__dirname}/launch-delay.html?delay=${launchDelay}`);
+    setTimeout(() => {
+      window.loadURL(configFileObj.url);
+    }, launchDelay * 1000);
+  }
+}
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
@@ -76,7 +107,7 @@ app.on('ready', async () => {
     height: 728
   });
 
-  mainWindow.loadURL(mainWindowURL);
+  loadWindowUptimeDelay(mainWindow, mainWindowURL);
 
   // @TODO: Use 'ready-to-show' event
   //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
