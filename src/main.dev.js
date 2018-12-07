@@ -148,6 +148,12 @@ app.on('ready', async () => {
   // Setup keyboard shortcuts
   registerKeyboardShortcuts();
 
+  // Setup application menu
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+});
+
+// Quit the app if all windows are closed
+app.on('window-all-closed', () => {
+  app.quit();
 });
