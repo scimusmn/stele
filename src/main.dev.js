@@ -8,14 +8,14 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import settings from 'electron-settings';
-import childProcess from 'child_process';
 import _ from 'lodash';
 import os from 'os';
 import path from 'path';
 import url from 'url';
 import MenuBuilder from './menu';
+import registerKeyboardShortcuts from './registerKeyboardShortcuts';
 
 //
 // Start main window container
@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Add useful debug features to Electron
-if ( process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true' ) {
+if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
   require('electron-debug')();
 }
 
@@ -46,9 +46,6 @@ const installExtensions = async () => {
   )
     .catch(console.log);
 };
-
-// Setup child processes for keyboard shortcuts
-const promisedExec = childProcess.exec;
 
 // Delay app loading until the system has been up for a few seconds
 function loadWindowUptimeDelay(window, configFileObj) {
@@ -121,22 +118,22 @@ app.on('ready', async () => {
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else if (process.env.NODE_ENV === 'development') {
-        mainWindow.showInactive();
-        if (process.env.HOT_RUN !== 'True') {
-          mainWindow.focus();
-          process.env.HOT_RUN = 'True';
-        } else {
-          mainWindow.blur();
-        }
-      } else {
+      mainWindow.showInactive();
+      if (process.env.HOT_RUN !== 'True') {
         mainWindow.focus();
-        mainWindow.show();
-        //
-        // Kiosk mode
-        //
-        // Enable fullscreen kiosk mode in production
-        //
-        mainWindow.setKiosk(true);
+        process.env.HOT_RUN = 'True';
+      } else {
+        mainWindow.blur();
+      }
+    } else {
+      mainWindow.focus();
+      mainWindow.show();
+      //
+      // Kiosk mode
+      //
+      // Enable fullscreen kiosk mode in production
+      //
+      mainWindow.setKiosk(true);
     }
   });
 
@@ -148,25 +145,8 @@ app.on('ready', async () => {
     settings.set('kiosk', { displayHome: arg.url });
   });
 
-  //
-  // Keyboard shortcuts
-  //
-  // Ctrl or Command + f will switch you to the Finder.
-  // We use the "switch to Finder" approach instead of a quit, because in most
-  // of our Electron setups we have a launchd process that will relaunch the
-  // app on quit. For maintenance, we probably just need to be able to get
-  // to the Finder while the application remains running in the background.
-  //
-  // TODO: Make this work on Windows and Linux
-  //
-  globalShortcut.register('Control+F', () => {
-    console.log('Switching to Finder');
-    promisedExec('open -a Finder');
-  });
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
+  // Setup keyboard shortcuts
+  registerKeyboardShortcuts();
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
