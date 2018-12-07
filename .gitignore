@@ -15,6 +15,7 @@ dist
 src/main.prod.js
 src/main.prod.js.map
 dll
+release
 
 # ignore everything in 'app' folder what had been generated from 'src' folder
 /app/app.js
