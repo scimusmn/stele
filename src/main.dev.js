@@ -17,19 +17,21 @@ import path from 'path';
 import url from 'url';
 import MenuBuilder from './menu';
 
-const promisedExec = childProcess.exec;
-
+//
+// Start main window container
+//
+// We will use this object to build out the Electron window
+//
 let mainWindow = null;
 
+// Enable stack traces in production
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
 
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.DEBUG_PROD === 'true'
-) {
+// Add useful debug features to Electron
+if ( process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true' ) {
   require('electron-debug')();
 }
 
@@ -45,9 +47,10 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-//
+// Setup child processes for keyboard shortcuts
+const promisedExec = childProcess.exec;
+
 // Delay app loading until the system has been up for a few seconds
-//
 function loadWindowUptimeDelay(window, configFileObj) {
   // Seconds since launch, when it will be safe to load the URL
   const nominalUptime = 300;
