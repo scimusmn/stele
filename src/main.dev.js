@@ -128,7 +128,13 @@ app.on('ready', async () => {
       } else {
         mainWindow.focus();
         mainWindow.show();
-      }
+        //
+        // Kiosk mode
+        //
+        // Enable fullscreen kiosk mode in production
+        //
+        mainWindow.setKiosk(true);
+    }
   });
 
   //
