@@ -183,9 +183,6 @@
     "directories": {
       "buildResources": "resources",
       "output": "release"
-    },
-    "publish": {
-      "publish": null
     }
   }
 }
