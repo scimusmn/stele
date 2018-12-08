@@ -12,17 +12,8 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import settings from 'electron-settings';
 import _ from 'lodash';
 import os from 'os';
-import path from 'path';
-import url from 'url';
 import MenuBuilder from './menu';
 import registerKeyboardShortcuts from './registerKeyboardShortcuts';
-
-//
-// Start main window container
-//
-// We will use this object to build out the Electron window
-//
-let mainWindow = null;
 
 // Enable stack traces in production
 if (process.env.NODE_ENV === 'production') {
@@ -48,44 +39,46 @@ const installExtensions = async () => {
 };
 
 // Delay app loading until the system has been up for a few seconds
-function loadWindowUptimeDelay(window, configFileObj) {
+function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
   // Seconds since launch, when it will be safe to load the URL
   const nominalUptime = 300;
-
   // Seconds to wait if we are not in the nominal uptime window
-  const launchDelay = 60;
-
-  if (os.uptime() > nominalUptime) {
-    console.log('Launching immediately');
-    window.loadURL(
-      url.format({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file:',
-        slashes: true,
-      }),
-    );
+  const launchDelayCustom = _.toNumber(process.env.STELE_DELAY);
+  if (os.uptime() < nominalUptime || _.isFinite(launchDelayCustom)) {
+    // Navigate to delay message during delay period
+    mainWindow.webContents.send('navigate', '/delay-start');
+    const launchDelay = launchDelayCustom || 30;
+    // After delay, load settings URL
+    setTimeout(() => { mainWindow.loadURL(mainWindowURL); }, launchDelay * 1000);
   } else {
-    console.log(`Delaying launch ${launchDelay} seconds`);
-    // window.loadURL(`file://${__dirname}/launch-delay.html?delay=${launchDelay}`);
-    setTimeout(() => {
-      window.loadURL(configFileObj.url);
-    }, launchDelay * 1000);
+    // Immediately navigate to settings URL
+    mainWindow.loadURL(mainWindowURL);
   }
 }
 
 app.on('ready', async () => {
+  //
+  // Start main window container
+  //
+  // We will use this object to build out the Electron window
+  //
+  // TODO: Move this into the ready
+  let mainWindow = null;
+
   //
   // Lookup settings
   //
   // Default the app to the settings input page if app values aren't set.
   //
   const kioskSettings = settings.getAll();
+  const reactHome = `file://${__dirname}/index.html`;
   const mainWindowURL = _.get(
     kioskSettings,
     'kiosk.displayHome',
-    `file://${__dirname}/index.html`
+    reactHome
   );
 
+  // Setup browser extensions
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
@@ -93,14 +86,26 @@ app.on('ready', async () => {
     await installExtensions();
   }
 
+  // Setup default window size
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
     height: 728
   });
 
-  loadWindowUptimeDelay(mainWindow, mainWindowURL);
+  // Start by loading the React home page
+  mainWindow.loadURL(reactHome);
 
+  // Once our react app has mounted, we can load kiosk content
+  ipcMain.on('routerMounted', () => {
+    if(_.has( kioskSettings, 'kiosk.displayHome')) {
+      loadWindowUptimeDelay(mainWindow, mainWindowURL);
+    }
+  });
+
+  //
+  // Show the app window
+  //
   // @TODO: Use 'ready-to-show' event
   //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
   mainWindow.webContents.on('did-finish-load', () => {
@@ -133,7 +138,6 @@ app.on('ready', async () => {
   // Update settings from the client using IPC
   //
   ipcMain.on('updateSettings', (_, arg) => {
-    console.log('setting settings');
     settings.set('kiosk', { displayHome: arg.url });
   });
 
