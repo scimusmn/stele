@@ -48,6 +48,7 @@
   },
   "plugins": ["import", "promise", "compat", "react"],
   "settings": {
+    "polyfills": ["promises"],
     "import/resolver": {
       "webpack": {
         "config": "config/webpack.config.eslint.js"
