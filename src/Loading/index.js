@@ -27,7 +27,6 @@ function Loading() {
       wait={250}
     >
       <div style={style}>
-	    Test
         <img src={spinner} alt="loading" />
       </div>
     </Delay>
