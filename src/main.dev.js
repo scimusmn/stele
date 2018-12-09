@@ -102,6 +102,8 @@ app.on('ready', async () => {
   ipcMain.on('routerMounted', () => {
     if (_.has(kioskSettings, 'kiosk.displayHome')) {
       loadWindowUptimeDelay(mainWindow, mainWindowURL);
+    } else {
+      mainWindow.webContents.send('navigate', '/settings');
     }
   });
 
