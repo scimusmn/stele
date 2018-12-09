@@ -11,8 +11,10 @@ const options = {
     'src/dist',
   ],
   ignoreMatches: [ // ignore dependencies that matches these globs
+    'bootstrap',
+    'electron-log',
+    'devtron',
     'grunt-*',
-    '*.prod.js'
   ],
   parsers: { // the target parsers
     '*.js': depcheck.parser.es6,
