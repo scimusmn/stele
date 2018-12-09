@@ -1,12 +1,33 @@
 import depcheck from 'depcheck';
+import _ from 'lodash';
+import chalk from 'chalk';
 import path from 'path';
 
 const options = {
-  ignoreMatches: [ // ignore dependencies that matches these globs
+  // ignore dependencies that matches these globs
+  ignoreMatches: [
+    'babel-jest',
+    'babel-loader',
     'bootstrap',
+    'concurrently',
+    'cross-env',
+    'css-loader',
     'devtron',
+    'electron-builder',
     'electron-log',
+    'eslint-formatter-pretty',
+    'eslint-import-resolver-webpack',
+    'eslint-plugin-jest',
+    'file-loader',
+    'file-loader',
+    'jest',
+    'prettier',
+    'sass-loader',
     'spectron',
+    'style-loader',
+    'stylelint',
+    'stylelint-config-prettier',
+    'stylelint-config-standard',
     'url-loader',
     'webpack-cli',
     'webpack-dev-server',
@@ -29,8 +50,14 @@ const options = {
 };
 
 depcheck(path.join(__dirname, '..'), options, (unused) => {
-  console.log('Unused dependencies');
-  console.log(unused.dependencies); // an array containing the unused dependencies
-  console.log('Unused devDependencies');
-  console.log(unused.devDependencies); // an array containing the unused devDependencies
+  const unusedDependencies = _.get(unused,'dependencies', null);
+  const unusedDevDependencies = _.get(unused, 'devDependencies', null);
+  if (!_.isEmpty(unusedDependencies)) {
+    console.log(chalk.yellow.bold('Unused dependencies'));
+    console.log(chalk.yellow(_.join(unusedDependencies,'\n')));
+  }
+  if (!_.isEmpty(unusedDevDependencies)) {
+    console.log(chalk.yellow.bold('Unused devDependencies'));
+    console.log(chalk.yellow(_.join(unusedDevDependencies,'\n')));
+  }
 });
