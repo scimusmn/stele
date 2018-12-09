@@ -10,10 +10,14 @@
 //
 import { app, BrowserWindow, ipcMain } from 'electron';
 import settings from 'electron-settings';
+import log from 'electron-log';
 import _ from 'lodash';
 import os from 'os';
 import MenuBuilder from './menu';
 import registerKeyboardShortcuts from './registerKeyboardShortcuts';
+
+// Set log level to info
+log.transports.file.level = 'info';
 
 // Enable stack traces in production
 if (process.env.NODE_ENV === 'production') {
@@ -46,6 +50,7 @@ function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
   const launchDelayCustom = _.toNumber(process.env.STELE_DELAY);
   if (os.uptime() < nominalUptime || _.isFinite(launchDelayCustom)) {
     // Navigate to delay message during delay period
+    log.info('Window - Delay triggered');
     mainWindow.webContents.send('navigate', '/delay-start');
     const launchDelay = launchDelayCustom || 30;
     // After delay, load settings URL
@@ -54,6 +59,7 @@ function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
     }, launchDelay * 1000);
   } else {
     // Immediately navigate to settings URL
+    log.info('Window - Immediately loading settings URL');
     mainWindow.loadURL(mainWindowURL);
   }
 }
@@ -94,15 +100,20 @@ app.on('ready', async () => {
     width: 1024,
     height: 728
   });
+  log.info('Window - New browser window');
 
   // Start by loading the React home page
   mainWindow.loadURL(reactHome);
+  log.info('Window - Load React home');
 
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
+    log.info('Window - React router mounted');
     if (_.has(kioskSettings, 'kiosk.displayHome')) {
+      log.info('Window - URL set, checking delay');
       loadWindowUptimeDelay(mainWindow, mainWindowURL);
     } else {
+      log.info('Window - No URL set, sending React to settings page');
       mainWindow.webContents.send('navigate', '/settings');
     }
   });
