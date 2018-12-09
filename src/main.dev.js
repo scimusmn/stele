@@ -49,7 +49,9 @@ function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
     mainWindow.webContents.send('navigate', '/delay-start');
     const launchDelay = launchDelayCustom || 30;
     // After delay, load settings URL
-    setTimeout(() => { mainWindow.loadURL(mainWindowURL); }, launchDelay * 1000);
+    setTimeout(() => {
+      mainWindow.loadURL(mainWindowURL);
+    }, launchDelay * 1000);
   } else {
     // Immediately navigate to settings URL
     mainWindow.loadURL(mainWindowURL);
@@ -98,7 +100,7 @@ app.on('ready', async () => {
 
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
-    if(_.has( kioskSettings, 'kiosk.displayHome')) {
+    if (_.has(kioskSettings, 'kiosk.displayHome')) {
       loadWindowUptimeDelay(mainWindow, mainWindowURL);
     }
   });
@@ -106,32 +108,11 @@ app.on('ready', async () => {
   //
   // Show the app window
   //
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-  mainWindow.webContents.on('did-finish-load', () => {
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
-    }
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-    } else if (process.env.NODE_ENV === 'development') {
-      mainWindow.showInactive();
-      if (process.env.HOT_RUN !== 'True') {
-        mainWindow.focus();
-        process.env.HOT_RUN = 'True';
-      } else {
-        mainWindow.blur();
-      }
-    } else {
-      mainWindow.focus();
-      mainWindow.show();
-      //
-      // Kiosk mode
-      //
-      // Enable fullscreen kiosk mode in production
-      //
-      mainWindow.setKiosk(true);
-    }
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+    // Enable fullscreen kiosk mode in production
+    if (process.env.NODE_ENV === 'production') { mainWindow.setKiosk(true) }
+
   });
 
   //

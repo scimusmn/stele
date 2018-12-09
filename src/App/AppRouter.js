@@ -5,6 +5,7 @@ import { ipcRenderer } from 'electron';
 import Settings from '../Settings';
 import DelayStart from '../DelayStart';
 import NoMatch from '../NoMatch';
+import Loading from '../Loading';
 
 class AppRoutes extends React.Component {
   componentDidMount() {
@@ -20,7 +21,8 @@ class AppRoutes extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/" exact component={Settings} />
+        <Route path="/" exact component={Loading} />
+        <Route path="/settings" exact component={Settings} />
         <Route exact path="/delay-start" component={DelayStart} />
         <Route component={NoMatch} />
       </Switch>
