@@ -47,7 +47,6 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-hot-loader": "^4.3.12",
-    "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "reactstrap": "^6.5.0",
     "source-map-support": "^0.5.9",
