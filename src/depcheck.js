@@ -20,6 +20,7 @@ const options = {
     'eslint-plugin-jest',
     'file-loader',
     'file-loader',
+    'husky',
     'jest',
     'prettier',
     'sass-loader',
