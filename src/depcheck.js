@@ -4,10 +4,13 @@ import path from 'path';
 const options = {
   ignoreMatches: [ // ignore dependencies that matches these globs
     'bootstrap',
-    'electron-log',
     'devtron',
+    'electron-log',
     'spectron',
-    'grunt-*',
+    'url-loader',
+    'webpack-cli',
+    'webpack-dev-server',
+    'yarn',
   ],
   // skip calculation of missing dependencies
   skipMissing: true,
@@ -19,6 +22,7 @@ const options = {
   ],
   // the target special parsers
   specials: [
+    depcheck.special.babel,
     depcheck.special.eslint,
     depcheck.special.webpack
   ],
