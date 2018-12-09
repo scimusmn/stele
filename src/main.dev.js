@@ -82,6 +82,7 @@ app.on('ready', async () => {
   //
   // Default the app to the settings input page if app values aren't set.
   //
+  store.set('kiosk.launching', 1);
   const reactHome = `file://${__dirname}/index.html`;
   const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
 
@@ -107,13 +108,17 @@ app.on('ready', async () => {
 
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
-    log.info('Window - React router mounted');
-    if (_.has(store.get('kiosk'), 'displayHome')) {
-      log.info('Window - URL set, checking delay');
-      loadWindowUptimeDelay(mainWindow, mainWindowURL);
-    } else {
-      log.info('Window - No URL set, sending React to settings page');
-      mainWindow.webContents.send('navigate', '/settings');
+    if (store.get('kiosk.launching', 1)) {
+      log.info('Window - React router mounted');
+      if (_.has(store.get('kiosk'), 'displayHome')) {
+        log.info('Window - URL set, checking delay');
+        loadWindowUptimeDelay(mainWindow, mainWindowURL);
+        // Done launching
+        store.set('kiosk.launching', 0);
+      } else {
+        log.info('Window - No URL set, sending React to settings page');
+        mainWindow.webContents.send('navigate', '/settings');
+      }
     }
   });
 
@@ -121,7 +126,8 @@ app.on('ready', async () => {
   // Update settings from the client using IPC
   //
   ipcMain.on('updateSettings', (event, arg) => {
-    store.set('kiosk', { displayHome: arg.url });
+    store.set('kiosk.displayHome', arg.url);
+    mainWindow.loadURL(arg.url);
   });
 
   // Setup keyboard shortcuts

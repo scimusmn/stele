@@ -13,12 +13,22 @@ import log from 'electron-log';
 //
 // TODO: Make this work on Windows and Linux
 //
-const registerKeyboardShortcuts = () => {
+const registerKeyboardShortcuts = (mainWindow, reactHome) => {
 
   // Setup child processes for keyboard shortcuts
   const promisedExec = childProcess.exec;
 
   // Switch to desktop
+  globalShortcut.register('Command+,', () => {
+    // Navigate to delay message during delay period
+    log.info('Window - Navigating to Settings with keyboard shortcut');
+    // TODO: Make this a function
+    // Make this little bit a function that you can import and reuse
+    mainWindow.loadURL(reactHome);
+    ipcMain.on('routerMounted', () => {
+      mainWindow.webContents.send('navigate', '/settings');
+    });
+  });
   globalShortcut.register('Control+F', () => {
     console.log('Switching to Finder');
     promisedExec('open -a Finder');
