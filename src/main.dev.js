@@ -122,7 +122,7 @@ app.on('ready', async () => {
   //
   // Update settings from the client using IPC
   //
-  ipcMain.on('updateSettings', (_, arg) => {
+  ipcMain.on('updateSettings', (event, arg) => {
     settings.set('kiosk', { displayHome: arg.url });
   });
 
