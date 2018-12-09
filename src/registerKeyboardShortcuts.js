@@ -1,5 +1,6 @@
 import childProcess from 'child_process';
-import { globalShortcut } from 'electron';
+import { globalShortcut, ipcMain } from 'electron';
+import log from 'electron-log';
 
 //
 // Keyboard shortcuts

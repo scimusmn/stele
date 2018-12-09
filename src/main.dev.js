@@ -9,12 +9,15 @@
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
 import { app, BrowserWindow, ipcMain } from 'electron';
-import settings from 'electron-settings';
+import Store from 'electron-store';
 import log from 'electron-log';
 import _ from 'lodash';
 import os from 'os';
 import MenuBuilder from './menu';
 import registerKeyboardShortcuts from './registerKeyboardShortcuts';
+
+// Local data persistance store
+const store = new Store();
 
 // Set log level to info
 log.transports.file.level = 'info';
@@ -79,13 +82,8 @@ app.on('ready', async () => {
   //
   // Default the app to the settings input page if app values aren't set.
   //
-  const kioskSettings = settings.getAll();
   const reactHome = `file://${__dirname}/index.html`;
-  const mainWindowURL = _.get(
-    kioskSettings,
-    'kiosk.displayHome',
-    reactHome
-  );
+  const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
 
   // Setup browser extensions
   if (
@@ -110,7 +108,7 @@ app.on('ready', async () => {
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
     log.info('Window - React router mounted');
-    if (_.has(kioskSettings, 'kiosk.displayHome')) {
+    if (_.has(store.get('kiosk'), 'displayHome')) {
       log.info('Window - URL set, checking delay');
       loadWindowUptimeDelay(mainWindow, mainWindowURL);
     } else {
@@ -123,11 +121,11 @@ app.on('ready', async () => {
   // Update settings from the client using IPC
   //
   ipcMain.on('updateSettings', (event, arg) => {
-    settings.set('kiosk', { displayHome: arg.url });
+    store.set('kiosk', { displayHome: arg.url });
   });
 
   // Setup keyboard shortcuts
-  registerKeyboardShortcuts();
+  registerKeyboardShortcuts(mainWindow, reactHome);
 
   // Setup application menu
   const menuBuilder = new MenuBuilder(mainWindow);
