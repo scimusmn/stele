@@ -2,25 +2,23 @@ import depcheck from 'depcheck';
 import path from 'path';
 
 const options = {
-  ignoreBinPackage: false, // ignore the packages with bin entry
-  skipMissing: false, // skip calculation of missing dependencies
-  ignoreDirs: [ // folder with these names will be ignored
+  ignoreMatches: [ // ignore dependencies that matches these globs
+    'bootstrap',
+    'electron-log',
+    'devtron',
+    'spectron',
+    'grunt-*',
+  ],
+  // skip calculation of missing dependencies
+  skipMissing: true,
+  ignoreDirs: [
     'dist',
     'dll',
     'release',
     'src/dist',
   ],
-  ignoreMatches: [ // ignore dependencies that matches these globs
-    'bootstrap',
-    'electron-log',
-    'devtron',
-    'grunt-*',
-  ],
-  parsers: { // the target parsers
-    '*.js': depcheck.parser.es6,
-    '*.jsx': depcheck.parser.jsx
-  },
-  specials: [ // the target special parsers
+  // the target special parsers
+  specials: [
     depcheck.special.eslint,
     depcheck.special.webpack
   ],
