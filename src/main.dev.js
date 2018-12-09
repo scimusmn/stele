@@ -106,16 +106,6 @@ app.on('ready', async () => {
   });
 
   //
-  // Show the app window
-  //
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-    // Enable fullscreen kiosk mode in production
-    if (process.env.NODE_ENV === 'production') { mainWindow.setKiosk(true) }
-
-  });
-
-  //
   // Update settings from the client using IPC
   //
   ipcMain.on('updateSettings', (_, arg) => {
@@ -128,6 +118,16 @@ app.on('ready', async () => {
   // Setup application menu
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+
+  //
+  // Show the app window once everything has loaded
+  //
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+    // Enable fullscreen kiosk mode in production
+    if (process.env.NODE_ENV === 'production') { mainWindow.setKiosk(true) }
+
+  });
 });
 
 // Quit the app if all windows are closed
