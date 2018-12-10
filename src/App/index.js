@@ -1,13 +1,15 @@
 import React from 'react';
 import { HashRouter as Router } from 'react-router-dom';
+import { Container } from 'reactstrap';
 import AppRoutes from './AppRouter';
-import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
+    <Container>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </Container>
   );
 }
 

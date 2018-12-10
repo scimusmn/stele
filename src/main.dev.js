@@ -130,6 +130,11 @@ app.on('ready', async () => {
     mainWindow.loadURL(arg.url);
   });
 
+  ipcMain.on('settingsGet', (event) => {
+    /* eslint no-param-reassign: off */
+    event.returnValue = store.get('kiosk.displayHome')
+  });
+
   // Setup keyboard shortcuts
   registerKeyboardShortcuts(mainWindow, reactHome);
 
