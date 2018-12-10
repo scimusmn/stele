@@ -6,6 +6,7 @@ import {
   Form,
   FormFeedback,
   FormGroup,
+  FormText,
   Input,
   Label,
   Row
@@ -50,12 +51,10 @@ class Settings extends Component {
             values,
             touched,
             errors,
-            dirty,
             isSubmitting,
             handleChange,
             handleBlur,
             handleSubmit,
-            handleReset,
           } = props;
           return (
             <Container>
@@ -63,44 +62,29 @@ class Settings extends Component {
                 <Col xs={8}><Form onSubmit={handleSubmit}>
                   <h1>Kiosk settings</h1>
                   <FormGroup>
-                    <Label
-                      htmlFor="url"
-                      style={{ display: 'block' }}
-                    >
-                      Kiosk URL
-                      <Input
-                        id="url"
-                        type="text"
-                        value={values.url}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className={
-                          errors.url && touched.url ? 'text-input error' : 'text-input'
-                        }
-                      />
-                    </Label>
-                    <FormFeedback>
-                      {errors.url &&
-                      touched.url && <div className="input-feedback">{errors.url}</div>}
+                    <Label for="url">Kiosk URL</Label>
+                    <Input
+                      invalid={errors.url && touched.url}
+                      id="url"
+                      type="text"
+                      value={values.url}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    <FormFeedback invalid={errors.url && touched.url}>
+                      A URL is required
                     </FormFeedback>
+                    <FormText>
+                      Enter the home URL for the kiosk.
+                    </FormText>
                   </FormGroup>
 
-
-                  <Button
-                    color="secondary"
-                    type="button"
-                    className="mr-3"
-                    onClick={handleReset}
-                    disabled={!dirty || isSubmitting}
-                  >
-                    Reset
-                  </Button>
                   <Button
                     color="primary"
                     type="submit"
                     disabled={isSubmitting}
                   >
-                    Submit
+                    Save
                   </Button>
 
                 </Form>
