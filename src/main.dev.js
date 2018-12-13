@@ -10,17 +10,44 @@
 //
 import { app, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
-import log from 'electron-log';
 import _ from 'lodash';
 import os from 'os';
+import path from 'path';
+import { createLogger, format, transports } from 'winston';
 import MenuBuilder from './menu';
 import registerKeyboardShortcuts from './registerKeyboardShortcuts';
 
-// Local data persistance store
-const store = new Store();
+//
+// Setup file logging with Winston
+//
+// Logs are saved in the appropriate log folder for the current OS.
+//
+const baseLogPath = app.getPath('logs');
+const logger = createLogger({
+  level: 'info',
+  format: format.combine(
+    format.timestamp(),
+    format.printf(
+      info => `${info.timestamp} ${info.level}: ${info.message}`
+    )
+  ),
+  transports: [
+    //
+    // - Write to all logs with level `info` and below to `combined.log`
+    // - Write all logs error (and below) to `error.log`.
+    //
+    new transports.File({
+      filename: path.join(baseLogPath, 'error.log'),
+      level: 'error'
+    }),
+    new transports.File({
+      filename: path.join(baseLogPath, 'combined.log'),
+    }),
+  ]
+});
 
-// Set log level to info
-log.transports.file.level = 'info';
+// Local data persistence store
+const store = new Store();
 
 // Enable stack traces in production
 if (process.env.NODE_ENV === 'production') {
@@ -54,7 +81,7 @@ function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
   const launchDelayCustom = _.toNumber(process.env.STELE_DELAY);
   if (os.uptime() < nominalUptime || _.isFinite(launchDelayCustom)) {
     // Navigate to delay message during delay period
-    log.info('Window - Delay triggered');
+    logger.info('Window - Delay triggered');
     mainWindow.webContents.send('navigate', '/delay-start');
     const launchDelay = launchDelayCustom || 30;
     // After delay, load settings URL
@@ -63,7 +90,7 @@ function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
     }, launchDelay * 1000);
   } else {
     // Immediately navigate to settings URL
-    log.info('Window - Immediately loading settings URL');
+    logger.info('Window - Immediately loading settings URL');
     mainWindow.loadURL(mainWindowURL);
   }
 }
@@ -100,7 +127,7 @@ app.on('ready', async () => {
     width: 1024,
     height: 728
   });
-  log.info('Window - New browser window');
+  logger.info('Window - New browser window');
 
   // Log console messages in the render process
   if (process.env.LOG_RENDER_CONSOLE === 'true') {
@@ -113,25 +140,25 @@ app.on('ready', async () => {
       const getLevel = (numberLevel) => _.has(levels, numberLevel.toString())
         ? levels[numberLevel]
         : 'Unknown';
-      log.info(`Render-${getLevel(level)} ${message} - ${sourceId}:${line}`);
+      logger.info(`Render-${getLevel(level)} - ${message} - ${sourceId}:${line}`);
     });
   }
 
   // Start by loading the React home page
   mainWindow.loadURL(reactHome);
-  log.info('Window - Load React home');
+  logger.info('Window - Load React home');
 
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
     if (store.get('kiosk.launching', 1)) {
-      log.info('Window - React router mounted');
+      logger.info('Window - React router mounted');
       if (_.has(store.get('kiosk'), 'displayHome')) {
-        log.info('Window - URL set, checking delay');
+        logger.info('Window - URL set, checking delay');
         loadWindowUptimeDelay(mainWindow, mainWindowURL);
         // Done launching
         store.set('kiosk.launching', 0);
       } else {
-        log.info('Window - No URL set, sending React to settings page');
+        logger.info('Window - No URL set, sending React to settings page');
         mainWindow.webContents.send('navigate', '/settings');
       }
     }
