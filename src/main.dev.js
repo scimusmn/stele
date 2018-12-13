@@ -13,14 +13,15 @@ import Store from 'electron-store';
 import _ from 'lodash';
 import os from 'os';
 import path from 'path';
-import { createLogger, format, transports } from 'winston';
+import { createLogger, format } from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 import MenuBuilder from './menu';
 import registerKeyboardShortcuts from './registerKeyboardShortcuts';
 
 //
 // Setup file logging with Winston
 //
-// Logs are saved in the appropriate log folder for the current OS.
+// Logs are saved in the appropriate log folder for the current OS and rotated daily.
 //
 const baseLogPath = app.getPath('logs');
 const logger = createLogger({
