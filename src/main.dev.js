@@ -125,7 +125,31 @@ app.on('ready', async () => {
   });
   logger.info('Window - New browser window');
 
-  // Log console messages in the render process
+  //
+  // Respond to failed window loads
+  //
+  // If the error is about an invalid URL, return the user to the settings page.
+  // Otherwise, log an error and quit Stele.
+  //
+  mainWindow.webContents.on(
+    'did-fail-load', (event, errorCode, errorDescription,) => {
+      if (errorDescription === 'ERR_INVALID_URL') {
+        const configuredURL = _.get(store.get('kiosk'), 'displayHome');
+        logger.info(
+          `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`
+        );
+        mainWindow.loadURL(reactHome);
+        ipcMain.on('routerMounted', () => {
+          mainWindow.webContents.send('navigate', '/settings');
+        });
+      } else {
+        logger.error(`App - Unknown web contents load failure - ${errorDescription}:${errorCode}`);
+        app.quit();
+      }
+    }
+  );
+
+// Log console messages in the render process
   if (process.env.LOG_RENDER_CONSOLE === 'true') {
     mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
       const levels = {
