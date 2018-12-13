@@ -32,16 +32,11 @@ const logger = createLogger({
     )
   ),
   transports: [
-    //
-    // - Write to all logs with level `info` and below to `combined.log`
-    // - Write all logs error (and below) to `error.log`.
-    //
-    new transports.File({
-      filename: path.join(baseLogPath, 'error.log'),
-      level: 'error'
-    }),
-    new transports.File({
-      filename: path.join(baseLogPath, 'combined.log'),
+    new DailyRotateFile({
+      filename: path.join(baseLogPath, 'log-%DATE%.log'),
+      datePattern: 'YYYY-MM-DD-HH',
+      maxSize: '20m',
+      maxFiles: '90d'
     }),
   ]
 });
