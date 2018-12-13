@@ -1,6 +1,6 @@
 {
   "name": "stele",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0-alpha.5",
   "private": true,
   "description": "Kiosk app wrapper for museum media exhibits",
   "author": "Science Museum of Minnesota",
@@ -28,7 +28,7 @@
     "package-win": "yarn build && electron-builder build --win --x64",
     "prestart": "yarn build && yarn depcheck",
     "start": "cross-env NODE_ENV=production electron ./src/main.prod.js",
-    "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r @babel/register ./src/main.dev.js",
+    "start-main-dev": "cross-env HOT=1 NODE_ENV=development LOG_RENDER_CONSOLE=true electron -r @babel/register ./src/main.dev.js",
     "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.renderer.dev.babel.js",
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 jest",
     "test-watch": "yarn test --watch"

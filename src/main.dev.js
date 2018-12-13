@@ -102,6 +102,21 @@ app.on('ready', async () => {
   });
   log.info('Window - New browser window');
 
+  // Log console messages in the render process
+  if (process.env.LOG_RENDER_CONSOLE === 'true') {
+    mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+      const levels = {
+        0: 'Info',
+        1: 'Warning',
+        2: 'Error',
+      };
+      const getLevel = (numberLevel) => _.has(levels, numberLevel.toString())
+        ? levels[numberLevel]
+        : 'Unknown';
+      log.info(`Render-${getLevel(level)} ${message} - ${sourceId}:${line}`);
+    });
+  }
+
   // Start by loading the React home page
   mainWindow.loadURL(reactHome);
   log.info('Window - Load React home');
@@ -132,7 +147,7 @@ app.on('ready', async () => {
 
   ipcMain.on('settingsGet', (event) => {
     /* eslint no-param-reassign: off */
-    event.returnValue = store.get('kiosk.displayHome')
+    event.returnValue = store.get('kiosk.displayHome');
   });
 
   // Setup keyboard shortcuts
