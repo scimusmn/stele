@@ -28,7 +28,7 @@ import registerKeyboardShortcuts from './registerKeyboardShortcuts';
 // So we manually configure the ~/.config/Stele/ folder the standard app logging folder.
 //
 const baseLogPath = process.platform === 'linux'
-  ? os.path(os.homedir, '.config', app.getName())
+  ? path.join(os.homedir(), '.config', app.getName())
   : app.getPath('logs');
 
 const logger = createLogger({
