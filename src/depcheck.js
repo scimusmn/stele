@@ -6,6 +6,7 @@ import path from 'path';
 const options = {
   // ignore dependencies that matches these globs
   ignoreMatches: [
+    'babel-core',
     'babel-jest',
     'babel-loader',
     'bootstrap',
@@ -22,6 +23,8 @@ const options = {
     'file-loader',
     'husky',
     'jest',
+    'jquery',
+    'popper.js',
     'prettier',
     'sass-loader',
     'spectron',
