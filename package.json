@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "description": "Kiosk app wrapper for museum media exhibits",
-  "author": "Science Museum of Minnesota",
+  "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
   "main": "./src/main.prod.js",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
