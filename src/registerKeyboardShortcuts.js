@@ -1,5 +1,5 @@
 import childProcess from 'child_process';
-import { globalShortcut, ipcMain } from 'electron';
+import { app, globalShortcut, ipcMain } from 'electron';
 import log from 'electron-log';
 
 //
@@ -18,7 +18,16 @@ const registerKeyboardShortcuts = (mainWindow, reactHome) => {
   // Setup child processes for keyboard shortcuts
   const promisedExec = childProcess.exec;
 
-  // Switch to desktop
+  // Quit shortcut
+  globalShortcut.register('CmdOrCtrl+Q', () => {
+    app.quit();
+  });
+
+  // Reload shortcut
+  globalShortcut.register('CmdOrCtrl+R', () => {
+    mainWindow.webContents.reload();
+  });
+
   globalShortcut.register('Command+,', () => {
     // Navigate to delay message during delay period
     log.info('Window - Navigating to Settings with keyboard shortcut');
@@ -29,6 +38,8 @@ const registerKeyboardShortcuts = (mainWindow, reactHome) => {
       mainWindow.webContents.send('navigate', '/settings');
     });
   });
+
+  // Switch to desktop
   globalShortcut.register('Control+F', () => {
     console.log('Switching to Finder');
     promisedExec('open -a Finder');
