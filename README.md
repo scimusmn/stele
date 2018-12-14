@@ -32,7 +32,13 @@ If you've made changes to the application and are ready to release a new version
 
 This will save a OS specific installer in `release`.
 
-We also inlcude [binaries for each OS in the latest release](https://github.com/scimusmn/stele/releases/latest).
+We also include [binaries for each OS in the latest release](https://github.com/scimusmn/stele/releases/latest).
+
+#### Linux
+If you are building a .deb on Linux you will likely need to install the `rpm` package. On Ubuntu, this would be done with:
+```bash
+sudo apt-get install rpm
+```
 
 ## Change kiosk URL
 When you start the app, and no URL is set, you will be directed to the settings page to enter a URL for your kiosk view.
