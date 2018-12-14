@@ -23,7 +23,14 @@ import registerKeyboardShortcuts from './registerKeyboardShortcuts';
 //
 // Logs are saved in the appropriate log folder for the current OS and rotated daily.
 //
-const baseLogPath = app.getPath('logs');
+// Electron's getPath helper isn't working for Ubuntu Linux right now:
+// https://github.com/electron/electron/issues/15877
+// So we manually configure the ~/.config/Stele/ folder the standard app logging folder.
+//
+const baseLogPath = process.platform === 'linux'
+  ? os.path(os.homedir, '.config', app.getName())
+  : app.getPath('logs');
+
 const logger = createLogger({
   level: 'info',
   format: format.combine(
