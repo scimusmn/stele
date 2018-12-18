@@ -1,20 +1,23 @@
 import React from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
+import PropTypes from 'prop-types';
 import Settings from '../Settings';
 import DelayStart from '../DelayStart';
 import NoMatch from '../NoMatch';
 import Loading from '../Loading';
 
 class AppRoutes extends React.Component {
+
   componentDidMount() {
     // Tell the main process that the render process is ready for navigation commands
     ipcRenderer.send('routerMounted');
 
-    ipcRenderer.on('navigate', (_, arg) => {
+    // Navigate to a route based on IPC commands from the main process
+    ipcRenderer.on('navigate', (_, path, param) => {
       const { history } = this.props;
-      history.push(arg)
+      const navigationPath = param ? `${path}/${param}` : path;
+      history.push(navigationPath);
     });
   }
 
@@ -23,7 +26,7 @@ class AppRoutes extends React.Component {
       <Switch>
         <Route path="/" exact component={Loading} />
         <Route path="/settings" exact component={Settings} />
-        <Route exact path="/delay-start" component={DelayStart} />
+        <Route exact path="/delay-start/:delay" component={DelayStart} />
         <Route component={NoMatch} />
       </Switch>
     );
@@ -31,7 +34,11 @@ class AppRoutes extends React.Component {
 }
 
 AppRoutes.propTypes = {
-  history: PropTypes.object.isRequired,
+  history: PropTypes.object
+};
+
+AppRoutes.defaultProps = {
+  history: {}
 };
 
 export default withRouter(AppRoutes);

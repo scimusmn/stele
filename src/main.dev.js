@@ -85,7 +85,7 @@ function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
   if (os.uptime() < nominalUptime || _.isFinite(launchDelayCustom)) {
     // Navigate to delay message during delay period
     logger.info('Window - Delay triggered');
-    mainWindow.webContents.send('navigate', '/delay-start');
+    mainWindow.webContents.send('navigate', '/delay-start', launchDelayCustom);
     const launchDelay = launchDelayCustom || 30;
     // After delay, load settings URL
     setTimeout(() => {
