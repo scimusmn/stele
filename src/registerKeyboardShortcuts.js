@@ -35,6 +35,7 @@ const registerKeyboardShortcuts = (mainWindow, reactHome) => {
     // Make this little bit a function that you can import and reuse
     mainWindow.loadURL(reactHome);
     ipcMain.on('routerMounted', () => {
+      clearTimeout(global.delayTimer);
       mainWindow.webContents.send('navigate', '/settings');
     });
   });

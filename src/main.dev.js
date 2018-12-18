@@ -18,6 +18,9 @@ import DailyRotateFile from 'winston-daily-rotate-file';
 import MenuBuilder from './menu';
 import registerKeyboardShortcuts from './registerKeyboardShortcuts';
 
+// Setup global timer container
+global.delayTimer = null;
+
 //
 // Setup file logging with Winston
 //
@@ -88,7 +91,7 @@ function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
     mainWindow.webContents.send('navigate', '/delay-start', launchDelayCustom);
     const launchDelay = launchDelayCustom || 30;
     // After delay, load settings URL
-    setTimeout(() => {
+    global.delayTimer = setTimeout(() => {
       mainWindow.loadURL(mainWindowURL);
     }, launchDelay * 1000);
   } else {
