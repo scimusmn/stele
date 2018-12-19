@@ -55,109 +55,40 @@ export default class MenuBuilder {
   }
 
   buildMacOSMenu() {
-    // Required to make normal text shortcuts work
-    const subMenuEdit = {
-      label: 'Edit',
-      submenu: [
-        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
-        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
-        { type: 'separator' },
-        { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
-        { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
-        { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
-        {
-          label: 'Select All',
-          accelerator: 'Command+A',
-          selector: 'selectAll:'
+    const submenuDefaultView = [
+      {
+        label: 'Toggle Full Screen',
+        accelerator: 'Ctrl+Command+F',
+        click: () => {
+          this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
         }
-      ]
-    };
-
-    const subMenuViewDev = {
-      label: 'View',
-      submenu: [
-        {
-          label: 'Reload',
-          accelerator: 'Command+R',
-          click: () => {
-            this.mainWindow.webContents.reload();
-          }
-        },
-        {
-          label: 'Toggle Full Screen',
-          accelerator: 'Ctrl+Command+F',
-          click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-          }
-        },
-        {
-          label: 'Toggle Developer Tools',
-          accelerator: 'Alt+Command+I',
-          click: () => {
-            this.mainWindow.toggleDevTools();
-          }
+      },
+      {
+        label: 'Reload',
+        accelerator: 'Command+R',
+        click: () => {
+          this.mainWindow.webContents.reload();
         }
-      ]
-    };
+      },
+    ];
 
-    const subMenuViewProd = {
-      label: 'View',
-      submenu: [
-        {
-          label: 'Toggle Full Screen',
-          accelerator: 'Ctrl+Command+F',
-          click: () => {
-            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-          }
+    const submenuDevView = submenuDefaultView.concat([
+      {
+        label: 'Toggle Developer Tools',
+        accelerator: 'Alt+Command+I',
+        click: () => {
+          this.mainWindow.toggleDevTools();
         }
-      ]
-    };
+      }
+    ]);
 
-    const subMenuWindow = {
-      label: 'Window',
-      submenu: [
-        {
-          label: 'Minimize',
-          accelerator: 'Command+M',
-          selector: 'performMiniaturize:'
-        },
-        {
-          label: 'Close',
-          accelerator: 'Command+W',
-          selector: 'performClose:'
-        },
-        { type: 'separator' },
-        {
-          label: 'Bring All to Front',
-          selector: 'arrangeInFront:'
-        }
-      ]
-    };
-    const subMenuHelp = {
-      label: 'Help',
-      submenu: [
-        {
-          label: 'Documentation',
-          click() {
-            shell.openExternal(
-              'https://github.com/scimusmn/stele#readme'
-            );
-          }
-        },
-        {
-          label: 'Search Issues',
-          click() {
-            shell.openExternal('https://github.com/scimusmn/stele/issues');
-          }
-        }
-      ]
-    };
+    const submenuView = process.env.NODE_ENV === 'development'
+      ? submenuDevView
+      : submenuDefaultView;
 
-    const subMenuView =
-      process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
-
+    // Stele - macOS menus
     return [
-      // Stele - About menu
+      // About
       {
         label: 'Stele',
         submenu: [
@@ -189,7 +120,77 @@ export default class MenuBuilder {
             }
           }
         ]
-      }, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp
+      },
+
+      // Edit
+      // Important for common text operations and keyboard shortcuts
+      {
+        label: 'Edit',
+        submenu: [
+          { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
+          { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
+          { type: 'separator' },
+          { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
+          { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
+          { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
+          {
+            label: 'Select All',
+            accelerator: 'Command+A',
+            selector: 'selectAll:'
+          }
+        ]
+      },
+
+      // View
+      {
+        label: 'View',
+        submenu: submenuView,
+      },
+
+      // Window
+      // Standard macOS window operations
+      {
+        label: 'Window',
+        submenu: [
+          {
+            label: 'Minimize',
+            accelerator: 'Command+M',
+            selector: 'performMiniaturize:'
+          },
+          {
+            label: 'Close',
+            accelerator: 'Command+W',
+            selector: 'performClose:'
+          },
+          { type: 'separator' },
+          {
+            label: 'Bring All to Front',
+            selector: 'arrangeInFront:'
+          }
+        ]
+      },
+
+      // Help
+      // Standard macOS window operations
+      {
+        label: 'Help',
+        submenu: [
+          {
+            label: 'Documentation',
+            click() {
+              shell.openExternal(
+                'https://github.com/scimusmn/stele#readme'
+              );
+            }
+          },
+          {
+            label: 'Report issues',
+            click() {
+              shell.openExternal('https://github.com/scimusmn/stele/issues');
+            }
+          }
+        ]
+      }
     ];
   }
 
