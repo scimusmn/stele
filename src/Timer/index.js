@@ -56,18 +56,16 @@ class Timer extends React.Component {
   // Add two seconds to playing conditional to
   // handle clip delay
   render() {
-    const { displayTimer } = this.props;
-    const { timer, countDownSound } = this.state;
+    const { timer } = this.state;
     return (
       <div>
-        {timer}
+        {Math.floor(timer / 1000)}
       </div>
     );
   }
 }
 
 Timer.propTypes = {
-  displayTimer: PropTypes.bool.isRequired,
   direction: PropTypes.oneOf(['up', 'down']).isRequired,
   countDownSound: PropTypes.bool,
   end: PropTypes.number.isRequired,

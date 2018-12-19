@@ -1,0 +1,41 @@
+body {
+  background-image: url("./copan.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: left bottom;
+  font-family: "FiraSans-Regular", sans-serif;
+}
+
+h1 {
+  font-family: "Merriweather-Black", sans-serif;
+}
+
+.vert-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+pre {
+  font-size: 30px;
+  line-height: 16px;
+  padding: 20px;
+}
+
+@font-face {
+  font-family: FiraSans-Regular;
+  src: url(FiraSans-Regular.ttf);
+}
+
+@font-face {
+  font-family: Merriweather-Regular;
+  src: url(Merriweather-Regular.ttf);
+}
+
+@font-face {
+  font-family: Merriweather-Black;
+  src: url(Merriweather-Black.ttf);
+}
