@@ -1,8 +1,10 @@
-import { app, Menu, shell } from 'electron';
+import { app, Menu, ipcMain, shell } from 'electron';
+import log from 'electron-log';
 
 export default class MenuBuilder {
-  constructor(mainWindow) {
+  constructor(mainWindow, reactHome) {
     this.mainWindow = mainWindow;
+    this.reactHome = reactHome;
   }
 
   //
@@ -92,6 +94,22 @@ export default class MenuBuilder {
           {
             label: 'About Stele',
             selector: 'orderFrontStandardAboutPanel:'
+          },
+          { type: 'separator' },
+          {
+            label: 'Preferences...',
+            accelerator: 'Command+,',
+            click: (() => {
+              // Navigate to delay message during delay period
+              log.info('Window - Navigating to Settings with keyboard shortcut');
+              // TODO: Make this a function
+              // Make this little bit a function that you can import and reuse
+              this.mainWindow.loadURL(this.reactHome);
+              ipcMain.on('routerMounted', () => {
+                clearTimeout(global.delayTimer);
+                this.mainWindow.webContents.send('navigate', '/settings');
+              });
+            })
           },
           { type: 'separator' },
           {

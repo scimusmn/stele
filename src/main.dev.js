@@ -16,7 +16,6 @@ import path from 'path';
 import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import MenuBuilder from './menu';
-import registerKeyboardShortcuts from './registerKeyboardShortcuts';
 
 // Setup global timer container
 global.delayTimer = null;
@@ -263,11 +262,8 @@ app.on('ready', async () => {
     event.returnValue = store.get('kiosk');
   });
 
-  // Setup keyboard shortcuts
-  registerKeyboardShortcuts(mainWindow, reactHome);
-
   // Setup application menu
-  const menuBuilder = new MenuBuilder(mainWindow);
+  const menuBuilder = new MenuBuilder(mainWindow, reactHome);
   menuBuilder.buildMenu();
 
   //
