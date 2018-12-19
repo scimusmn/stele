@@ -5,6 +5,16 @@ export default class MenuBuilder {
     this.mainWindow = mainWindow;
   }
 
+  //
+  // Build application menu and define local keyboard shortcuts
+  //
+  // OS Specific notes:
+  // `&` is a specific accelerator in Windows.
+  // `_` is a the accelerator on Linux.
+  // This allows users to trigger the menu item using Alt+the letter following the accelerator
+  // To render the & character use && on Windows or __ on Linux
+  // MacOS doesn't support this concept.
+  //
   buildMenu() {
     if (
       process.env.NODE_ENV === 'development' ||
