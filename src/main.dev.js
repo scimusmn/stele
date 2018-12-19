@@ -194,6 +194,12 @@ app.on('ready', async () => {
     }
   });
 
+  // Navigate to the main URL if the user clicks on the skip delay button on the delay page
+  ipcMain.on('skipDelay', () => {
+    logger.info('Window - Delay skipped');
+    mainWindow.loadURL(mainWindowURL);
+  });
+
   //
   // Update settings from the client using IPC
   //

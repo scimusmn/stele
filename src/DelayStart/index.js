@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
+import { ipcRenderer } from 'electron';
 import PropTypes from 'prop-types';
 import Timer from '../Timer';
 import './DelayStart.global.css';
@@ -20,11 +21,15 @@ function DelayStart({ match }) {
           seconds
         </pre>
         <Button
+          size="lg"
           onClick={() => {
             // TODO: Make an IPC call to load the URL
+            ipcRenderer.send('skipDelay');
             console.log('IPC to skip delay');
           }} color="warning"
-        >Skip delay</Button>
+        >
+          Skip delay
+        </Button>
       </div>
     </Fragment>
   );
