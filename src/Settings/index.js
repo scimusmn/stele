@@ -99,7 +99,7 @@ class Settings extends Component {
 
                     </select>
                     <FormText>
-                      Select mouse cursor visibility. (Will not work on iFrames)
+                      Select mouse cursor visibility. Does not work with iFrames.
                     </FormText>
                   </FormGroup>
                   <Button
