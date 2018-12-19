@@ -161,13 +161,14 @@ app.on('ready', async () => {
 
       const hideCursor = store.get('kiosk.cursorVisibility');
       let inactivityDelay = 0;
+      const hideCursorCSS = 'html, body, *{ cursor: none !important;}';
 
       switch(hideCursor) {
         case 'show':
-          contents.insertCSS('html,body{ cursor: default !important; }');
+          // Do nothing. Use default cursor styles.
         break;
         case 'hide':
-          contents.insertCSS('html,body{ cursor: none !important;}');
+          contents.insertCSS(hideCursorCSS);
         break;
         case 'hide_after_5':
           inactivityDelay = 5000;
@@ -178,21 +179,21 @@ app.on('ready', async () => {
           // Javascript injection for timed cursor hiding...
           /* eslint no-case-declarations: off */
           let js = 'let eCursorTimeout = {}; ';
-          js += 'const eBody = document.querySelector("body"); ';
-          js += 'eBody.style.cursor = "none"; ';
+          js += 'const eStylesheet = document.styleSheets[0]; ';
+          js += `let eRuleIndex = eStylesheet.insertRule("${hideCursorCSS}", 0); `;
           js += 'window.addEventListener("mousemove", () => { ';
           js += 'clearTimeout(eCursorTimeout); ';
-          js += 'eBody.style.cursor = "auto"; ';
-          js += 'eCursorTimeout = setTimeout( () => {';
-          js += 'eBody.style.cursor = "none";}, ';
-          js += inactivityDelay;
+          js += 'if (eRuleIndex >= 0) { eStylesheet.deleteRule(eRuleIndex); eRuleIndex = -1; } ';
+          js += 'eCursorTimeout = setTimeout( () => { ';
+          js += `eRuleIndex = eStylesheet.insertRule("${hideCursorCSS}", 0); `;
+          js += `}, ${  inactivityDelay}`;
           js += ') }, true)';
 
           contents.executeJavaScript(js);
 
         break;
         default:
-          console.warn('[Warning] Cursor visibility status not recognized.');
+          console.warn('[Warning] Cursor visibility selection not recognized.');
       }
 
     }
