@@ -163,8 +163,8 @@ app.on('ready', async () => {
   mainWindow.webContents.on('did-finish-load', () => {
 
     const contents = mainWindow.webContents;
-    const {history} = contents;
-    const currentURL = history[history.length-1];
+    const { history } = contents;
+    const currentURL = history[history.length - 1];
 
     // Ensure we are on our target kiosk URL
     if (currentURL.indexOf(reactHome) === -1) {
@@ -173,19 +173,18 @@ app.on('ready', async () => {
       let inactivityDelay = 0;
       const hideCursorCSS = 'html, body, *{ cursor: none !important;}';
 
-      switch(hideCursor) {
+      switch (hideCursor) {
         case 'show':
           // Do nothing. Use default cursor styles.
-        break;
+          break;
         case 'hide':
           contents.insertCSS(hideCursorCSS);
-        break;
+          break;
         case 'hide_after_5':
           inactivityDelay = 5000;
-          /* falls through */
+        // Falls through
         case 'hide_after_60':
           if (inactivityDelay === 0) inactivityDelay = 60000;
-
           // Javascript injection for timed cursor hiding...
           /* eslint no-case-declarations: off */
           let js = 'let eCursorTimeout = {}; ';
@@ -196,18 +195,14 @@ app.on('ready', async () => {
           js += 'if (eRuleIndex >= 0) { eStylesheet.deleteRule(eRuleIndex); eRuleIndex = -1; } ';
           js += 'eCursorTimeout = setTimeout( () => { ';
           js += `eRuleIndex = eStylesheet.insertRule("${hideCursorCSS}", 0); `;
-          js += `}, ${  inactivityDelay}`;
+          js += `}, ${inactivityDelay}`;
           js += ') }, true)';
-
           contents.executeJavaScript(js);
-
-        break;
+          break;
         default:
           console.warn('[Warning] Cursor visibility selection not recognized.');
       }
-
     }
-    
   });
 
   // Log console messages in the render process
@@ -256,10 +251,10 @@ app.on('ready', async () => {
   //
   ipcMain.on('updateSettings', (event, arg) => {
 
-    store.set({ 
-                'kiosk.displayHome': arg.url, 
-                'kiosk.cursorVisibility': arg.cursorVis
-              });
+    store.set({
+      'kiosk.displayHome': arg.url,
+      'kiosk.cursorVisibility': arg.cursorVis
+    });
     mainWindow.loadURL(arg.url);
   });
 
