@@ -27,13 +27,10 @@ export default class MenuBuilder {
           ? this.buildMacOSMenu()
           : this.buildDefaultTemplate();
 
-      const menu = Menu.buildFromTemplate(template);
-      Menu.setApplicationMenu(menu);
-      return menu;
-
+      const devMenu = Menu.buildFromTemplate(template);
+      Menu.setApplicationMenu(devMenu);
+      return devMenu;
     }
-
-    // Only show a menu on dev for our kiosk app
     return null;
   }
 
