@@ -159,7 +159,58 @@ app.on('ready', async () => {
     }
   );
 
-// Log console messages in the render process
+  // Do any necessary js/css injections after load
+  mainWindow.webContents.on('did-finish-load', () => {
+
+    const contents = mainWindow.webContents;
+    const {history} = contents;
+    const currentURL = history[history.length-1];
+
+    // Ensure we are on our target kiosk URL
+    if (currentURL.indexOf(reactHome) === -1) {
+
+      const hideCursor = store.get('kiosk.cursorVisibility');
+      let inactivityDelay = 0;
+      const hideCursorCSS = 'html, body, *{ cursor: none !important;}';
+
+      switch(hideCursor) {
+        case 'show':
+          // Do nothing. Use default cursor styles.
+        break;
+        case 'hide':
+          contents.insertCSS(hideCursorCSS);
+        break;
+        case 'hide_after_5':
+          inactivityDelay = 5000;
+          /* falls through */
+        case 'hide_after_60':
+          if (inactivityDelay === 0) inactivityDelay = 60000;
+
+          // Javascript injection for timed cursor hiding...
+          /* eslint no-case-declarations: off */
+          let js = 'let eCursorTimeout = {}; ';
+          js += 'const eStylesheet = document.styleSheets[0]; ';
+          js += `let eRuleIndex = eStylesheet.insertRule("${hideCursorCSS}", 0); `;
+          js += 'window.addEventListener("mousemove", () => { ';
+          js += 'clearTimeout(eCursorTimeout); ';
+          js += 'if (eRuleIndex >= 0) { eStylesheet.deleteRule(eRuleIndex); eRuleIndex = -1; } ';
+          js += 'eCursorTimeout = setTimeout( () => { ';
+          js += `eRuleIndex = eStylesheet.insertRule("${hideCursorCSS}", 0); `;
+          js += `}, ${  inactivityDelay}`;
+          js += ') }, true)';
+
+          contents.executeJavaScript(js);
+
+        break;
+        default:
+          console.warn('[Warning] Cursor visibility selection not recognized.');
+      }
+
+    }
+    
+  });
+
+  // Log console messages in the render process
   if (process.env.LOG_RENDER_CONSOLE === 'true') {
     mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
       const levels = {
@@ -204,13 +255,17 @@ app.on('ready', async () => {
   // Update settings from the client using IPC
   //
   ipcMain.on('updateSettings', (event, arg) => {
-    store.set('kiosk.displayHome', arg.url);
+
+    store.set({ 
+                'kiosk.displayHome': arg.url, 
+                'kiosk.cursorVisibility': arg.cursorVis
+              });
     mainWindow.loadURL(arg.url);
   });
 
   ipcMain.on('settingsGet', (event) => {
     /* eslint no-param-reassign: off */
-    event.returnValue = store.get('kiosk.displayHome');
+    event.returnValue = store.get('kiosk');
   });
 
   // Setup keyboard shortcuts
