@@ -24,7 +24,7 @@ export default class MenuBuilder {
 
       const template =
         process.platform === 'darwin'
-          ? this.buildDarwinTemplate()
+          ? this.buildMacOSMenu()
           : this.buildDefaultTemplate();
 
       const menu = Menu.buildFromTemplate(template);
@@ -54,45 +54,7 @@ export default class MenuBuilder {
     });
   }
 
-  buildDarwinTemplate() {
-    const subMenuAbout = {
-      label: 'Stele',
-      submenu: [
-        {
-          label: 'About ElectronReact',
-          selector: 'orderFrontStandardAboutPanel:'
-        },
-        { type: 'separator' },
-        {
-          label: 'Services',
-          submenu: []
-        },
-        { type: 'separator' },
-        {
-          label: 'Hide ElectronReact',
-          accelerator: 'Command+H',
-          selector: 'hide:'
-        },
-        {
-          label: 'Hide Others',
-          accelerator: 'Command+Shift+H',
-          selector: 'hideOtherApplications:'
-        },
-        {
-          label: 'Show All',
-          selector: 'unhideAllApplications:'
-        },
-        { type: 'separator' },
-        {
-          label: 'Quit',
-          accelerator: 'Command+Q',
-          click: () => {
-            app.quit();
-          }
-        }
-      ]
-    };
-
+  buildMacOSMenu() {
     // Required to make normal text shortcuts work
     const subMenuEdit = {
       label: 'Edit',
@@ -137,6 +99,7 @@ export default class MenuBuilder {
         }
       ]
     };
+
     const subMenuViewProd = {
       label: 'View',
       submenu: [
@@ -149,6 +112,7 @@ export default class MenuBuilder {
         }
       ]
     };
+
     const subMenuWindow = {
       label: 'Window',
       submenu: [
@@ -192,7 +156,41 @@ export default class MenuBuilder {
     const subMenuView =
       process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
 
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    return [
+      // Stele - About menu
+      {
+        label: 'Stele',
+        submenu: [
+          {
+            label: 'About Stele',
+            selector: 'orderFrontStandardAboutPanel:'
+          },
+          { type: 'separator' },
+          {
+            label: 'Hide Stele',
+            accelerator: 'Command+H',
+            selector: 'hide:'
+          },
+          {
+            label: 'Hide Others',
+            accelerator: 'Command+Shift+H',
+            selector: 'hideOtherApplications:'
+          },
+          {
+            label: 'Show All',
+            selector: 'unhideAllApplications:'
+          },
+          { type: 'separator' },
+          {
+            label: 'Quit',
+            accelerator: 'Command+Q',
+            click: () => {
+              app.quit();
+            }
+          }
+        ]
+      }, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp
+    ];
   }
 
   buildDefaultTemplate() {
