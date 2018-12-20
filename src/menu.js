@@ -23,17 +23,15 @@ export default class MenuBuilder {
       process.env.DEBUG_PROD === 'true'
     ) {
       this.setupDevelopmentEnvironment();
-
-      const template =
-        process.platform === 'darwin'
-          ? this.buildMacOSMenu()
-          : this.buildDefaultTemplate();
-
-      const devMenu = Menu.buildFromTemplate(template);
-      Menu.setApplicationMenu(devMenu);
-      return devMenu;
     }
-    return null;
+    const template =
+      process.platform === 'darwin'
+        ? this.buildMacOSMenu()
+        : this.buildDefaultTemplate();
+
+    const devMenu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(devMenu);
+    return devMenu;
   }
 
   setupDevelopmentEnvironment() {
