@@ -8,14 +8,15 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
 import os from 'os';
 import path from 'path';
 import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
-import MenuBuilder from './menu';
+import buildMenu from './menuShortcuts';
+import setupDevelopmentEnvironment from './devTools';
 
 // Setup global timer container
 global.delayTimer = null;
@@ -262,9 +263,14 @@ app.on('ready', async () => {
     event.returnValue = store.get('kiosk');
   });
 
-  // Setup application menu
-  const menuBuilder = new MenuBuilder(mainWindow, reactHome);
-  menuBuilder.buildMenu();
+  // Setup application menu and menu-based keyboard shortcuts
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.DEBUG_PROD === 'true'
+  ) {
+    setupDevelopmentEnvironment(mainWindow);
+  }
+  Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
 
   //
   // Show the app window once everything has loaded
