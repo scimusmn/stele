@@ -317,7 +317,7 @@ app.on('ready', async () => {
     process.env.NODE_ENV === 'development' ||
     (
       process.env.NODE_ENV !== 'development' &&
-      process.platform !== 'development'
+      process.platform === 'darwin'
     )
   ) {
     Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
