@@ -107,6 +107,16 @@ const buildMenu = (window, reactHome) => {
       { role: 'minimize' },
       { role: 'front' }
     ];
+  } else {
+    template[2].submenu.push(
+      {
+        label: 'Preferences...',
+        accelerator: 'Control+,',
+        click: (() => {
+          navigateSettings(window, reactHome);
+        }),
+      },
+    )
   }
 
   //
