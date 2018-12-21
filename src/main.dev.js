@@ -15,7 +15,7 @@ import os from 'os';
 import path from 'path';
 import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
-import buildMenu from './menuShortcuts';
+import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
 
 // Setup global timer container
@@ -79,26 +79,61 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-// Delay app loading until the system has been up for a few seconds
-function loadWindowUptimeDelay(mainWindow, mainWindowURL) {
+//
+// Lookup the delay time environment variable
+//
+// Return NaN if set and not transformable to a number.
+// Returns 0 if the environment variable is not set
+// Returns an optional defaultSeconds if the environment variable is not set
+//
+function getDelayTime(defaultSeconds) {
+  return process.env.STELE_DELAY ? process.env.STELE_DELAY * 1 : defaultSeconds || 0;
+}
+
+// Check whether the computer has been up long enough to start the configured URL
+// If we just started up returns false
+function checkUptime(nominalUptime) {
   // Seconds since launch, when it will be safe to load the URL
-  const nominalUptime = 300;
-  // Seconds to wait if we are not in the nominal uptime window
-  const launchDelayCustom = _.toNumber(process.env.STELE_DELAY);
-  if (os.uptime() < nominalUptime || _.isFinite(launchDelayCustom)) {
-    // Navigate to delay message during delay period
-    logger.info('Window - Delay triggered');
-    mainWindow.webContents.send('navigate', '/delay-start', launchDelayCustom);
-    const launchDelay = launchDelayCustom || 30;
-    // After delay, load settings URL
-    global.delayTimer = setTimeout(() => {
-      mainWindow.loadURL(mainWindowURL);
-    }, launchDelay * 1000);
-  } else {
-    // Immediately navigate to settings URL
-    logger.info('Window - Immediately loading settings URL');
-    mainWindow.loadURL(mainWindowURL);
+  const nominalUptimeValue = nominalUptime || 300;
+  return !(os.uptime() < nominalUptimeValue);
+}
+
+// Load the appropriate content in the kiosk window based on environment and config settings
+function loadWindow(mainWindow, mainWindowURL) {
+  if ( process.env.NODE_ENV === 'development' ) {
+    const delayTime = getDelayTime();
+    // In dev we only set a delay if it's explicitly set as an environment variable and
+    // it's a real number greater than 0.
+    if (_.isFinite(delayTime) && delayTime > 0) {
+      loadWindowDelay(mainWindow, mainWindowURL)
+    } else {
+      loadWindowNow(mainWindow, mainWindowURL)
+    }
   }
+  if ( process.env.NODE_ENV !== 'development' && !checkUptime()) {
+    loadWindowDelay(mainWindow, mainWindowURL)
+  } else {
+    loadWindowNow(mainWindow, mainWindowURL)
+  }
+}
+
+// Load the configured kiosk URL immediately.
+function loadWindowNow(mainWindow, mainWindowURL) {
+  logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
+  mainWindow.loadURL(mainWindowURL);
+}
+
+// Load the configured kiosk URL after a configured delay.
+function loadWindowDelay(mainWindow, mainWindowURL) {
+  // We set a default here to ensure that we pass a required delay time to the route
+  // even if this gets called with an invalid delay time.
+  const delayTime = getDelayTime(30);
+  logger.info('Window - Delay triggered');
+  mainWindow.webContents.send('navigate', '/delay-start', delayTime);
+  // After delay, load settings URL
+  global.delayTimer = setTimeout(() => {
+    mainWindow.loadURL(mainWindowURL);
+  }, delayTime * 1000);
 }
 
 app.on('ready', async () => {
@@ -230,7 +265,7 @@ app.on('ready', async () => {
       logger.info('Window - React router mounted');
       if (_.has(store.get('kiosk'), 'displayHome')) {
         logger.info('Window - URL set, checking delay');
-        loadWindowUptimeDelay(mainWindow, mainWindowURL);
+        loadWindow(mainWindow, mainWindowURL);
         // Done launching
         store.set('kiosk.launching', 0);
       } else {

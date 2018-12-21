@@ -1,6 +1,18 @@
 import { app, Menu, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 
+const navigateSettings = (window, reactHome) => {
+  // Navigate to delay message during delay period
+  log.info('Window - Navigating to Settings with keyboard shortcut');
+  // TODO: Make this a function
+  // Make this little bit a function that you can import and reuse
+  window.loadURL(reactHome);
+  ipcMain.on('routerMounted', () => {
+    clearTimeout(global.delayTimer);
+    window.webContents.send('navigate', '/settings');
+  });
+};
+
 const buildMenu = (window, reactHome) => {
   const template = [
     {
@@ -65,16 +77,8 @@ const buildMenu = (window, reactHome) => {
           label: 'Preferences...',
           accelerator: 'Command+,',
           click: (() => {
-            // Navigate to delay message during delay period
-            log.info('Window - Navigating to Settings with keyboard shortcut');
-            // TODO: Make this a function
-            // Make this little bit a function that you can import and reuse
-            window.loadURL(reactHome);
-            ipcMain.on('routerMounted', () => {
-              clearTimeout(global.delayTimer);
-              window.webContents.send('navigate', '/settings');
-            });
-          })
+            navigateSettings(window, reactHome);
+          }),
         },
         { type: 'separator' },
         { role: 'hide' },
@@ -105,6 +109,19 @@ const buildMenu = (window, reactHome) => {
     ];
   }
 
+  //
+  // Handle OS unique menu behaviors for production kiosk app
+  //
+  // Windows & Linux: The kiosk mode in these environments shows the menu. We don't want this in
+  //   kiosk mode. These OSes will also tolerate running an app with no menu.
+  // macOS: macOS (aka Darwin) both hides the menu in kiosk mode and also requires the menu to be
+  //   defined so that the app window will render. So we let this fall through and set the menu.
+  //
+  if (process.env.NODE_ENV !== 'development') {
+    if (process.platform !== 'darwin') {
+      return Menu.buildFromTemplate(null);
+    }
+  }
   return Menu.buildFromTemplate(template);
 };
 
