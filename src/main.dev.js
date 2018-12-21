@@ -17,6 +17,7 @@ import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
+import buildShortcutsLocal from './buildShortcutsLocal';
 
 // Setup global timer container
 global.delayTimer = null;
@@ -305,6 +306,7 @@ app.on('ready', async () => {
   ) {
     setupDevelopmentEnvironment(mainWindow);
   }
+
   //
   // Handle OS unique menu behaviors for production kiosk app
   //
@@ -321,6 +323,8 @@ app.on('ready', async () => {
     )
   ) {
     Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
+  } else {
+    buildShortcutsLocal(mainWindow, reactHome)
   }
 
   //
@@ -332,7 +336,6 @@ app.on('ready', async () => {
     if (process.env.NODE_ENV === 'production') {
       mainWindow.setKiosk(true);
     }
-
   });
 });
 
