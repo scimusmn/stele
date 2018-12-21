@@ -100,20 +100,20 @@ function checkUptime(nominalUptime) {
 
 // Load the appropriate content in the kiosk window based on environment and config settings
 function loadWindow(mainWindow, mainWindowURL) {
-  if ( process.env.NODE_ENV === 'development' ) {
+  if (process.env.NODE_ENV === 'development') {
     const delayTime = getDelayTime();
     // In dev we only set a delay if it's explicitly set as an environment variable and
     // it's a real number greater than 0.
     if (_.isFinite(delayTime) && delayTime > 0) {
-      loadWindowDelay(mainWindow, mainWindowURL)
+      loadWindowDelay(mainWindow, mainWindowURL);
     } else {
-      loadWindowNow(mainWindow, mainWindowURL)
+      loadWindowNow(mainWindow, mainWindowURL);
     }
   }
-  if ( process.env.NODE_ENV !== 'development' && !checkUptime()) {
-    loadWindowDelay(mainWindow, mainWindowURL)
+  if (process.env.NODE_ENV !== 'development' && !checkUptime()) {
+    loadWindowDelay(mainWindow, mainWindowURL);
   } else {
-    loadWindowNow(mainWindow, mainWindowURL)
+    loadWindowNow(mainWindow, mainWindowURL);
   }
 }
 
@@ -305,7 +305,23 @@ app.on('ready', async () => {
   ) {
     setupDevelopmentEnvironment(mainWindow);
   }
-  Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
+  //
+  // Handle OS unique menu behaviors for production kiosk app
+  //
+  // Windows & Linux: The kiosk mode in these environments shows the menu. We don't want this in
+  //   kiosk mode. These OSes will also tolerate running an app with no menu.
+  // macOS: macOS (aka Darwin) both hides the menu in kiosk mode and also requires the menu to be
+  //   defined so that the app window will render. So we let this fall through and set the menu.
+  //
+  if (
+    process.env.NODE_ENV === 'development' ||
+    (
+      process.env.NODE_ENV !== 'development' &&
+      process.platform !== 'development'
+    )
+  ) {
+    Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
+  }
 
   //
   // Show the app window once everything has loaded
