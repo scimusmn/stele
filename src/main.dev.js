@@ -17,7 +17,7 @@ import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
-import buildShortcutsLocal from './buildShortcutsLocal';
+import buildShortcuts from './buildShortcuts';
 
 // Setup global timer container
 global.delayTimer = null;
@@ -324,7 +324,7 @@ app.on('ready', async () => {
   ) {
     Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
   } else {
-    buildShortcutsLocal(mainWindow, reactHome)
+    buildShortcuts(mainWindow, reactHome)
   }
 
   //
