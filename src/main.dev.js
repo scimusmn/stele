@@ -8,7 +8,7 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, Menu } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
 import os from 'os';
@@ -17,7 +17,7 @@ import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
-import buildShortcutsLocal from './buildShortcutsLocal';
+import navigateSettings from './navigate'
 
 // Setup global timer container
 global.delayTimer = null;
@@ -324,7 +324,38 @@ app.on('ready', async () => {
   ) {
     Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
   } else {
-    buildShortcutsLocal(mainWindow, reactHome)
+    // Undo
+    globalShortcut.register('CommandOrControl+Z', () => {
+      mainWindow.webContents.undo();
+    });
+    // Redo
+    globalShortcut.register('CommandOrControl+Shift+Z', () => {
+      mainWindow.webContents.redo();
+    });
+    // Cut
+    globalShortcut.register('CommandOrControl+X', () => {
+      mainWindow.webContents.cut();
+    });
+    // Copy
+    globalShortcut.register('CommandOrControl+C', () => {
+      mainWindow.webContents.copy();
+    });
+    // Paste
+    globalShortcut.register('CommandOrControl+V', () => {
+      mainWindow.webContents.paste();
+    });
+    // Select all
+    globalShortcut.register('CommandOrControl+A', () => {
+      mainWindow.webContents.selectAll();
+    });
+    // Settings
+    globalShortcut.register('CommandOrControl+,', () => {
+      navigateSettings(mainWindow, reactHome)
+    });
+    // Quit
+    globalShortcut.register('CommandOrControl+Q', () => {
+      app.quit();
+    })
   }
 
   //
@@ -342,4 +373,9 @@ app.on('ready', async () => {
 // Quit the app if all windows are closed
 app.on('window-all-closed', () => {
   app.quit();
+});
+
+// Unregister all shortcuts when the app exits.
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
 });
