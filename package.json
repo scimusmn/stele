@@ -128,7 +128,7 @@
   },
   "build": {
     "productName": "Stele",
-    "appId": "org.smm.electron-wrapper",
+    "appId": "org.smm.stele",
     "files": [
       "src/dist/",
       "src/index.html",
