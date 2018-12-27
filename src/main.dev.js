@@ -352,6 +352,10 @@ app.on('ready', async () => {
     globalShortcut.register('CommandOrControl+,', () => {
       navigateSettings(mainWindow, reactHome)
     });
+    // Reload
+    globalShortcut.register('CommandOrControl+R', () => {
+      mainWindow.webContents.reload();
+    });
     // Quit
     globalShortcut.register('CommandOrControl+Q', () => {
       app.quit();
