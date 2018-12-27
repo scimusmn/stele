@@ -49,7 +49,7 @@ When running the application you can use a few keyboard shortcuts to control the
 | Ctrl or Cmd+H | Hide application<sup>*</sup> | ✓       | ✓     | ✓     |
 | Ctrl or Cmd+Q | Quit application             | ✓       | ✓     | ✓     |
 
-\* Hide application will actually hide the application on macOS. On Windows and Linux, we simply open a file explorer, pushing the Stele application into the background. Stele won't actually be hidden.
+\* Hide application will actually hide the application on macOS and Windows. On Linux, we simply open the nautilus file explorer, pushing the Stele application into the background. Stele won't actually be hidden.
 
 # Credit
 ## What's a Stele?

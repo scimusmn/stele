@@ -361,13 +361,10 @@ app.on('ready', async () => {
     });
     // Hide window
     globalShortcut.register('CommandOrControl+H', () => {
-      if (process.platform === 'win32') {
-        logger.info('Switching to explorer');
-        promisedExec('explorer.exe');
-      }
       if (process.platform === 'linux') {
-        logger.info('Switching to nautilus');
         promisedExec('nautilus');
+      } else {
+        mainWindow.blur();
       }
     });
     // Quit
