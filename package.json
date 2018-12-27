@@ -136,6 +136,11 @@
       "src/main.prod.js.map",
       "package.json"
     ],
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
     "dmg": {
       "contents": [
         {
@@ -157,9 +162,6 @@
     },
     "linux": {
       "target": [
-        "deb",
-        "rpm",
-        "snap",
         "AppImage"
       ],
       "category": "Development"
