@@ -1,6 +1,6 @@
 {
   "name": "stele",
-  "version": "2.0.1-alpha.3",
+  "version": "2.0.1-alpha.4",
   "private": true,
   "description": "Kiosk app wrapper for museum media exhibits",
   "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
@@ -22,7 +22,9 @@
     "lint-styles-fix": "yarn --silent lint-styles --fix; exit 0",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
     "package": "yarn build && electron-builder build --publish never",
+    "package-publish": "yarn build && electron-builder build --publish always",
     "package-all": "yarn build && electron-builder build --mac --win --linux --publish never",
+    "package-all-publish": "yarn build && electron-builder build --mac --win --linux --publish always",
     "package-ci": "yarn postinstall && yarn build && electron-builder --publish never",
     "package-mac": "yarn build && electron-builder build --mac",
     "package-linux": "yarn build && electron-builder build --linux",
@@ -166,6 +168,11 @@
       ],
       "category": "Development"
     },
+    "publish": [{
+      "provider": "github",
+      "owner": "scimusmn",
+      "repo": "stele"
+    }],
     "directories": {
       "buildResources": "resources",
       "output": "release"
