@@ -13,11 +13,14 @@ import Store from 'electron-store';
 import _ from 'lodash';
 import os from 'os';
 import path from 'path';
+import childProcess from 'child_process';
 import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
 import navigateSettings from './navigate'
+
+const promisedExec = childProcess.exec;
 
 // Setup global timer container
 global.delayTimer = null;
@@ -355,6 +358,17 @@ app.on('ready', async () => {
     // Reload
     globalShortcut.register('CommandOrControl+R', () => {
       mainWindow.webContents.reload();
+    });
+    // Hide window
+    globalShortcut.register('CommandOrControl+H', () => {
+      if (process.platform === 'win32') {
+        logger.info('Switching to explorer');
+        promisedExec('explorer.exe');
+      }
+      if (process.platform === 'linux') {
+        logger.info('Switching to nautilus');
+        promisedExec('nautilus');
+      }
     });
     // Quit
     globalShortcut.register('CommandOrControl+Q', () => {
