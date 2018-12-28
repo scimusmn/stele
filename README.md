@@ -42,14 +42,17 @@ When operating the app in kiosk mode use the `Cmd`+`,` keyboard shortcut to acce
 # Keyboard shortcuts
 When running the application you can use a few keyboard shortcuts to control the program. This can be useful when debugging a kiosk application in an exhibit.
 
-| Shortcut      | Action                       | Windows | Linux | macOS |
-| ---           | ---                          | ---     | ---   | ---   |
-| Ctrl or Cmd+, | Settings page                | ✓       | ✓     | ✓     |
-| Ctrl or Cmd+R | Reload page                  | ✓       | ✓     | ✓     |
-| Ctrl or Cmd+H | Hide application<sup>*</sup> | ✓       | ✓     | ✓     |
-| Ctrl or Cmd+Q | Quit application             | ✓       | ✓     | ✓     |
+| Shortcut | Action                       | Windows | Linux | macOS |
+| ---      | ---                          | ---     | ---   | ---   |
+| Ctrl + , | Settings page                | ✓       | ✓     | 𐄂     |
+| Cmd + ,  | Settings page                | 𐄂       | 𐄂     | ✓     |
+| Ctrl + R | Reload page                  | ✓       | ✓     | 𐄂     |
+| Cmd + R  | Reload page                  | 𐄂       | 𐄂     | ✓     |
+| Ctrl + H | Hide application<sup>*</sup> | ✓       | ✓     | ✓     |
+| Ctrl + Q | Quit application             | ✓       | ✓     | ✓     |
+| Cmd + Q  | Quit application             | 𐄂       | 𐄂     | ✓     |
 
-\* Hide application will actually hide the application on macOS and Windows. On Linux, we simply open the nautilus file explorer, pushing the Stele application into the background. Stele won't actually be hidden.
+\* Hide application works on Windows. On Linux and Mac, we simply open the file explorer, pushing the Stele application into the background.
 
 # Credit
 ## What's a Stele?

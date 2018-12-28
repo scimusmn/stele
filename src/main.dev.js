@@ -325,6 +325,17 @@ app.on('ready', async () => {
     )
   ) {
     Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
+    // Set shortcuts for alternate quit and hide keyboard shortcuts on the Mac
+    // These are useful when remotely controlling the computer. In this situation the traditional
+    // app shortcuts often don't come through to Stele because they are captured with the
+    // remote control application. This provides an alternate way to quit or hide the app
+    // in this situation.
+    globalShortcut.register('Control+Q', () => {
+      app.quit();
+    });
+    globalShortcut.register('Control+H', () => {
+      promisedExec('open -a Finder ~/');
+    });
   } else {
     // Undo
     globalShortcut.register('CommandOrControl+Z', () => {
