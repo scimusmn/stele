@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import validUrl from 'valid-url';
 import {
   Button,
   Col,
@@ -44,11 +45,19 @@ class Settings extends Component {
             setSubmitting(false);
           }, 500);
         }}
-        validationSchema={Yup.object()
-          .shape({
-            url: Yup.string()
-              .required('Required'),
-          })}
+        validationSchema={
+          Yup
+            .object()
+            .shape({
+              url: Yup
+                .string()
+                .test(
+                  'is-url',
+                  value => (!!((validUrl.isHttpUri(value) || validUrl.isHttpsUri(value)))),
+                )
+                .required('Required'),
+            })
+        }
       >
         {(props) => {
           const {
@@ -77,10 +86,12 @@ class Settings extends Component {
                         onBlur={handleBlur}
                       />
                       <FormFeedback invalid={errors.url && touched.url}>
-                      A URL is required
+                        A valid URL is required.
+                        <br />
+                        The URL should start with http:// or https://
                       </FormFeedback>
                       <FormText>
-                      Enter the home URL for the kiosk.
+                        Enter the home URL for the kiosk.
                       </FormText>
                     </FormGroup>
                     <FormGroup>
