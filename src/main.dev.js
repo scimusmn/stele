@@ -120,7 +120,6 @@ function loadWindowDelay(mainWindow, mainWindowURL) {
 // Load the configured kiosk URL immediately.
 function loadWindowNow(mainWindow, mainWindowURL) {
   logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
-  mainWindow.loadURL(mainWindowURL);
 }
 
 // Load the appropriate content in the kiosk window based on environment and config settings
@@ -184,7 +183,10 @@ app.on('ready', async () => {
   //
   mainWindow.webContents.on(
     'did-fail-load', (event, errorCode, errorDescription) => {
-      if (errorDescription === 'ERR_INVALID_URL') {
+      if (
+        errorDescription === 'ERR_INVALID_URL'
+        || errorDescription === 'ERR_NAME_NOT_RESOLVED'
+      ) {
         const configuredURL = _.get(store.get('kiosk'), 'displayHome');
         logger.info(
           `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`,
