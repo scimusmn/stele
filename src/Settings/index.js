@@ -73,7 +73,10 @@ class Settings extends Component {
             <Container>
               <Row className="mt-3">
                 <Col xs={8}>
-                  <Form onSubmit={handleSubmit}>
+                  <Form
+                    className="border p-3 bg-light"
+                    onSubmit={handleSubmit}
+                  >
                     <h1>Kiosk settings</h1>
                     <FormGroup>
                       <Label for="url">Kiosk URL</Label>
@@ -111,7 +114,7 @@ class Settings extends Component {
 
                       </select>
                       <FormText>
-                      Select mouse cursor visibility. Does not work with iFrames.
+                        Select mouse cursor visibility. Does not work with iFrames.
                       </FormText>
                     </FormGroup>
                     <Button
@@ -119,7 +122,7 @@ class Settings extends Component {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                    Save
+                      Save
                     </Button>
                   </Form>
                 </Col>
