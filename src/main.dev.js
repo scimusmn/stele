@@ -104,6 +104,25 @@ function checkUptime(nominalUptime) {
   return !(os.uptime() < nominalUptimeValue);
 }
 
+// Load the configured kiosk URL after a configured delay.
+function loadWindowDelay(mainWindow, mainWindowURL) {
+  // We set a default here to ensure that we pass a required delay time to the route
+  // even if this gets called with an invalid delay time.
+  const delayTime = getDelayTime(30);
+  logger.info('Window - Delay triggered');
+  mainWindow.webContents.send('navigate', '/delay-start', delayTime);
+  // After delay, load settings URL
+  global.delayTimer = setTimeout(() => {
+    mainWindow.loadURL(mainWindowURL);
+  }, delayTime * 1000);
+}
+
+// Load the configured kiosk URL immediately.
+function loadWindowNow(mainWindow, mainWindowURL) {
+  logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
+  mainWindow.loadURL(mainWindowURL);
+}
+
 // Load the appropriate content in the kiosk window based on environment and config settings
 function loadWindow(mainWindow, mainWindowURL) {
   if (process.env.NODE_ENV === 'development') {
@@ -121,25 +140,6 @@ function loadWindow(mainWindow, mainWindowURL) {
   } else {
     loadWindowNow(mainWindow, mainWindowURL);
   }
-}
-
-// Load the configured kiosk URL immediately.
-function loadWindowNow(mainWindow, mainWindowURL) {
-  logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
-  mainWindow.loadURL(mainWindowURL);
-}
-
-// Load the configured kiosk URL after a configured delay.
-function loadWindowDelay(mainWindow, mainWindowURL) {
-  // We set a default here to ensure that we pass a required delay time to the route
-  // even if this gets called with an invalid delay time.
-  const delayTime = getDelayTime(30);
-  logger.info('Window - Delay triggered');
-  mainWindow.webContents.send('navigate', '/delay-start', delayTime);
-  // After delay, load settings URL
-  global.delayTimer = setTimeout(() => {
-    mainWindow.loadURL(mainWindowURL);
-  }, delayTime * 1000);
 }
 
 app.on('ready', async () => {
