@@ -6,7 +6,7 @@
 // keyboard shortcuts that we want to enable in kiosk mode.
 //
 import { globalShortcut } from 'electron';
-import navigateSettings from './navigate'
+import navigateSettings from './navigate';
 
 const buildShortcuts = (window, reactHome) => {
   // Undo
@@ -34,7 +34,7 @@ const buildShortcuts = (window, reactHome) => {
     window.webContents.selectAll();
   });
   globalShortcut.register(null, 'CommandOrControl+,', () => {
-    navigateSettings(window, reactHome)
+    navigateSettings(window, reactHome);
   });
 };
 

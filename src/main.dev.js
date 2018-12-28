@@ -8,7 +8,9 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import { app, BrowserWindow, ipcMain, globalShortcut, Menu } from 'electron';
+import {
+  app, BrowserWindow, ipcMain, globalShortcut, Menu,
+} from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
 import os from 'os';
@@ -18,7 +20,7 @@ import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
-import navigateSettings from './navigate'
+import navigateSettings from './navigate';
 
 const promisedExec = childProcess.exec;
 
@@ -43,17 +45,17 @@ const logger = createLogger({
   format: format.combine(
     format.timestamp(),
     format.printf(
-      info => `${info.timestamp} ${info.level}: ${info.message}`
-    )
+      info => `${info.timestamp} ${info.level}: ${info.message}`,
+    ),
   ),
   transports: [
     new DailyRotateFile({
       filename: path.join(baseLogPath, 'log-%DATE%.log'),
       datePattern: 'YYYY-MM-DD-HH',
       maxSize: '20m',
-      maxFiles: '90d'
+      maxFiles: '90d',
     }),
-  ]
+  ],
 });
 
 // Local data persistence store
@@ -78,7 +80,7 @@ const installExtensions = async () => {
 
   return Promise
     .all(
-      extensions.map(name => installer.default(installer[name], forceDownload))
+      extensions.map(name => installer.default(installer[name], forceDownload)),
     )
     .catch(console.log);
 };
@@ -160,8 +162,8 @@ app.on('ready', async () => {
 
   // Setup browser extensions
   if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
+    process.env.NODE_ENV === 'development'
+    || process.env.DEBUG_PROD === 'true'
   ) {
     await installExtensions();
   }
@@ -170,7 +172,7 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
-    height: 728
+    height: 728,
   });
   logger.info('Window - New browser window');
 
@@ -181,11 +183,11 @@ app.on('ready', async () => {
   // Otherwise, log an error and quit Stele.
   //
   mainWindow.webContents.on(
-    'did-fail-load', (event, errorCode, errorDescription,) => {
+    'did-fail-load', (event, errorCode, errorDescription) => {
       if (errorDescription === 'ERR_INVALID_URL') {
         const configuredURL = _.get(store.get('kiosk'), 'displayHome');
         logger.info(
-          `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`
+          `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`,
         );
         mainWindow.loadURL(reactHome);
         ipcMain.on('routerMounted', () => {
@@ -195,19 +197,17 @@ app.on('ready', async () => {
         logger.error(`App - Unknown web contents load failure - ${errorDescription}:${errorCode}`);
         app.quit();
       }
-    }
+    },
   );
 
   // Do any necessary js/css injections after load
   mainWindow.webContents.on('did-finish-load', () => {
-
     const contents = mainWindow.webContents;
     const { history } = contents;
     const currentURL = history[history.length - 1];
 
     // Ensure we are on our target kiosk URL
     if (currentURL.indexOf(reactHome) === -1) {
-
       const hideCursor = store.get('kiosk.cursorVisibility');
       let inactivityDelay = 0;
       const hideCursorCSS = 'html, body, *{ cursor: none !important;}';
@@ -252,9 +252,9 @@ app.on('ready', async () => {
         1: 'Warning',
         2: 'Error',
       };
-      const getLevel = (numberLevel) => _.has(levels, numberLevel.toString())
+      const getLevel = numberLevel => (_.has(levels, numberLevel.toString())
         ? levels[numberLevel]
-        : 'Unknown';
+        : 'Unknown');
       logger.info(`Render-${getLevel(level)} - ${message} - ${sourceId}:${line}`);
     });
   }
@@ -289,10 +289,9 @@ app.on('ready', async () => {
   // Update settings from the client using IPC
   //
   ipcMain.on('updateSettings', (event, arg) => {
-
     store.set({
       'kiosk.displayHome': arg.url,
-      'kiosk.cursorVisibility': arg.cursorVis
+      'kiosk.cursorVisibility': arg.cursorVis,
     });
     mainWindow.loadURL(arg.url);
   });
@@ -304,8 +303,8 @@ app.on('ready', async () => {
 
   // Setup application menu and menu-based keyboard shortcuts
   if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
+    process.env.NODE_ENV === 'development'
+    || process.env.DEBUG_PROD === 'true'
   ) {
     setupDevelopmentEnvironment(mainWindow);
   }
@@ -319,10 +318,10 @@ app.on('ready', async () => {
   //   defined so that the app window will render. So we let this fall through and set the menu.
   //
   if (
-    process.env.NODE_ENV === 'development' ||
-    (
-      process.env.NODE_ENV !== 'development' &&
-      process.platform === 'darwin'
+    process.env.NODE_ENV === 'development'
+    || (
+      process.env.NODE_ENV !== 'development'
+      && process.platform === 'darwin'
     )
   ) {
     Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
@@ -353,7 +352,7 @@ app.on('ready', async () => {
     });
     // Settings
     globalShortcut.register('CommandOrControl+,', () => {
-      navigateSettings(mainWindow, reactHome)
+      navigateSettings(mainWindow, reactHome);
     });
     // Reload
     globalShortcut.register('CommandOrControl+R', () => {
@@ -370,7 +369,7 @@ app.on('ready', async () => {
     // Quit
     globalShortcut.register('CommandOrControl+Q', () => {
       app.quit();
-    })
+    });
   }
 
   //
@@ -392,5 +391,5 @@ app.on('window-all-closed', () => {
 
 // Unregister all shortcuts when the app exits.
 app.on('will-quit', () => {
-  globalShortcut.unregisterAll()
+  globalShortcut.unregisterAll();
 });

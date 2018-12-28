@@ -1,4 +1,6 @@
-import { app, Menu, ipcMain, shell } from 'electron';
+import {
+  app, Menu, ipcMain, shell,
+} from 'electron';
 import log from 'electron-log';
 
 const navigateSettings = (window, reactHome) => {
@@ -26,8 +28,8 @@ const buildMenu = (window, reactHome) => {
         { role: 'paste' },
         { role: 'pasteandmatchstyle' },
         { role: 'delete' },
-        { role: 'selectall' }
-      ]
+        { role: 'selectall' },
+      ],
     },
     {
       label: 'View',
@@ -36,15 +38,15 @@ const buildMenu = (window, reactHome) => {
         { role: 'forcereload' },
         { role: 'toggledevtools' },
         { type: 'separator' },
-        { role: 'togglefullscreen' }
-      ]
+        { role: 'togglefullscreen' },
+      ],
     },
     {
       role: 'window',
       submenu: [
         { role: 'minimize' },
-        { role: 'close' }
-      ]
+        { role: 'close' },
+      ],
     },
     {
       role: 'help',
@@ -53,18 +55,18 @@ const buildMenu = (window, reactHome) => {
           label: 'Documentation',
           click() {
             shell.openExternal(
-              'https://github.com/scimusmn/stele#readme'
+              'https://github.com/scimusmn/stele#readme',
             );
-          }
+          },
         },
         {
           label: 'Report issues',
           click() {
             shell.openExternal('https://github.com/scimusmn/stele/issues');
-          }
-        }
+          },
+        },
       ],
-    }
+    },
   ];
 
   if (process.platform === 'darwin') {
@@ -85,8 +87,8 @@ const buildMenu = (window, reactHome) => {
         { role: 'hideothers' },
         { role: 'unhide' },
         { type: 'separator' },
-        { role: 'quit' }
-      ]
+        { role: 'quit' },
+      ],
     });
 
     // Edit menu
@@ -96,16 +98,16 @@ const buildMenu = (window, reactHome) => {
         label: 'Speech',
         submenu: [
           { role: 'startspeaking' },
-          { role: 'stopspeaking' }
-        ]
-      }
+          { role: 'stopspeaking' },
+        ],
+      },
     );
 
     // Window menu
     template[3].submenu = [
       { role: 'close' },
       { role: 'minimize' },
-      { role: 'front' }
+      { role: 'front' },
     ];
   } else {
     template[2].submenu.push(
@@ -116,7 +118,7 @@ const buildMenu = (window, reactHome) => {
           navigateSettings(window, reactHome);
         }),
       },
-    )
+    );
   }
 
   return Menu.buildFromTemplate(template);

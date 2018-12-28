@@ -9,11 +9,11 @@ import {
   FormText,
   Input,
   Label,
-  Row
+  Row,
 } from 'reactstrap';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { ipcRenderer } from 'electron';
+import * as Yup from 'yup';
 
 class Settings extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class Settings extends Component {
 
     this.state = {
       displayHome: '',
-      cursorVisibility: 'show'
+      cursorVisibility: 'show',
     };
   }
 
@@ -50,7 +50,7 @@ class Settings extends Component {
               .required('Required'),
           })}
       >
-        {props => {
+        {(props) => {
           const {
             values,
             touched,
@@ -63,53 +63,54 @@ class Settings extends Component {
           return (
             <Container>
               <Row className="mt-3">
-                <Col xs={8}><Form onSubmit={handleSubmit}>
-                  <h1>Kiosk settings</h1>
-                  <FormGroup>
-                    <Label for="url">Kiosk URL</Label>
-                    <Input
-                      invalid={errors.url && touched.url}
-                      id="url"
-                      type="text"
-                      value={values.url}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <FormFeedback invalid={errors.url && touched.url}>
+                <Col xs={8}>
+                  <Form onSubmit={handleSubmit}>
+                    <h1>Kiosk settings</h1>
+                    <FormGroup>
+                      <Label for="url">Kiosk URL</Label>
+                      <Input
+                        invalid={errors.url && touched.url}
+                        id="url"
+                        type="text"
+                        value={values.url}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <FormFeedback invalid={errors.url && touched.url}>
                       A URL is required
-                    </FormFeedback>
-                    <FormText>
+                      </FormFeedback>
+                      <FormText>
                       Enter the home URL for the kiosk.
-                    </FormText>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="cursorVis">Cursor Visibility</Label>
-                    <select
-                      name="cursorVis"
-                      id="cursorVis"
-                      value={values.cursorVis}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      style={{ display: 'block' }}
+                      </FormText>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="cursorVis">Cursor Visibility</Label>
+                      <select
+                        name="cursorVis"
+                        id="cursorVis"
+                        value={values.cursorVis}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: 'block' }}
                       >
-                      <option value="show" label="Show" />
-                      <option value="hide" label="Hide" />
-                      <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
-                      <option value="hide_after_60" label="Hide after 60 seconds inactivity" />
+                        <option value="show" label="Show" />
+                        <option value="hide" label="Hide" />
+                        <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
+                        <option value="hide_after_60" label="Hide after 60 seconds inactivity" />
 
-                    </select>
-                    <FormText>
+                      </select>
+                      <FormText>
                       Select mouse cursor visibility. Does not work with iFrames.
-                    </FormText>
-                  </FormGroup>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
+                      </FormText>
+                    </FormGroup>
+                    <Button
+                      color="primary"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
                     Save
-                  </Button>
-                </Form>
+                    </Button>
+                  </Form>
                 </Col>
               </Row>
             </Container>

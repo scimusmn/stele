@@ -26,7 +26,8 @@ function DelayStart({ match }) {
             // TODO: Make an IPC call to load the URL
             ipcRenderer.send('skipDelay');
             console.log('IPC to skip delay');
-          }} color="warning"
+          }}
+          color="warning"
         >
           Skip delay
         </Button>
@@ -40,4 +41,3 @@ DelayStart.propTypes = {
 };
 
 export default DelayStart;
-

@@ -8,7 +8,6 @@ import NoMatch from '../NoMatch';
 import Loading from '../Loading';
 
 class AppRoutes extends React.Component {
-
   componentDidMount() {
     // Tell the main process that the render process is ready for navigation commands
     ipcRenderer.send('routerMounted');
@@ -34,11 +33,11 @@ class AppRoutes extends React.Component {
 }
 
 AppRoutes.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
 };
 
 AppRoutes.defaultProps = {
-  history: {}
+  history: {},
 };
 
 export default withRouter(AppRoutes);

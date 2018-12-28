@@ -10,8 +10,8 @@ const setupDevelopmentEnvironment = (window) => {
         label: 'Inspect element',
         click: () => {
           window.inspectElement(x, y);
-        }
-      }
+        },
+      },
     ])
       .popup(window);
   });

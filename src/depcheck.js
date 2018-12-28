@@ -49,19 +49,19 @@ const options = {
   specials: [
     depcheck.special.babel,
     depcheck.special.eslint,
-    depcheck.special.webpack
+    depcheck.special.webpack,
   ],
 };
 
 depcheck(path.join(__dirname, '..'), options, (unused) => {
-  const unusedDependencies = _.get(unused,'dependencies', null);
+  const unusedDependencies = _.get(unused, 'dependencies', null);
   const unusedDevDependencies = _.get(unused, 'devDependencies', null);
   if (!_.isEmpty(unusedDependencies)) {
     console.log(chalk.yellow.bold('Unused dependencies'));
-    console.log(chalk.yellow(_.join(unusedDependencies,'\n')));
+    console.log(chalk.yellow(_.join(unusedDependencies, '\n')));
   }
   if (!_.isEmpty(unusedDevDependencies)) {
     console.log(chalk.yellow.bold('Unused devDependencies'));
-    console.log(chalk.yellow(_.join(unusedDevDependencies,'\n')));
+    console.log(chalk.yellow(_.join(unusedDevDependencies, '\n')));
   }
 });
