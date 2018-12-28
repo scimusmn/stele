@@ -120,6 +120,7 @@ function loadWindowDelay(mainWindow, mainWindowURL) {
 // Load the configured kiosk URL immediately.
 function loadWindowNow(mainWindow, mainWindowURL) {
   logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
+  mainWindow.loadURL(mainWindowURL);
 }
 
 // Load the appropriate content in the kiosk window based on environment and config settings
