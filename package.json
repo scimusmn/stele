@@ -163,11 +163,13 @@
       ],
       "category": "Development"
     },
-    "publish": [{
-      "provider": "github",
-      "owner": "scimusmn",
-      "repo": "stele"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "scimusmn",
+        "repo": "stele"
+      }
+    ],
     "directories": {
       "buildResources": "resources",
       "output": "release"
