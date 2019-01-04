@@ -155,7 +155,8 @@
     },
     "win": {
       "target": [
-        "nsis"
+        "nsis",
+        "msi"
       ]
     },
     "linux": {
