@@ -148,6 +148,15 @@ app.on('ready', async () => {
   //
   // Primary display
   const displaysPrimary = screen.getPrimaryDisplay();
+  const displaysAll = screen.getAllDisplays();
+  logger.info(`Displays - ${displaysAll.length} displays connected.`);
+  _.forEach(displaysAll, (display, index) => {
+    logger.info(
+      `Displays - Display ${index + 1}${display.id === displaysPrimary.id
+        ? ' (Primary) '
+        : ' '}- ${display.size.width} x ${display.size.height}`,
+    );
+  });
 
   //
   // Start main window container
