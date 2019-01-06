@@ -9,7 +9,7 @@
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
 import {
-  app, BrowserWindow, ipcMain, globalShortcut, Menu,
+  app, BrowserWindow, globalShortcut, ipcMain, Menu, screen,
 } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
@@ -144,6 +144,12 @@ function loadWindow(mainWindow, mainWindowURL) {
 
 app.on('ready', async () => {
   //
+  // Get display information
+  //
+  // Primary display
+  const displaysPrimary = screen.getPrimaryDisplay();
+
+  //
   // Start main window container
   //
   // We will use this object to build out the Electron window
@@ -171,8 +177,8 @@ app.on('ready', async () => {
   // Setup default window size
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: (displaysPrimary.size.width / 2),
+    height: ((displaysPrimary.size.height / 3) * 2),
   });
   logger.info('Window - New browser window');
 
