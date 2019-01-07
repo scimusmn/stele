@@ -133,14 +133,6 @@ app.on('ready', async () => {
   store.set('kiosk.displayPrimaryID', displaysPrimary.id);
 
   //
-  // Start main window container
-  //
-  // We will use this object to build out the Electron window
-  //
-  // TODO: Move this into the ready
-  let mainWindow = null;
-
-  //
   // Lookup settings
   //
   // Default the app to the settings input page if app values aren't set.
@@ -158,7 +150,7 @@ app.on('ready', async () => {
   await installExtensions();
 
   // Setup default window size
-  mainWindow = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     show: false,
     width: (displaysPrimary.size.width / 2),
     height: ((displaysPrimary.size.height / 3) * 2),
