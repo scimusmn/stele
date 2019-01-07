@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import validUrl from 'valid-url';
+import _ from 'lodash';
 import {
   Button,
   Col,
@@ -12,7 +13,7 @@ import {
   Label,
   Row,
 } from 'reactstrap';
-import { Formik } from 'formik';
+import { Formik, FieldArray, Field } from 'formik';
 import { ipcRenderer } from 'electron';
 import * as Yup from 'yup';
 
@@ -21,24 +22,36 @@ class Settings extends Component {
     super(props);
 
     this.state = {
-      displayHome: '',
       cursorVisibility: 'show',
+      displays: [],
+      displayPrimaryID: [],
     };
   }
 
+  // TODO: Cleanup these default checks. Mutating these values isn't the right way here
   componentWillMount() {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
-    let { displayHome, cursorVisibility } = kioskSettings;
+    let {
+      displayHome, cursorVisibility, displayCount, displayPrimaryID, displays,
+    } = kioskSettings;
     if (displayHome === undefined) displayHome = '';
     if (cursorVisibility === undefined) cursorVisibility = 'show';
-    this.setState({ displayHome, cursorVisibility });
+    if (displayCount === undefined) displayCount = 1;
+    if (displayPrimaryID === undefined) displayPrimaryID = '';
+    if (displays === undefined) displays = [];
+    this.setState({
+      cursorVisibility, displayPrimaryID, displays,
+    });
   }
 
   render() {
-    const { displayHome, cursorVisibility } = this.state;
+    const {
+      cursorVisibility, displayPrimaryID, displays,
+    } = this.state;
+    const isValid = (errors, touched, name) => !!(_.get(errors, name) && _.get(touched, name));
     return (
       <Formik
-        initialValues={{ url: displayHome, cursorVis: cursorVisibility }}
+        initialValues={{ displays, cursorVis: cursorVisibility }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             ipcRenderer.send('updateSettings', values);
@@ -49,13 +62,18 @@ class Settings extends Component {
           Yup
             .object()
             .shape({
-              url: Yup
-                .string()
-                .test(
-                  'is-url',
-                  value => (!!((validUrl.isHttpUri(value) || validUrl.isHttpsUri(value)))),
-                )
-                .required('Required'),
+              displays: Yup.array()
+                .of(
+                  Yup.object().shape({
+                    url: Yup
+                      .string()
+                      .test(
+                        'is-url',
+                        value => (!!((validUrl.isHttpUri(value) || validUrl.isHttpsUri(value)))),
+                      )
+                      .required('Required'),
+                  }),
+                ),
             })
         }
       >
@@ -71,34 +89,75 @@ class Settings extends Component {
           } = props;
           return (
             <Container>
-              <Row className="mt-3">
-                <Col xs={8}>
+              <Row className="mt-3 justify-content-center">
+                <Col xs={10}>
                   <Form
                     className="border p-3 bg-light"
                     onSubmit={handleSubmit}
                   >
-                    <h1>Kiosk settings</h1>
+                    <h1 className="text-center">Kiosk settings</h1>
+                    <hr />
+                    <h2>Display configuration</h2>
+
+                    <FieldArray
+                      name="urls"
+                      render={() => (
+                        <Fragment>
+                          {
+                          values.displays.map((display, index) => (
+                            <FormGroup row key={display.id}>
+                              <Label
+                                className="text-right"
+                                sm={3}
+                                for={`displays[${index}].url`}
+                              >
+                                {display.id === displayPrimaryID
+                                  ? <strong>Primary display</strong>
+                                  : 'Display'}
+                                <br />
+                                id:
+                                {' '}
+                                {display.id}
+                              </Label>
+                              <Col sm={9}>
+                                <Field
+                                  name={`displays[${index}].url`}
+                                  render={({ field }) => (
+                                    <Input
+                                      {...field}
+                                      className="form-control"
+                                      type="text"
+                                      invalid={isValid(errors, touched, `displays[${index}].url`)}
+                                      value={values.displays[index].url}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                    />
+                                  )}
+                                />
+                                <FormFeedback invalid={errors.url && touched.url}>
+                                  A valid URL is required.
+                                  <br />
+                                  The URL should start with http:// or https://
+                                </FormFeedback>
+                                <FormText>
+                                  Enter a URL for
+                                  {' '}
+                                  {display.id === displayPrimaryID ? 'the primary' : 'this'}
+                                  {' '}
+                                  display
+                                </FormText>
+                              </Col>
+                            </FormGroup>
+                          ))
+                        }
+                        </Fragment>
+                      )}
+                    />
+
                     <FormGroup>
-                      <Label for="url">Kiosk URL</Label>
-                      <Input
-                        invalid={errors.url && touched.url}
-                        id="url"
-                        type="text"
-                        value={values.url}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <FormFeedback invalid={errors.url && touched.url}>
-                        A valid URL is required.
-                        <br />
-                        The URL should start with http:// or https://
-                      </FormFeedback>
-                      <FormText>
-                        Enter the home URL for the kiosk.
-                      </FormText>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="cursorVis">Cursor Visibility</Label>
+                      <Label for="cursorVis">
+                        <h2>Cursor visibility</h2>
+                      </Label>
                       <select
                         name="cursorVis"
                         id="cursorVis"

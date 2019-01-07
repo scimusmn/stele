@@ -104,8 +104,33 @@ function checkUptime(nominalUptime) {
   return !(os.uptime() < nominalUptimeValue);
 }
 
+// Load the configured kiosk URL immediately.
+function loadWindowNow(mainWindow, storeDisplays) {
+  logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
+  mainWindow.loadURL(storeDisplays[0].url);
+  const secondaryWindows = [];
+  const allDisplays = screen.getAllDisplays();
+  if (storeDisplays.length > 1) {
+    _.forEach(storeDisplays, (display, index) => {
+      if (index !== 0) {
+        // TODO: Make this work for more than two displays
+        // Right now this will only correctly position a display on the 2nd display
+        secondaryWindows[index] = new BrowserWindow({
+          x: allDisplays[index].bounds.x,
+          y: 0,
+          show: false,
+        });
+        secondaryWindows[index].loadURL(storeDisplays[index].url);
+        secondaryWindows[index].once('ready-to-show', () => {
+          secondaryWindows[index].show();
+        });
+      }
+    });
+  }
+}
+
 // Load the configured kiosk URL after a configured delay.
-function loadWindowDelay(mainWindow, mainWindowURL) {
+function loadWindowDelay(mainWindow, storeDisplays) {
   // We set a default here to ensure that we pass a required delay time to the route
   // even if this gets called with an invalid delay time.
   const delayTime = getDelayTime(30);
@@ -113,32 +138,28 @@ function loadWindowDelay(mainWindow, mainWindowURL) {
   mainWindow.webContents.send('navigate', '/delay-start', delayTime);
   // After delay, load settings URL
   global.delayTimer = setTimeout(() => {
-    mainWindow.loadURL(mainWindowURL);
+    loadWindowNow(mainWindow, storeDisplays);
   }, delayTime * 1000);
 }
 
-// Load the configured kiosk URL immediately.
-function loadWindowNow(mainWindow, mainWindowURL) {
-  logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
-  mainWindow.loadURL(mainWindowURL);
-}
-
 // Load the appropriate content in the kiosk window based on environment and config settings
-function loadWindow(mainWindow, mainWindowURL) {
+function loadWindow(mainWindow, storeDisplays) {
   if (process.env.NODE_ENV === 'development') {
     const delayTime = getDelayTime();
     // In dev we only set a delay if it's explicitly set as an environment variable and
     // it's a real number greater than 0.
     if (_.isFinite(delayTime) && delayTime > 0) {
-      loadWindowDelay(mainWindow, mainWindowURL);
+      loadWindowDelay(mainWindow, storeDisplays);
     } else {
-      loadWindowNow(mainWindow, mainWindowURL);
+      loadWindowNow(mainWindow, storeDisplays);
     }
   }
-  if (process.env.NODE_ENV !== 'development' && !checkUptime()) {
-    loadWindowDelay(mainWindow, mainWindowURL);
-  } else {
-    loadWindowNow(mainWindow, mainWindowURL);
+  if (process.env.NODE_ENV !== 'development') {
+    if (!checkUptime()) {
+      loadWindowDelay(mainWindow, storeDisplays);
+    } else {
+      loadWindowNow(mainWindow, storeDisplays);
+    }
   }
 }
 
@@ -159,6 +180,22 @@ app.on('ready', async () => {
   });
 
   //
+  // TODO: Check the displays against the config
+  // Don't delete configured URLs
+  //
+  // const displaySizes = _.map(displaysAll, _.partialRight(_.pick, ['id', 'size']));
+  // store.set('kiosk.displayCount', displaysAll.length);
+  // // Fake displays value during development
+  // // change this back to `displays` after you get the react form working
+  // const tempUrls = ['http://www.example.com', 'https://en.wikipedia.org/wiki/Main_Page'];
+  // const displays = _.forEach(
+  //   displaySizes, (display, index) => _.assignIn(display, { url: tempUrls[index] }),
+  // );
+  // store.set('kiosk.displays', displays);
+
+  store.set('kiosk.displayPrimaryID', displaysPrimary.id);
+
+  //
   // Start main window container
   //
   // We will use this object to build out the Electron window
@@ -173,6 +210,11 @@ app.on('ready', async () => {
   //
   store.set('kiosk.launching', 1);
   const reactHome = `file://${__dirname}/index.html`;
+
+  // Get display configuration from the settings
+  // If a display config isn't present load the default reactHome for Settings init
+  const storeDisplays = _.get(store.get('kiosk'), 'displays', [{ enabled: true, reactHome }]);
+
   const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
 
   // Setup browser extensions
@@ -285,9 +327,9 @@ app.on('ready', async () => {
   ipcMain.on('routerMounted', () => {
     if (store.get('kiosk.launching', 1)) {
       logger.info('Window - React router mounted');
-      if (_.has(store.get('kiosk'), 'displayHome')) {
-        logger.info('Window - URL set, checking delay');
-        loadWindow(mainWindow, mainWindowURL);
+      if (_.has(store.get('kiosk'), 'displays')) {
+        logger.info('Window - Display URLs configured, checking delay');
+        loadWindow(mainWindow, storeDisplays);
         // Done launching
         store.set('kiosk.launching', 0);
       } else {
@@ -300,7 +342,7 @@ app.on('ready', async () => {
   // Navigate to the main URL if the user clicks on the skip delay button on the delay page
   ipcMain.on('skipDelay', () => {
     logger.info('Window - Delay skipped');
-    mainWindow.loadURL(mainWindowURL);
+    loadWindowNow(mainWindow, storeDisplays);
   });
 
   //
@@ -308,10 +350,15 @@ app.on('ready', async () => {
   //
   ipcMain.on('updateSettings', (event, arg) => {
     store.set({
-      'kiosk.displayHome': arg.url,
+      'kiosk.displays': arg.displays,
       'kiosk.cursorVisibility': arg.cursorVis,
     });
-    mainWindow.loadURL(arg.url);
+    const updatedStoreDisplays = _.get(
+      store.get('kiosk'),
+      'displays',
+      [{ enabled: true, reactHome }],
+    );
+    loadWindowNow(mainWindow, updatedStoreDisplays);
   });
 
   ipcMain.on('settingsGet', (event) => {
