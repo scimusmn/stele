@@ -42,8 +42,9 @@ if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true')
 }
 
 // Load the configured kiosk URL immediately.
-function loadWindowNow(mainWindow, storeDisplays) {
-  // logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
+function loadWindowNow(mainWindow) {
+  const storeDisplays = store.get('kiosk.displays');
+  logger.info('Window - Immediately loading windows');
   mainWindow.loadURL(storeDisplays[0].url);
   const secondaryWindows = [];
   const allDisplays = screen.getAllDisplays();
@@ -67,7 +68,7 @@ function loadWindowNow(mainWindow, storeDisplays) {
 }
 
 // Load the configured kiosk URL after a configured delay.
-function loadWindowDelay(mainWindow, storeDisplays) {
+function loadWindowDelay(mainWindow) {
   // We set a default here to ensure that we pass a required delay time to the route
   // even if this gets called with an invalid delay time.
   const delayTime = getDelayTime(30);
@@ -75,38 +76,43 @@ function loadWindowDelay(mainWindow, storeDisplays) {
   mainWindow.webContents.send('navigate', '/delay-start', delayTime);
   // After delay, load settings URL
   global.delayTimer = setTimeout(() => {
-    loadWindowNow(mainWindow, storeDisplays);
+    loadWindowNow(mainWindow);
   }, delayTime * 1000);
 }
 
 // Load the appropriate content in the kiosk window based on environment and config settings
-function loadWindow(mainWindow, storeDisplays) {
+function loadWindow(mainWindow) {
   if (process.env.NODE_ENV === 'development') {
     const delayTime = getDelayTime();
     // In dev we only set a delay if it's explicitly set as an environment variable and
     // it's a real number greater than 0.
     if (_.isFinite(delayTime) && delayTime > 0) {
-      loadWindowDelay(mainWindow, storeDisplays);
+      loadWindowDelay(mainWindow);
     } else {
-      loadWindowNow(mainWindow, storeDisplays);
+      loadWindowNow(mainWindow);
     }
   }
   if (process.env.NODE_ENV !== 'development') {
     if (!checkUptime()) {
-      loadWindowDelay(mainWindow, storeDisplays);
+      loadWindowDelay(mainWindow);
     } else {
-      loadWindowNow(mainWindow, storeDisplays);
+      loadWindowNow(mainWindow);
     }
   }
 }
 
 app.on('ready', async () => {
+  // Define default URL, our compiled React app.
+  const appHome = `file://${__dirname}/index.html`;
+
   //
   // Get display information
   //
-  // Primary display
   const displaysPrimary = screen.getPrimaryDisplay();
+  store.set('kiosk.displayPrimaryID', displaysPrimary.id);
+
   const displaysAll = screen.getAllDisplays();
+
   logger.info(`Displays - ${displaysAll.length} displays connected.`);
   _.forEach(displaysAll, (display, index) => {
     logger.info(
@@ -116,35 +122,30 @@ app.on('ready', async () => {
     );
   });
 
+  // Store display info on startup
+  store.set('kiosk.displayCount', displaysAll.length);
   //
-  // TODO: Check the displays against the config
-  // Don't delete configured URLs
+  // Handle fresh settings
   //
-  // const displaySizes = _.map(displaysAll, _.partialRight(_.pick, ['id', 'size']));
-  // store.set('kiosk.displayCount', displaysAll.length);
-  // // Fake displays value during development
-  // // change this back to `displays` after you get the react form working
-  // const tempUrls = ['http://www.example.com', 'https://en.wikipedia.org/wiki/Main_Page'];
-  // const displays = _.forEach(
-  //   displaySizes, (display, index) => _.assignIn(display, { url: tempUrls[index] }),
-  // );
-  // store.set('kiosk.displays', displays);
+  // If we're starting the app for the first time the displays setting will be blank
+  // in the data store. Create the display settings with our screen information
+  // and add a blank URL item.
+  store.set(
+    'kiosk.displays',
+    _.get(
+      store.get('kiosk'),
+      'displays',
+      _.map(
+        displaysAll, item => _.extend({}, item, { url: '' }),
+      ),
+    ),
+  );
 
-  store.set('kiosk.displayPrimaryID', displaysPrimary.id);
-
-  //
-  // Lookup settings
-  //
-  // Default the app to the settings input page if app values aren't set.
-  //
+  // TODO: Confirm that this description is correct
+  // Set an initial launching state flag.
+  // This allows us to wait for the React app to start up and send back a signal that it is ready
+  // to navigate to the appropriate path.
   store.set('kiosk.launching', 1);
-  const reactHome = `file://${__dirname}/index.html`;
-
-  // Get display configuration from the settings
-  // If a display config isn't present load the default reactHome for Settings init
-  const storeDisplays = _.get(store.get('kiosk'), 'displays', [{ enabled: true, reactHome }]);
-
-  // const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
 
   // Setup browser extensions
   await installExtensions();
@@ -173,7 +174,7 @@ app.on('ready', async () => {
         logger.info(
           `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`,
         );
-        mainWindow.loadURL(reactHome);
+        mainWindow.loadURL(appHome);
         ipcMain.on('routerMounted', () => {
           mainWindow.webContents.send('navigate', '/settings');
         });
@@ -191,7 +192,7 @@ app.on('ready', async () => {
     const currentURL = history[history.length - 1];
 
     // Ensure we are on our target kiosk URL
-    if (currentURL.indexOf(reactHome) === -1) {
+    if (currentURL.indexOf(appHome) === -1) {
       const hideCursor = store.get('kiosk.cursorVisibility');
       let inactivityDelay = 0;
       const hideCursorCSS = 'html, body, *{ cursor: none !important;}';
@@ -244,16 +245,16 @@ app.on('ready', async () => {
   }
 
   // Start by loading the React home page
-  mainWindow.loadURL(reactHome);
+  mainWindow.loadURL(appHome);
   logger.info('Window - Load React home');
 
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
     if (store.get('kiosk.launching', 1)) {
       logger.info('Window - React router mounted');
-      if (_.has(store.get('kiosk'), 'displays')) {
+      if (_.get(store.get('kiosk'), 'displays[0].url') !== '') {
         logger.info('Window - Display URLs configured, checking delay');
-        loadWindow(mainWindow, storeDisplays);
+        loadWindow(mainWindow);
         // Done launching
         store.set('kiosk.launching', 0);
       } else {
@@ -266,7 +267,7 @@ app.on('ready', async () => {
   // Navigate to the main URL if the user clicks on the skip delay button on the delay page
   ipcMain.on('skipDelay', () => {
     logger.info('Window - Delay skipped');
-    loadWindowNow(mainWindow, storeDisplays);
+    loadWindowNow(mainWindow);
   });
 
   //
@@ -277,12 +278,7 @@ app.on('ready', async () => {
       'kiosk.displays': arg.displays,
       'kiosk.cursorVisibility': arg.cursorVis,
     });
-    const updatedStoreDisplays = _.get(
-      store.get('kiosk'),
-      'displays',
-      [{ enabled: true, reactHome }],
-    );
-    loadWindowNow(mainWindow, updatedStoreDisplays);
+    loadWindowNow(mainWindow);
   });
 
   ipcMain.on('settingsGet', (event) => {
@@ -313,7 +309,7 @@ app.on('ready', async () => {
       && process.platform === 'darwin'
     )
   ) {
-    Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
+    Menu.setApplicationMenu(buildMenu(mainWindow, appHome));
     // Set shortcuts for alternate quit and hide keyboard shortcuts on the Mac
     // These are useful when remotely controlling the computer. In this situation the traditional
     // app shortcuts often don't come through to Stele because they are captured with the
@@ -352,7 +348,7 @@ app.on('ready', async () => {
     });
     // Settings
     globalShortcut.register('CommandOrControl+,', () => {
-      navigateSettings(mainWindow, reactHome);
+      navigateSettings(mainWindow, appHome);
     });
     // Reload
     globalShortcut.register('CommandOrControl+R', () => {
