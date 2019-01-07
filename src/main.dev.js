@@ -47,14 +47,13 @@ function loadWindowNow(mainWindow) {
   logger.info('Window - Immediately loading windows');
   mainWindow.loadURL(storeDisplays[0].url);
   const secondaryWindows = [];
-  const allDisplays = screen.getAllDisplays();
   if (storeDisplays.length > 1) {
     _.forEach(storeDisplays, (display, index) => {
       if (index !== 0) {
         // TODO: Make this work for more than two displays
         // Right now this will only correctly position a display on the 2nd display
         secondaryWindows[index] = new BrowserWindow({
-          x: allDisplays[index].bounds.x,
+          x: storeDisplays[index].bounds.x,
           y: 0,
           show: false,
         });
