@@ -60,6 +60,10 @@ function loadWindowNow(mainWindow) {
         secondaryWindows[index].loadURL(storeDisplays[index].url);
         secondaryWindows[index].once('ready-to-show', () => {
           secondaryWindows[index].show();
+          // Enable fullscreen kiosk mode for secondary windows in production
+          if (process.env.NODE_ENV === 'production') {
+            secondaryWindows[index].setKiosk(true);
+          }
         });
       }
     });
