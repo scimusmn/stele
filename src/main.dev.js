@@ -21,21 +21,22 @@ import navigateSettings from './navigate';
 import logger from './logger';
 import installExtensions from './extensions';
 
-const promisedExec = childProcess.exec;
-
 // Setup global timer container
 global.delayTimer = null;
 
-// Local data persistence store
+// Setup local execution
+const promisedExec = childProcess.exec;
+
+// Setup local data store
 const store = new Store();
 
-// Enable stack traces in production
+// Setup stack traces in production
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
 
-// Add useful debug features to Electron
+// Setup useful Electron debug features in development
 if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
   require('electron-debug')();
 }
