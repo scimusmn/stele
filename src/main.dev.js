@@ -13,8 +13,8 @@ import {
 } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
-import os from 'os';
 import childProcess from 'child_process';
+import { getDelayTime, checkUptime } from './delay';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
 import navigateSettings from './navigate';
@@ -41,28 +41,9 @@ if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true')
   require('electron-debug')();
 }
 
-//
-// Lookup the delay time environment variable
-//
-// Return NaN if set and not transformable to a number.
-// Returns 0 if the environment variable is not set
-// Returns an optional defaultSeconds if the environment variable is not set
-//
-function getDelayTime(defaultSeconds) {
-  return process.env.STELE_DELAY ? process.env.STELE_DELAY * 1 : defaultSeconds || 0;
-}
-
-// Check whether the computer has been up long enough to start the configured URL
-// If we just started up returns false
-function checkUptime(nominalUptime) {
-  // Seconds since launch, when it will be safe to load the URL
-  const nominalUptimeValue = nominalUptime || 300;
-  return !(os.uptime() < nominalUptimeValue);
-}
-
 // Load the configured kiosk URL immediately.
 function loadWindowNow(mainWindow, storeDisplays) {
-  logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
+  // logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
   mainWindow.loadURL(storeDisplays[0].url);
   const secondaryWindows = [];
   const allDisplays = screen.getAllDisplays();
