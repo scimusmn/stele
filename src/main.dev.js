@@ -21,6 +21,7 @@ import DailyRotateFile from 'winston-daily-rotate-file';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
 import navigateSettings from './navigate';
+import { autoLaunchApp } from './startupHelpers';
 
 const promisedExec = childProcess.exec;
 
@@ -272,6 +273,7 @@ app.on('ready', async () => {
       logger.info('Window - React router mounted');
       if (_.has(store.get('kiosk'), 'displayHome')) {
         logger.info('Window - URL set, checking delay');
+        autoLaunchApp(store.get('kiosk.autoLaunch'));
         loadWindow(mainWindow, mainWindowURL);
         // Done launching
         store.set('kiosk.launching', 0);
