@@ -72,7 +72,7 @@ class Settings extends Component {
           return (
             <Container>
               <Row className="mt-3">
-                <Col xs={8}>
+                <Col xs={8} className="mx-auto">
                   <Form
                     className="border p-3 bg-light"
                     onSubmit={handleSubmit}
@@ -97,26 +97,43 @@ class Settings extends Component {
                         Enter the home URL for the kiosk.
                       </FormText>
                     </FormGroup>
-                    <FormGroup>
-                      <Label for="cursorVis">Cursor Visibility</Label>
-                      <select
-                        name="cursorVis"
-                        id="cursorVis"
-                        value={values.cursorVis}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ display: 'block' }}
-                      >
-                        <option value="show" label="Show" />
-                        <option value="hide" label="Hide" />
-                        <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
-                        <option value="hide_after_60" label="Hide after 60 seconds inactivity" />
+                    <Row form>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="cursorVis">Cursor Visibility</Label>
+                          <select
+                            name="cursorVis"
+                            id="cursorVis"
+                            value={values.cursorVis}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            style={{ display: 'block' }}
+                          >
+                            <option value="show" label="Show" />
+                            <option value="hide" label="Hide" />
+                            <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
+                            <option value="hide_after_60" label="Hide after 60 seconds inactivity" />
 
-                      </select>
-                      <FormText>
+                          </select>
+                          <FormText>
                         Select mouse cursor visibility. Does not work with iFrames.
-                      </FormText>
-                    </FormGroup>
+                          </FormText>
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <Label for="autoLaunch">Auto Launch</Label>
+                        <FormGroup check>
+                          <Label check>
+                            <Input type="checkbox" id="autoLaunch" />
+                            {' '}
+                          Auto launch application on startup
+                          </Label>
+                          <FormText>
+                        Auto launch application on startup.
+                          </FormText>
+                        </FormGroup>
+                      </Col>
+                    </Row>
                     <Button
                       color="primary"
                       type="submit"
