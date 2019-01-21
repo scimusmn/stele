@@ -23,22 +23,24 @@ class Settings extends Component {
     this.state = {
       displayHome: '',
       cursorVisibility: 'show',
+      autoLaunch: true,
     };
   }
 
   componentWillMount() {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
-    let { displayHome, cursorVisibility } = kioskSettings;
+    let { displayHome, cursorVisibility, autoLaunch } = kioskSettings;
     if (displayHome === undefined) displayHome = '';
     if (cursorVisibility === undefined) cursorVisibility = 'show';
-    this.setState({ displayHome, cursorVisibility });
+    if (autoLaunch === undefined) autoLaunch = true;
+    this.setState({ displayHome, cursorVisibility, autoLaunch });
   }
 
   render() {
-    const { displayHome, cursorVisibility } = this.state;
+    const { displayHome, cursorVisibility, autoLaunch } = this.state;
     return (
       <Formik
-        initialValues={{ url: displayHome, cursorVis: cursorVisibility }}
+        initialValues={{ url: displayHome, cursorVis: cursorVisibility, autoLaunch }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             ipcRenderer.send('updateSettings', values);
@@ -124,7 +126,7 @@ class Settings extends Component {
                         <Label for="autoLaunch">Auto Launch</Label>
                         <FormGroup check>
                           <Label check>
-                            <Input type="checkbox" id="autoLaunch" />
+                            <Input onChange={handleChange} type="checkbox" id="autoLaunch" checked={values.autoLaunch} />
                             {' '}
                           Auto launch application on startup
                           </Label>
