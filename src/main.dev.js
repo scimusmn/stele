@@ -295,6 +295,7 @@ app.on('ready', async () => {
     store.set({
       'kiosk.displayHome': arg.url,
       'kiosk.cursorVisibility': arg.cursorVis,
+      'kiosk.autoLaunch': arg.autoLaunch,
     });
     mainWindow.loadURL(arg.url);
   });
