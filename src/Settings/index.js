@@ -23,7 +23,7 @@ class Settings extends Component {
     this.state = {
       displayHome: '',
       cursorVisibility: 'show',
-      autoLaunch: true,
+      autoLaunch: false,
     };
   }
 
@@ -32,7 +32,7 @@ class Settings extends Component {
     let { displayHome, cursorVisibility, autoLaunch } = kioskSettings;
     if (displayHome === undefined) displayHome = '';
     if (cursorVisibility === undefined) cursorVisibility = 'show';
-    if (autoLaunch === undefined) autoLaunch = true;
+    if (autoLaunch === undefined) autoLaunch = false;
     this.setState({ displayHome, cursorVisibility, autoLaunch });
   }
 
