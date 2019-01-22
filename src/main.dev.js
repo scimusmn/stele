@@ -273,7 +273,6 @@ app.on('ready', async () => {
       logger.info('Window - React router mounted');
       if (_.has(store.get('kiosk'), 'displayHome')) {
         logger.info('Window - URL set, checking delay');
-        autoLaunchApp(store.get('kiosk.autoLaunch'));
         loadWindow(mainWindow, mainWindowURL);
         // Done launching
         store.set('kiosk.launching', 0);
@@ -300,6 +299,7 @@ app.on('ready', async () => {
       'kiosk.autoLaunch': arg.autoLaunch,
     });
     mainWindow.loadURL(arg.url);
+    autoLaunchApp(store.get('kiosk.autoLaunch'));
   });
 
   ipcMain.on('settingsGet', (event) => {
