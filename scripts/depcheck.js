@@ -1,4 +1,4 @@
-import depcheck from 'depcheck';
+import depcheck from 'scripts/depcheck';
 import _ from 'lodash';
 import chalk from 'chalk';
 import path from 'path';

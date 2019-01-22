@@ -11,7 +11,7 @@
     "build-e2e": "cross-env E2E_BUILD=true yarn build",
     "build-main": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.main.prod.babel.js --colors",
     "build-renderer": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.renderer.prod.babel.js --colors",
-    "depcheck": "node -r @babel/register src/depcheck.js",
+    "depcheck": "node -r @babel/register scripts/depcheck.js",
     "dev": "cross-env START_HOT=1 node -r @babel/register ./scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
     "dev-delay": "cross-env START_HOT=1 node -r @babel/register ./scripts/CheckPortInUse.js && cross-env START_HOT=1 STELE_DELAY=5 yarn start-renderer-dev",
     "postinstall": "electron-builder install-app-deps package.json && yarn build-dll && yarn depcheck",
