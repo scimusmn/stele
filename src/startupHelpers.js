@@ -3,7 +3,7 @@ import { app } from 'electron';
 
 export function autoLaunchApp(autoLaunchSetting) {
   const kioskAutoLaunch = new AutoLaunch({
-    name: 'Stele',
+    name: app.getName(),
   });
   console.log(app.getName());
   function whichSetting(settingsBool, configSetting) {
