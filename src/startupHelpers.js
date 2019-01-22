@@ -1,24 +1,30 @@
 import AutoLaunch from 'auto-launch';
-
+import { app } from 'electron';
 
 export function autoLaunchApp(autoLaunchSetting) {
-  console.log("autolaunch settings: " + autoLaunchSetting);
+  const kioskAutoLaunch = new AutoLaunch({
+    name:  app.getName()
+  });
+  function whichSetting(settingsBool, configSetting){
+    if(settingsBool == configSetting){
+      console.log("autolaunch setting already configured")
+      return
+    } else if(configSetting) {
+      console.log("autolaunch enabled");
+      kioskAutoLaunch.enable()
+    } else {
+      console.log("autolaunch disabled");
+      kioskAutoLaunch.disable()
+    }
+  }
   function successCallback(result) {
     console.log("auto launch Success: " + result);
   }
-  
   function failureCallback(error) {
     console.log("auto launch Error: " + error);
   }
-  const kioskAutoLaunch = new AutoLaunch({
-    name: 'electron'
-  });
-  if(autoLaunchSetting){
-    console.log("enable startup");
-    kioskAutoLaunch.enable().then(successCallback, failureCallback);
-  }else{
-    console.log("disable auto startupp")
-    kioskAutoLaunch.disable().then(successCallback, failureCallback);
-  }
-  
+  kioskAutoLaunch.isEnabled()
+  .then(isEnabled => whichSetting(isEnabled, autoLaunchSetting))
+  .catch(failureCallback);
+
 }
