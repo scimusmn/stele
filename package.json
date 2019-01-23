@@ -162,7 +162,8 @@
     },
     "linux": {
       "target": [
-        "AppImage"
+        "AppImage",
+        "zip"
       ],
       "category": "Development"
     },

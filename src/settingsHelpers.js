@@ -3,9 +3,9 @@ import { app } from 'electron';
 
 export function autoLaunchApp(autoLaunchSetting) {
   // added process.env.APPIMAGE for linux appimage build
-  // process.env.APPIMAGE will return undefined in Qindows and Mac
+  // process.env.APPIMAGE will return undefined in Windows and Mac
   // when path: is undefined AutoLaunch default guesses correct location of application only
-  // for Mac and Windows
+  // for Mac and Windows, due to AppImage placement of app
   const kioskAutoLaunch = new AutoLaunch({
     name: app.getName(),
     path: process.env.APPIMAGE,
