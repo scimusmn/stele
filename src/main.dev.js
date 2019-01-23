@@ -21,7 +21,7 @@ import DailyRotateFile from 'winston-daily-rotate-file';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
 import navigateSettings from './navigate';
-import { autoLaunchApp } from './startupHelpers';
+import { autoLaunchApp } from './settingsHelpers';
 
 const promisedExec = childProcess.exec;
 
