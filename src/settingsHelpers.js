@@ -2,15 +2,15 @@ import AutoLaunch from 'auto-launch';
 import { app } from 'electron';
 
 export function autoLaunchApp(autoLaunchSetting) {
-  // added process.env.APPIMAGE for linux appimage build
-  // process.env.APPIMAGE will return undefined in Windows and Mac
-  // when path: is undefined AutoLaunch default guesses correct location of application only
-  // for Mac and Windows, due to AppImage placement of app
+  // adding path:process.env.APPIMAGE for linux appimage build
+  // places appImage in ~./config/autostart
+  // eventhough the appImage for Stele is placed within ~./config/autostart
+  // the app does not open on startup
+  // the .zip release works without issue
+
   const kioskAutoLaunch = new AutoLaunch({
     name: app.getName(),
-    path: process.env.APPIMAGE,
   });
-  console.log(process.env.APPIMAGE);
   function whichSetting(settingsBool, configSetting) {
     if (settingsBool == configSetting) {
       console.log('autolaunch setting already configured');
