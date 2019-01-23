@@ -2,7 +2,7 @@ import AutoLaunch from 'auto-launch';
 import { app } from 'electron';
 
 export function autoLaunchApp(autoLaunchSetting) {
-  // linux issue: placing path:process.env.APPIMAGE for linux appimage build
+  // linux issue: placing path:process.env.APPIMAGE for linux appImage build
   // even though the Stele appImage is place in ~./config when path above is added
   // the appImage does not get called on startup. works fine with .zip build
   const kioskAutoLaunch = new AutoLaunch({
