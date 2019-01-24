@@ -32,7 +32,7 @@ If you've made changes to the application and are ready to release a new version
 
     yarn package
 
-This will save either a `.dmg` (macOS), `.exe` (Windows 10), or an `.Zip` (Linux) in the `release` directory.
+This will save either a `.dmg` (macOS), `.exe` (Windows 10), or an `.zip` (Linux) in the `release` directory.
 
 ## Change kiosk URL
 When you start the app, and no URL is set, you will be directed to the settings page to enter a URL for your kiosk view.
