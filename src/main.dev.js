@@ -248,6 +248,13 @@ app.on('ready', async () => {
     }
   });
 
+  // Ensure the application window has focus as well as the emmbedded content
+  mainWindow.webContents.on('dom-ready', () => {
+    console.log('DOM READY');
+    mainWindow.focus();
+    mainWindow.webContents.focus();
+  });
+
   // Log console messages in the render process
   if (process.env.LOG_RENDER_CONSOLE === 'true') {
     mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
