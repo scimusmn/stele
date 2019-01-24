@@ -32,7 +32,7 @@ If you've made changes to the application and are ready to release a new version
 
     yarn package
 
-This will save either a `.dmg` (macOS), `.exe` (Windows 10), or an `.AppImage` (Linux) in the `release` directory.
+This will save either a `.dmg` (macOS), `.exe` (Windows 10), or an `.zip` (Linux) in the `release` directory.
 
 ## Change kiosk URL
 When you start the app, and no URL is set, you will be directed to the settings page to enter a URL for your kiosk view.
@@ -53,6 +53,7 @@ When running the application you can use a few keyboard shortcuts to control the
 | Cmd + Q  | Quit application             | 𐄂       | 𐄂     | ✓     |
 
 \* Hide application works on Windows. On Linux and Mac, we simply open the file explorer, pushing the Stele application into the background.
+
 
 # Credit
 ## What's a Stele?

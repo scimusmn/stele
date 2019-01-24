@@ -21,6 +21,7 @@ import DailyRotateFile from 'winston-daily-rotate-file';
 import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
 import navigateSettings from './navigate';
+import { autoLaunchApp } from './settingsHelpers';
 
 const promisedExec = childProcess.exec;
 
@@ -295,8 +296,10 @@ app.on('ready', async () => {
     store.set({
       'kiosk.displayHome': arg.url,
       'kiosk.cursorVisibility': arg.cursorVis,
+      'kiosk.autoLaunch': arg.autoLaunch,
     });
     mainWindow.loadURL(arg.url);
+    autoLaunchApp(store.get('kiosk.autoLaunch'));
   });
 
   ipcMain.on('settingsGet', (event) => {
