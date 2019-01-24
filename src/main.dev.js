@@ -249,6 +249,7 @@ app.on('ready', async () => {
   });
 
   // Ensure the application window has focus as well as the emmbedded content
+  // will be called on settings page and when url is switched to home url
   mainWindow.webContents.on('dom-ready', () => {
     console.log('DOM READY');
     mainWindow.focus();
