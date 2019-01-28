@@ -95,24 +95,20 @@ class Settings extends Component {
               <Row className="mt-3 justify-content-center">
                 <Col xs={10}>
                   <Form
-                    className="border p-3 bg-light"
-                    onSubmit={handleSubmit}
+                    className="border p-3 bg-light" onSubmit={handleSubmit}
                   >
                     <h1 className="text-center">Kiosk settings</h1>
                     <hr />
                     <h2>Display configuration</h2>
 
                     <FieldArray
-                      name="urls"
-                      render={() => (
-                        <Fragment>
-                          {
+                      name="urls" render={() => (
+                      <Fragment>
+                        {
                           values.displays.map((display, index) => (
                             <FormGroup row key={display.id}>
                               <Label
-                                className="text-right"
-                                sm={3}
-                                for={`displays[${index}].url`}
+                                className="text-right" sm={3} for={`displays[${index}].url`}
                               >
                                 {display.id === displayPrimaryID
                                   ? <strong>Primary display</strong>
@@ -124,18 +120,16 @@ class Settings extends Component {
                               </Label>
                               <Col sm={9}>
                                 <Field
-                                  name={`displays[${index}].url`}
-                                  render={({ field }) => (
-                                    <Input
-                                      {...field}
-                                      className="form-control"
-                                      type="text"
-                                      invalid={isValid(errors, touched, `displays[${index}].url`)}
-                                      value={values.displays[index].url}
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                    />
-                                  )}
+                                  name={`displays[${index}].url`} render={({ field }) => (
+                                  <Input
+                                    {...field} className="form-control"
+                                    type="text"
+                                    invalid={isValid(errors, touched, `displays[${index}].url`)}
+                                    value={values.displays[index].url}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                  />
+                                )}
                                 />
                                 <FormFeedback invalid={errors.url && touched.url}>
                                   A valid URL is required.
@@ -153,54 +147,63 @@ class Settings extends Component {
                             </FormGroup>
                           ))
                         }
-                          <Alert color="warning">
-                            Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust.
-                          </Alert>
-                        </Fragment>
-                      )}
+                        <Alert color="warning">
+                          Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust.
+                        </Alert>
+                      </Fragment>
+                    )}
                     />
 
-                    <FormGroup>
-                      <Label for="cursorVis">
-                        <h2>Cursor visibility</h2>
-                      </Label>
-                      <select
-                        name="cursorVis"
-                        id="cursorVis"
-                        value={values.cursorVis}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ display: 'block' }}
-                      >
-                        <option value="show" label="Show" />
-                        <option value="hide" label="Hide" />
-                        <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
-                        <option value="hide_after_60" label="Hide after 60 seconds inactivity" />
-
+                    <Row>
+                      <Col>
+                        <FormGroup>
+                          <Label for="cursorVis">
+                            <h2>Cursor visibility</h2>
+                          </Label>
+                          <select
+                            name="cursorVis"
+                            id="cursorVis"
+                            value={values.cursorVis}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            style={{ display: 'block' }}
+                          >
+                            <option value="show" label="Show" />
+                            <option value="hide" label="Hide" />
+                            <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
+                            <option
+                              value="hide_after_60"
+                              label="Hide after 60 seconds inactivity"
+                            />
                           </select>
+
                           <FormText>
-                        Select mouse cursor visibility. Does not work with iFrames.
+                            Select mouse cursor visibility. Does not work with iFrames.
                           </FormText>
                         </FormGroup>
                       </Col>
-                      <Col md={6}>
-                        <Label for="autoLaunch">Auto Launch</Label>
+
+                      <Col>
+                        <Label for="autoLaunch"><h2>Auto Launch</h2></Label>
                         <FormGroup check>
                           <Label check>
-                            <Input onChange={handleChange} type="checkbox" id="autoLaunch" checked={values.autoLaunch} />
+                            <Input
+                              onChange={handleChange}
+                              type="checkbox"
+                              id="autoLaunch"
+                              checked={values.autoLaunch}
+                            />
                             {' '}
-                          Auto launch application on startup
+                            Auto launch application on startup
                           </Label>
                           <FormText>
-                        Auto launch application on startup.
+                            Auto launch application on startup.
                           </FormText>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Button
-                      color="primary"
-                      type="submit"
-                      disabled={isSubmitting}
+                      color="primary" type="submit" disabled={isSubmitting}
                     >
                       Save
                     </Button>
