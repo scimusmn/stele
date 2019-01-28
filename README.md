@@ -54,6 +54,8 @@ When running the application you can use a few keyboard shortcuts to control the
 
 \* Hide application works on Windows. On Linux and Mac, we simply open the file explorer, pushing the Stele application into the background.
 
+# Security warning
+This app is under active development, but doesn't yet follow all of Electron's best-practices around system security. Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust. Web content theoretically could have access to execute system commands on your local machine. [Better checks, will be added in future releases.](https://github.com/scimusmn/stele/issues/20)
 
 # Credit
 ## What's a Stele?
