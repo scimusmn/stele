@@ -248,12 +248,13 @@ app.on('ready', async () => {
     }
   });
 
-  // Ensure the application window has focus as well as the emmbedded content
+  // Ensure the application window has focus as well as the embedded content
   // will be called on settings page and when url is switched to home url
   mainWindow.webContents.on('dom-ready', () => {
-    console.log('DOM READY');
-    mainWindow.focus();
-    mainWindow.webContents.focus();
+    if (process.env.NODE_ENV === 'production'){
+      mainWindow.focus();
+      mainWindow.webContents.focus();
+    }
   });
 
   // Log console messages in the render process
