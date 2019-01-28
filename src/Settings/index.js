@@ -11,6 +11,7 @@ import {
   Input,
   Label,
   Row,
+  Alert,
 } from 'reactstrap';
 import { Formik } from 'formik';
 import { ipcRenderer } from 'electron';
@@ -98,6 +99,9 @@ class Settings extends Component {
                       <FormText>
                         Enter the home URL for the kiosk.
                       </FormText>
+                      <Alert color="warning">
+                      Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust.
+                      </Alert>
                     </FormGroup>
                     <Row form>
                       <Col md={6}>
