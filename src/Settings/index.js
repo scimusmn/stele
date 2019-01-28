@@ -12,6 +12,7 @@ import {
   Input,
   Label,
   Row,
+  Alert,
 } from 'reactstrap';
 import { Formik, FieldArray, Field } from 'formik';
 import { ipcRenderer } from 'electron';
@@ -23,6 +24,7 @@ class Settings extends Component {
 
     this.state = {
       cursorVisibility: 'show',
+      autoLaunch: false,
       displays: [],
       displayPrimaryID: [],
     };
@@ -32,26 +34,27 @@ class Settings extends Component {
   componentWillMount() {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
     let {
-      displayHome, cursorVisibility, displayCount, displayPrimaryID, displays,
+      displayHome, cursorVisibility, displayCount, displayPrimaryID, displays, autoLaunch,
     } = kioskSettings;
     if (displayHome === undefined) displayHome = '';
     if (cursorVisibility === undefined) cursorVisibility = 'show';
+    if (autoLaunch === undefined) autoLaunch = false;
     if (displayCount === undefined) displayCount = 1;
     if (displayPrimaryID === undefined) displayPrimaryID = '';
     if (displays === undefined) displays = [];
     this.setState({
-      cursorVisibility, displayPrimaryID, displays,
+      cursorVisibility, displayPrimaryID, displays, autoLaunch,
     });
   }
 
   render() {
     const {
-      cursorVisibility, displayPrimaryID, displays,
+      cursorVisibility, displayPrimaryID, displays, autoLaunch,
     } = this.state;
     const isValid = (errors, touched, name) => !!(_.get(errors, name) && _.get(touched, name));
     return (
       <Formik
-        initialValues={{ displays, cursorVis: cursorVisibility }}
+        initialValues={{ displays, cursorVis: cursorVisibility, autoLaunch }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             ipcRenderer.send('updateSettings', values);
@@ -150,6 +153,9 @@ class Settings extends Component {
                             </FormGroup>
                           ))
                         }
+                          <Alert color="warning">
+                            Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust.
+                          </Alert>
                         </Fragment>
                       )}
                     />
@@ -171,11 +177,26 @@ class Settings extends Component {
                         <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
                         <option value="hide_after_60" label="Hide after 60 seconds inactivity" />
 
-                      </select>
-                      <FormText>
+                          </select>
+                          <FormText>
                         Select mouse cursor visibility. Does not work with iFrames.
-                      </FormText>
-                    </FormGroup>
+                          </FormText>
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <Label for="autoLaunch">Auto Launch</Label>
+                        <FormGroup check>
+                          <Label check>
+                            <Input onChange={handleChange} type="checkbox" id="autoLaunch" checked={values.autoLaunch} />
+                            {' '}
+                          Auto launch application on startup
+                          </Label>
+                          <FormText>
+                        Auto launch application on startup.
+                          </FormText>
+                        </FormGroup>
+                      </Col>
+                    </Row>
                     <Button
                       color="primary"
                       type="submit"

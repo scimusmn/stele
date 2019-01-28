@@ -5,6 +5,8 @@
 // even when the window is in fullscreen kiosk mode. So we manually construct the common
 // keyboard shortcuts that we want to enable in kiosk mode.
 //
+// TODO: Figure out why this file isn't included and why the functions are set to null
+//
 import { globalShortcut } from 'electron';
 import navigateSettings from './navigate';
 

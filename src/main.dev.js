@@ -20,6 +20,7 @@ import setupDevelopmentEnvironment from './devTools';
 import navigateSettings from './navigate';
 import logger from './logger';
 import installExtensions from './extensions';
+import { autoLaunchApp } from './settingsHelpers';
 
 // Setup global timer container
 global.delayTimer = null;
@@ -232,6 +233,15 @@ app.on('ready', async () => {
     }
   });
 
+  // Ensure the application window has focus as well as the embedded content
+  // will be called on settings page and when url is switched to home url
+  mainWindow.webContents.on('dom-ready', () => {
+    if (process.env.NODE_ENV === 'production'){
+      mainWindow.focus();
+      mainWindow.webContents.focus();
+    }
+  });
+
   // Log console messages in the render process
   if (process.env.LOG_RENDER_CONSOLE === 'true') {
     mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
@@ -280,8 +290,10 @@ app.on('ready', async () => {
     store.set({
       'kiosk.displays': arg.displays,
       'kiosk.cursorVisibility': arg.cursorVis,
+      'kiosk.autoLaunch': arg.autoLaunch,
     });
     loadWindowNow(mainWindow);
+    autoLaunchApp(store.get('kiosk.autoLaunch'), logger);
   });
 
   ipcMain.on('settingsGet', (event) => {
