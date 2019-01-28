@@ -299,7 +299,7 @@ app.on('ready', async () => {
       'kiosk.autoLaunch': arg.autoLaunch,
     });
     mainWindow.loadURL(arg.url);
-    autoLaunchApp(store.get('kiosk.autoLaunch'));
+    autoLaunchApp(store.get('kiosk.autoLaunch'), logger);
   });
 
   ipcMain.on('settingsGet', (event) => {
