@@ -169,34 +169,20 @@ class Settings extends Component {
                     </FormGroup>
                     <FormGroup>
                       <Label className="d-block">Message Reload Parse Setting</Label>
-                      <FormGroup check inline>
-                        <Label check>
-                          <Input type="radio" name="radio2" />
-                          {' '}
-                          Disabled
-                        </Label>
-                      </FormGroup>
-                      <FormGroup check inline>
-                        <Label check>
-                          <Input type="radio" name="radio2" />
-                          {' '}
-                          Contains
-                        </Label>
-                      </FormGroup>
-                      <FormGroup check inline>
-                        <Label check>
-                          <Input type="radio" name="radio2" />
-                          {' '}
-                          Starts with
-                        </Label>
-                      </FormGroup>
-                      <FormGroup check inline>
-                        <Label check>
-                          <Input type="radio" name="radio2" />
-                          {' '}
-                          Ends with
-                        </Label>
-                      </FormGroup>
+                      <select
+                        name="msgReloadOption"
+                        id="msgReloadOption"
+                        value={values.msgReloadOption}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: 'block' }}
+                      >
+                        <option value="disabled" label="Disabled" />
+                        <option value="contains" label="Contains" />
+                        <option value="startsWith" label="Starts with" />
+                        <option value="endsWith" label="Ends with" />
+
+                      </select>
                     </FormGroup>
                     <Button
                       color="primary"

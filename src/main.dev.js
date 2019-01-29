@@ -251,7 +251,7 @@ app.on('ready', async () => {
   // Ensure the application window has focus as well as the embedded content
   // will be called on settings page and when url is switched to home url
   mainWindow.webContents.on('dom-ready', () => {
-    if (process.env.NODE_ENV === 'production'){
+    if (process.env.NODE_ENV === 'production') {
       mainWindow.focus();
       mainWindow.webContents.focus();
     }
@@ -306,6 +306,8 @@ app.on('ready', async () => {
       'kiosk.displayHome': arg.url,
       'kiosk.cursorVisibility': arg.cursorVis,
       'kiosk.autoLaunch': arg.autoLaunch,
+      'kiosk.msgReloadMessage': arg.msgReloadMessage,
+      'kiosk.msgReloadOption': arg.msgReloadOption,
     });
     mainWindow.loadURL(arg.url);
     autoLaunchApp(store.get('kiosk.autoLaunch'), logger);
