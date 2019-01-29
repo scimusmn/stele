@@ -25,23 +25,35 @@ class Settings extends Component {
       displayHome: '',
       cursorVisibility: 'show',
       autoLaunch: false,
+      msgReloadMessage: '',
+      msgReloadOption: 'disable',
     };
   }
 
   componentWillMount() {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
-    let { displayHome, cursorVisibility, autoLaunch } = kioskSettings;
+    let {
+      displayHome, cursorVisibility, autoLaunch, msgReloadMessage, msgReloadOption,
+    } = kioskSettings;
     if (displayHome === undefined) displayHome = '';
     if (cursorVisibility === undefined) cursorVisibility = 'show';
     if (autoLaunch === undefined) autoLaunch = false;
-    this.setState({ displayHome, cursorVisibility, autoLaunch });
+    if (msgReloadMessage === undefined) msgReloadMessage = '';
+    if (msgReloadOption === undefined) msgReloadOption = 'disabled';
+    this.setState({
+      displayHome, cursorVisibility, autoLaunch, msgReloadMessage, msgReloadOption,
+    });
   }
 
   render() {
-    const { displayHome, cursorVisibility, autoLaunch } = this.state;
+    const {
+      displayHome, cursorVisibility, autoLaunch, msgReloadMessage, msgReloadOption,
+    } = this.state;
     return (
       <Formik
-        initialValues={{ url: displayHome, cursorVis: cursorVisibility, autoLaunch }}
+        initialValues={{
+          url: displayHome, cursorVis: cursorVisibility, autoLaunch, msgReloadMessage, msgReloadOption,
+        }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             ipcRenderer.send('updateSettings', values);
@@ -140,6 +152,52 @@ class Settings extends Component {
                         </FormGroup>
                       </Col>
                     </Row>
+                    <FormGroup>
+                      <legend>Message Reload Settings</legend>
+                      <Label for="msgReloadMessage">Message</Label>
+                      <Input
+                        invalid={errors.msgReloadMessage && touched.msgReloadMessage}
+                        id="msgReloadMessage"
+                        type="text"
+                        value={values.msgReloadMessage}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <FormText>
+                        Enter logging message to watch for. Will trigger reload.
+                      </FormText>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label className="d-block">Message Reload Parse Setting</Label>
+                      <FormGroup check inline>
+                        <Label check>
+                          <Input type="radio" name="radio2" />
+                          {' '}
+                          Disabled
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check inline>
+                        <Label check>
+                          <Input type="radio" name="radio2" />
+                          {' '}
+                          Contains
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check inline>
+                        <Label check>
+                          <Input type="radio" name="radio2" />
+                          {' '}
+                          Starts with
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check inline>
+                        <Label check>
+                          <Input type="radio" name="radio2" />
+                          {' '}
+                          Ends with
+                        </Label>
+                      </FormGroup>
+                    </FormGroup>
                     <Button
                       color="primary"
                       type="submit"
