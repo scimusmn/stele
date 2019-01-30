@@ -204,6 +204,47 @@ app.on('ready', async () => {
     },
   );
 
+  let scrapeforMessageReload = false;
+  let msgReloadScrapeFunc = null;
+  let msgReloadMessage;
+  // Do any necessary js/css injections after load
+  mainWindow.webContents.on('did-start-loading', () => {
+    // Configure console scraping based on current settings
+    msgReloadMessage = store.get('kiosk.msgReloadMessage');
+    const msgReloadOption = store.get('kiosk.msgReloadOption');
+
+    if (msgReloadMessage === undefined
+      || msgReloadMessage === ''
+      || msgReloadOption === undefined
+      || msgReloadOption === 'disabled') {
+      // Disable all message scraping
+      scrapeforMessageReload = false;
+    } else {
+      // Enable all message scraping
+      scrapeforMessageReload = true;
+
+      // Set how we should search through
+      // messages for our target string
+      switch (msgReloadOption) {
+        case 'contains':
+          msgReloadScrapeFunc = _.includes;
+          break;
+        case 'startsWith':
+          msgReloadScrapeFunc = _.startsWith;
+          break;
+        case 'endsWith':
+          msgReloadScrapeFunc = _.endsWith;
+          break;
+        case 'disabled':
+          msgReloadScrapeFunc = null;
+          break;
+        default:
+          console.warn(`Setting messageReload included unrecognized option: ${msgReloadOption}`);
+      }
+    }
+  });
+
+
   // Do any necessary js/css injections after load
   mainWindow.webContents.on('did-finish-load', () => {
     const contents = mainWindow.webContents;
@@ -212,6 +253,7 @@ app.on('ready', async () => {
 
     // Ensure we are on our target kiosk URL
     if (currentURL.indexOf(reactHome) === -1) {
+      // Configure cursor visibility based on settings
       const hideCursor = store.get('kiosk.cursorVisibility');
       let inactivityDelay = 0;
       const hideCursorCSS = 'html, body, *{ cursor: none !important;}';
@@ -258,7 +300,7 @@ app.on('ready', async () => {
   });
 
   // Log console messages in the render process
-  if (process.env.LOG_RENDER_CONSOLE === 'true') {
+  if (process.env.LOG_RENDER_CONSOLE === 'true' || scrapeforMessageReload === true) {
     mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
       const levels = {
         0: 'Info',
@@ -268,7 +310,23 @@ app.on('ready', async () => {
       const getLevel = numberLevel => (_.has(levels, numberLevel.toString())
         ? levels[numberLevel]
         : 'Unknown');
-      logger.info(`Render-${getLevel(level)} - ${message} - ${sourceId}:${line}`);
+
+      // Check all messages for specific string that
+      // auto reloads page (edge-case error handling)
+      if (scrapeforMessageReload === true) {
+        const didFind = msgReloadScrapeFunc(message, msgReloadMessage);
+        if (didFind) {
+          logger.warn(`Detected msgReloadMessage in console: [${msgReloadMessage}] -> ${message}`);
+          logger.info('Reloading in 5 seconds...');
+          setTimeout(() => {
+            mainWindow.webContents.reload();
+          }, 5000);
+        }
+      }
+
+      if (process.env.LOG_RENDER_CONSOLE === 'true') {
+        logger.info(`Render-${getLevel(level)} - ${message} - ${sourceId}:${line}`);
+      }
     });
   }
 
