@@ -1,8 +1,9 @@
 /* eslint global-require: off, import/no-dynamic-require: off */
 
-/**
- * Builds the DLL for development electron renderer process
- */
+//
+// Builds the DLL for development electron renderer process
+// DLL speeds up the dev render time for HMR
+//
 
 import webpack from 'webpack';
 import path from 'path';
@@ -26,9 +27,9 @@ export default merge.smart(baseConfig, {
 
   externals: ['bootstrap', 'fsevents', 'crypto-browserify'],
 
-  /**
-   * Use `module` from `webpack.config.renderer.dev.js`
-   */
+  //
+  // Use `module` from `webpack.config.renderer.dev.js`
+  //
   module: require('./webpack.config.renderer.dev.babel').default.module,
 
   entry: {
@@ -48,15 +49,15 @@ export default merge.smart(baseConfig, {
       name: '[name]'
     }),
 
-    /**
-     * Create global constants which can be configured at compile time.
-     *
-     * Useful for allowing different behaviour between development builds and
-     * release builds
-     *
-     * NODE_ENV should be production so that modules do not perform certain
-     * development checks
-     */
+    //
+    // Create global constants which can be configured at compile time.
+    //
+    // Useful for allowing different behaviour between development builds and
+    // release builds
+    //
+    // NODE_ENV should be production so that modules do not perform certain
+    // development checks
+    //
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development'
     }),
