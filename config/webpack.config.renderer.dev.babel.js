@@ -253,6 +253,8 @@ export default merge.smart(baseConfig, {
       verbose: true,
       disableDotRule: false
     },
+
+    // Start the main Electron process before running the dev server
     before() {
       if (process.env.START_HOT) {
         console.log('Starting Main Process...');
