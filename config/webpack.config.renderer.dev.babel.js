@@ -239,7 +239,7 @@ export default merge.smart(baseConfig, {
     stats: 'errors-only',
     inline: true,
     lazy: false,
-    // Enabel Hot Module Reload
+    // Enable Hot Module Reload
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     // TODO: update this when we refactor React app folder
