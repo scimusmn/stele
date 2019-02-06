@@ -25,7 +25,7 @@ export default merge.smart(baseConfig, {
 
   target: 'electron-renderer',
 
-  entry: path.join(__dirname, '..', 'src/index'),
+  entry: path.join(__dirname, '..', 'src/renderer/index'),
 
   output: {
     path: path.join(__dirname, '..', 'src/dist'),
