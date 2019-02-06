@@ -13,19 +13,22 @@ import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
 
+// Ensure we're setting the correct environment
 CheckNodeEnv('development');
 
+// Development Hot Module Replacement server
 const port = process.env.PORT || 1212;
 const publicPath = `http://localhost:${port}/dist`;
+
+//
+// Define DLL helper configs
+//
 const dll = path.join(__dirname, '..', 'dll');
 const manifest = path.resolve(dll, 'renderer.json');
 const requiredByDLLConfig = module.parent.filename.includes(
   'webpack.config.renderer.dev.dll'
 );
-
-//
 // Warn if the DLL is not built
-//
 if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
   console.log(
     chalk.black.bgYellow.bold(
@@ -35,7 +38,11 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
   execSync('yarn build-dll');
 }
 
+//
+// Define Webpack config
+//
 export default merge.smart(baseConfig, {
+  // TODO: Decide if this is the right debug tool here
   devtool: 'inline-source-map',
 
   mode: 'development',

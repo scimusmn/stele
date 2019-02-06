@@ -12,7 +12,12 @@ import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
 
+// Ensure we're setting the correct environment
 CheckNodeEnv('production');
+
+//
+// Define Webpack config
+//
 export default merge.smart(baseConfig, {
   devtool: 'source-map',
 
