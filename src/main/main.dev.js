@@ -158,7 +158,7 @@ app.on('ready', async () => {
   // Default the app to the settings input page if app values aren't set.
   //
   store.set('kiosk.launching', 1);
-  const reactHome = `file://${__dirname}/renderer/index.html`;
+  const reactHome = `file://${__dirname}/../renderer/index.html`;
   const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
 
   // Setup browser extensions

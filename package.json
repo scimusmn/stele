@@ -4,7 +4,7 @@
   "private": true,
   "description": "Kiosk app wrapper for museum media exhibits",
   "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
-  "main": "./src/main.prod.js",
+  "main": "./src/main/main.prod.js",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./config/webpack.config.renderer.dev.dll.babel.js --colors",
@@ -28,8 +28,8 @@
     "package-linux": "yarn build && electron-builder build --linux",
     "package-win": "yarn build && electron-builder build --win --x64",
     "prestart": "yarn build && yarn depcheck",
-    "start": "cross-env NODE_ENV=production electron ./src/main.prod.js",
-    "start-main-dev": "cross-env HOT=1 NODE_ENV=development LOG_RENDER_CONSOLE=true electron -r @babel/register ./src/main.dev.js",
+    "start": "cross-env NODE_ENV=production electron ./src/main/main.prod.js",
+    "start-main-dev": "cross-env HOT=1 NODE_ENV=development LOG_RENDER_CONSOLE=true electron -r @babel/register ./src/main/main.dev.js",
     "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.renderer.dev.babel.js",
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 jest",
     "test-watch": "yarn test --watch"
@@ -131,8 +131,8 @@
     "files": [
       "src/dist/",
       "src/renderer/index.html",
-      "src/main.prod.js",
-      "src/main.prod.js.map",
+      "src/main/main.prod.js",
+      "src/main/main.prod.js.map",
       "package.json"
     ],
     "mac": {
