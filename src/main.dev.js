@@ -317,7 +317,9 @@ app.on('ready', async () => {
   });
 
   // Setup application menu and menu-based keyboard shortcuts
-  setupDevelopmentEnvironment(mainWindow);
+  if ( process.env.NODE_ENV === 'development' ) {
+    setupDevelopmentEnvironment(mainWindow);
+  }
 
   //
   // Handle OS unique menu behaviors for production kiosk app
