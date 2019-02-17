@@ -1,7 +1,6 @@
-/**
- * Build config for electron renderer process
- */
-
+//
+// Build config for electron renderer process
+//
 import path from 'path';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';

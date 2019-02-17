@@ -27,9 +27,7 @@ export default {
     libraryTarget: 'commonjs2',
   },
 
-  /**
-   * Determine the array of extensions that should be used to resolve modules.
-   */
+  // Determine the array of extensions that should be used to resolve modules.
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
   },
