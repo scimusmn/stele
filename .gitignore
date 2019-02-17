@@ -1,23 +1,15 @@
-# MacOS system files
-.DS_Store
-Thumbs.db
-
-# Don't include node modules in project
+# We don't include node_modules in our projects
 node_modules
 
-# Log files
-*.log
-
-# Don't include the built application
-dist
-
-# Built production files
-main.prod.js
-main.prod.js.map
+#
+# Exclude built files
+#
+# Webpack DLL files speed up dev Hot Module Replacement reloads
 dll
+# Production build of the renderer files
+src/dist
+# Production build of the Electron main files
+src/main/main.prod.js
+src/main/main.prod.js.map
+# Production built app binaries and installers
 release
-
-# ignore everything in 'app' folder what had been generated from 'src' folder
-/app/app.js
-/app/background.js
-/app/**/*.map
