@@ -158,7 +158,7 @@ app.on('ready', async () => {
   // Default the app to the settings input page if app values aren't set.
   //
   store.set('kiosk.launching', 1);
-  const reactHome = `file://${__dirname}/index.html`;
+  const reactHome = `file://${__dirname}/renderer/index.html`;
   const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
 
   // Setup browser extensions
@@ -274,7 +274,7 @@ app.on('ready', async () => {
 
   // Start by loading the React home page
   mainWindow.loadURL(reactHome);
-  logger.info('Window - Load React home');
+  logger.info(`Window - Load React home - ${reactHome}`);
 
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
@@ -317,12 +317,7 @@ app.on('ready', async () => {
   });
 
   // Setup application menu and menu-based keyboard shortcuts
-  if (
-    process.env.NODE_ENV === 'development'
-    || process.env.DEBUG_PROD === 'true'
-  ) {
-    setupDevelopmentEnvironment(mainWindow);
-  }
+  setupDevelopmentEnvironment(mainWindow);
 
   //
   // Handle OS unique menu behaviors for production kiosk app

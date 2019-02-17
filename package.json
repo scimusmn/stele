@@ -130,7 +130,7 @@
     "appId": "org.smm.stele",
     "files": [
       "src/dist/",
-      "src/index.html",
+      "src/renderer/index.html",
       "src/main.prod.js",
       "src/main.prod.js.map",
       "package.json"
