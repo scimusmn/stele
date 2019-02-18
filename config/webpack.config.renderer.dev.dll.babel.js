@@ -25,7 +25,14 @@ export default merge.smart(baseConfig, {
 
   target: 'electron-renderer',
 
-  externals: ['bootstrap', 'fsevents', 'crypto-browserify'],
+  // Ignore imported modules that don't support DLL features
+  externals: [
+    'bootstrap',
+    'crypto-browserify',
+    'electron-debug',
+    'fsevents',
+    'write-file-atomic',
+  ],
 
   //
   // Use `module` from `webpack.config.renderer.dev.js`
