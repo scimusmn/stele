@@ -82,14 +82,14 @@ export default merge.smart(baseConfig, {
             loader: 'css-loader',
             options: {
               modules: true,
-              sourceMap: true,
               importLoaders: 1,
               localIdentName: '[name]__[local]__[hash:base64:5]',
+              sourceMap: true,
             },
           },
         ],
       },
-      // SASS support - compile all .global.scss files and pipe it to style.css
+      // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
         test: /\.global\.(scss|sass)$/,
         use: [
@@ -118,9 +118,9 @@ export default merge.smart(baseConfig, {
             loader: 'css-loader',
             options: {
               modules: true,
-              sourceMap: true,
               importLoaders: 1,
               localIdentName: '[name]__[local]__[hash:base64:5]',
+              sourceMap: true,
             },
           },
           {
