@@ -1,7 +1,7 @@
 /* eslint global-require: off, import/no-dynamic-require: off */
 
 //
-// Development config, using Hot Module Replacement
+// Development Webpack config for Electron Renderer process, using Hot Module Replacement
 //
 
 import path from 'path';
@@ -38,9 +38,6 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
   execSync('yarn build-dll');
 }
 
-//
-// Define Webpack config
-//
 export default merge.smart(baseConfig, {
   // Good balance of rebuild speed and dev helpfulness. Copying our approach from create-react-app
   // See the discussion in https://github.com/facebook/create-react-app/issues/343

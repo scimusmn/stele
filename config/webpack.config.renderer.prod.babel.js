@@ -14,9 +14,6 @@ import CheckNodeEnv from '../scripts/CheckNodeEnv';
 // Ensure we're setting the correct environment
 CheckNodeEnv('production');
 
-//
-// Define Webpack config
-//
 export default merge.smart(baseConfig, {
   // Create the slower but suitable for production source-map
   devtool: 'source-map',
