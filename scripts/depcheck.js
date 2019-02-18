@@ -16,6 +16,7 @@ const options = {
     'devtron',
     'electron-builder',
     'electron-log',
+    'electron-run',
     'eslint-formatter-pretty',
     'eslint-import-resolver-webpack',
     'eslint-plugin-jest',
