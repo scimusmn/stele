@@ -31,6 +31,7 @@ export default merge.smart(baseConfig, {
     'crypto-browserify',
     'electron-debug',
     'fsevents',
+    'run-electron',
     'write-file-atomic',
   ],
 
