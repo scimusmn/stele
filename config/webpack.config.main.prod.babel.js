@@ -12,13 +12,13 @@ import CheckNodeEnv from '../scripts/CheckNodeEnv';
 CheckNodeEnv('production');
 
 export default merge.smart(baseConfig, {
-  devtool: 'source-map',
-
   mode: 'production',
 
-  target: 'electron-main',
+  devtool: 'source-map',
 
   entry: './src/main/main.dev',
+
+  target: 'electron-main',
 
   output: {
     path: path.join(__dirname, '..'),

@@ -15,10 +15,10 @@ import CheckNodeEnv from '../scripts/CheckNodeEnv';
 CheckNodeEnv('production');
 
 export default merge.smart(baseConfig, {
+  mode: 'production',
+
   // Create the slower but suitable for production source-map
   devtool: 'source-map',
-
-  mode: 'production',
 
   output: {
     // Absolute directory path to the compiled renderer files

@@ -46,6 +46,21 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 };
 
 export default {
+  entry: path.join(__dirname, '..', 'src/renderer/index'),
+
+  target: 'electron-renderer',
+
+  // TODO: Resolve diff with prod and dev
+  // Output is also defined in prod and dev with potentially conflicting or overridden results
+  output: {
+    // https://github.com/webpack/webpack/issues/1114
+    libraryTarget: 'commonjs2',
+  },
+
+  // Determine the array of extensions that should be used to resolve modules.
+  resolve: {
+    extensions: ['.js', '.jsx', '.json'],
+  },
 
   module: {
     rules: [
@@ -149,22 +164,6 @@ export default {
         ],
       },
     ],
-  },
-
-  entry: path.join(__dirname, '..', 'src/renderer/index'),
-
-  // TODO: Resolve diff with prod and dev
-  // Output is also defined in prod and dev with potentially conflicting or overridden results
-  output: {
-    // https://github.com/webpack/webpack/issues/1114
-    libraryTarget: 'commonjs2',
-  },
-
-  target: 'electron-renderer',
-
-  // Determine the array of extensions that should be used to resolve modules.
-  resolve: {
-    extensions: ['.js', '.jsx', '.json'],
   },
 
   plugins: [

@@ -39,11 +39,11 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
 }
 
 export default merge.smart(baseConfig, {
+  mode: 'development',
+
   // Good balance of rebuild speed and dev helpfulness. Copying our approach from create-react-app
   // See the discussion in https://github.com/facebook/create-react-app/issues/343
   devtool: 'cheap-module-source-map',
-
-  mode: 'development',
 
   output: {
     // Path to generated images, fonts, and other files. Served by HMR in development.
