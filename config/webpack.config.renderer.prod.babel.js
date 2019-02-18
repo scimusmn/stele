@@ -1,5 +1,5 @@
 //
-// Build config for electron renderer process
+// Production Webpack config for Electron Renderer process
 //
 import path from 'path';
 import webpack from 'webpack';
@@ -22,10 +22,6 @@ export default merge.smart(baseConfig, {
   devtool: 'source-map',
 
   mode: 'production',
-
-  target: 'electron-renderer',
-
-  entry: path.join(__dirname, '..', 'src/renderer/index'),
 
   output: {
     path: path.join(__dirname, '..', 'src/dist'),

@@ -48,10 +48,6 @@ export default merge.smart(baseConfig, {
 
   mode: 'development',
 
-  target: 'electron-renderer',
-
-  entry: path.join(__dirname, '..', 'src/renderer/index'),
-
   output: {
     publicPath: `http://localhost:${port}/dist/`,
     filename: 'renderer.dev.js',
