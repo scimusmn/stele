@@ -111,6 +111,9 @@
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "^0.4.4",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss-flexbugs-fixes": "4.1.0",
+    "postcss-loader": "3.0.0",
+    "postcss-preset-env": "6.4.0",
     "sass-loader": "^7.1.0",
     "spectron": "^5.0.0",
     "style-loader": "^0.23.1",
@@ -178,5 +181,11 @@
       "buildResources": "resources",
       "output": "release"
     }
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
