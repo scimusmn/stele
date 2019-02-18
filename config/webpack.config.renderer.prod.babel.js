@@ -28,6 +28,7 @@ export default merge.smart(baseConfig, {
     filename: 'renderer.prod.js',
   },
 
+  // Optimize code for production build
   optimization: {
     minimizer: process.env.E2E_BUILD
       ? []
