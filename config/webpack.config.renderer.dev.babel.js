@@ -42,8 +42,9 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
 // Define Webpack config
 //
 export default merge.smart(baseConfig, {
-  // TODO: Decide if this is the right debug tool here
-  devtool: 'inline-source-map',
+  // Good balance of rebuild speed and dev helpfulness. Copying our approach from create-react-app
+  // See the discussion in https://github.com/facebook/create-react-app/issues/343
+  devtool: 'cheap-module-source-map',
 
   mode: 'development',
 
