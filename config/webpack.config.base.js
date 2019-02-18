@@ -8,6 +8,8 @@ export default {
 
   module: {
     rules: [
+      // Disable require.ensure as it's not a standard language feature.
+      { parser: { requireEnsure: false } },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
