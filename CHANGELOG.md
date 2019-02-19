@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased](https://github.com/scimusmn/stele/tree/HEAD)
+
+[Full Changelog](https://github.com/scimusmn/stele/compare/v2.0.2...HEAD)
+
+**Implemented enhancements:**
+
+- As a user I want to be able to be able to display the dev tools console when the app is in production so that I can debug the renderer process [\#63](https://github.com/scimusmn/stele/issues/63)
+
 ## [v2.0.2](https://github.com/scimusmn/stele/tree/v2.0.2) (2019-02-19)
 [Full Changelog](https://github.com/scimusmn/stele/compare/v2.0.2-alpha.1...v2.0.2)
 
