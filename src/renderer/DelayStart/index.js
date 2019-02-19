@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import { ipcRenderer } from 'electron';
 import PropTypes from 'prop-types';
 import Timer from '../Timer';
-import './DelayStart.global.css';
+import './DelayStart.css';
 
 function DelayStart({ match }) {
   return (

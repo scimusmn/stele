@@ -3,7 +3,7 @@ import {
 } from 'electron';
 import navigateSettings from './navigate';
 
-const buildMenu = (window, reactHome) => {
+const buildMenu = (window, reactHome, store) => {
   const template = [
     {
       label: 'Edit',
@@ -67,7 +67,7 @@ const buildMenu = (window, reactHome) => {
           label: 'Preferences...',
           accelerator: 'Command+,',
           click: (() => {
-            navigateSettings(window, reactHome);
+            navigateSettings(window, reactHome, store);
           }),
         },
         { type: 'separator' },
@@ -103,7 +103,7 @@ const buildMenu = (window, reactHome) => {
         label: 'Preferences...',
         accelerator: 'Control+,',
         click: (() => {
-          navigateSettings(window, reactHome);
+          navigateSettings(window, reactHome, store);
         }),
       },
     );
