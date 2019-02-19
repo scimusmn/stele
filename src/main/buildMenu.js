@@ -3,11 +3,12 @@ import {
 } from 'electron';
 import log from 'electron-log';
 
-const navigateSettings = (window, reactHome) => {
+const navigateSettings = (window, reactHome, store) => {
   // Navigate to delay message during delay period
   log.info('Window - Navigating to Settings with keyboard shortcut');
   // TODO: Make this a function
   // Make this little bit a function that you can import and reuse
+  store.set('kiosk.browsingContent', 0);
   window.loadURL(reactHome);
   ipcMain.on('routerMounted', () => {
     clearTimeout(global.delayTimer);
@@ -15,7 +16,7 @@ const navigateSettings = (window, reactHome) => {
   });
 };
 
-const buildMenu = (window, reactHome) => {
+const buildMenu = (window, reactHome, store) => {
   const template = [
     {
       label: 'Edit',
@@ -79,7 +80,7 @@ const buildMenu = (window, reactHome) => {
           label: 'Preferences...',
           accelerator: 'Command+,',
           click: (() => {
-            navigateSettings(window, reactHome);
+            navigateSettings(window, reactHome, store);
           }),
         },
         { type: 'separator' },
@@ -115,7 +116,7 @@ const buildMenu = (window, reactHome) => {
         label: 'Preferences...',
         accelerator: 'Control+,',
         click: (() => {
-          navigateSettings(window, reactHome);
+          navigateSettings(window, reactHome, store);
         }),
       },
     );

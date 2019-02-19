@@ -112,8 +112,9 @@ function loadWindowDelay(mainWindow, mainWindowURL) {
   const delayTime = getDelayTime(30);
   logger.info('Window - Delay triggered');
   mainWindow.webContents.send('navigate', '/delay-start', delayTime);
-  // After delay, load settings URL
+  // After delay, load configured content
   global.delayTimer = setTimeout(() => {
+    store.set('kiosk.browsingContent', 1);
     mainWindow.loadURL(mainWindowURL);
   }, delayTime * 1000);
 }
@@ -121,6 +122,7 @@ function loadWindowDelay(mainWindow, mainWindowURL) {
 // Load the configured kiosk URL immediately.
 function loadWindowNow(mainWindow, mainWindowURL) {
   logger.info(`Window - Immediately loading settings URL: ${mainWindowURL}`);
+  store.set('kiosk.browsingContent', 1);
   mainWindow.loadURL(mainWindowURL);
 }
 
@@ -151,6 +153,11 @@ app.on('ready', async () => {
   //
   // TODO: Move this into the ready
   let mainWindow = null;
+
+  // Set a boolean for the browsing state. We want to register when the app is looking at the
+  // configured content, or when it is on one of the internal settings page. This is primarily
+  // used to help with cursor and window lock-down that we want to disable on settings pages.
+  store.set('kiosk.browsingContent', 0);
 
   //
   // Lookup settings
@@ -193,6 +200,7 @@ app.on('ready', async () => {
         logger.info(
           `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`,
         );
+        store.set('kiosk.browsingContent', 0);
         mainWindow.loadURL(reactHome);
         ipcMain.on('routerMounted', () => {
           mainWindow.webContents.send('navigate', '/settings');
@@ -207,11 +215,9 @@ app.on('ready', async () => {
   // Do any necessary js/css injections after load
   mainWindow.webContents.on('did-finish-load', () => {
     const contents = mainWindow.webContents;
-    const { history } = contents;
-    const currentURL = history[history.length - 1];
 
-    // Ensure we are on our target kiosk URL
-    if (currentURL.indexOf(reactHome) === -1) {
+    // Hide the cursor when browsing the configured content
+    if (store.get('kiosk.browsingContent')) {
       const hideCursor = store.get('kiosk.cursorVisibility');
       let inactivityDelay = 0;
       const hideCursorCSS = 'html, body, *{ cursor: none !important;}';
@@ -273,6 +279,7 @@ app.on('ready', async () => {
   }
 
   // Start by loading the React home page
+  store.set('kiosk.browsingContent', 1);
   mainWindow.loadURL(reactHome);
   logger.info(`Window - Load React home - ${reactHome}`);
 
@@ -295,6 +302,7 @@ app.on('ready', async () => {
   // Navigate to the main URL if the user clicks on the skip delay button on the delay page
   ipcMain.on('skipDelay', () => {
     logger.info('Window - Delay skipped');
+    store.set('kiosk.browsingContent', 1);
     mainWindow.loadURL(mainWindowURL);
   });
 
@@ -307,6 +315,7 @@ app.on('ready', async () => {
       'kiosk.cursorVisibility': arg.cursorVis,
       'kiosk.autoLaunch': arg.autoLaunch,
     });
+    store.set('kiosk.browsingContent', 1);
     mainWindow.loadURL(arg.url);
     autoLaunchApp(store.get('kiosk.autoLaunch'), logger);
   });
@@ -336,7 +345,7 @@ app.on('ready', async () => {
       && process.platform === 'darwin'
     )
   ) {
-    Menu.setApplicationMenu(buildMenu(mainWindow, reactHome));
+    Menu.setApplicationMenu(buildMenu(mainWindow, reactHome, store));
     // Set shortcuts for alternate quit and hide keyboard shortcuts on the Mac
     // These are useful when remotely controlling the computer. In this situation the traditional
     // app shortcuts often don't come through to Stele because they are captured with the
@@ -375,7 +384,7 @@ app.on('ready', async () => {
     });
     // Settings
     globalShortcut.register('CommandOrControl+,', () => {
-      navigateSettings(mainWindow, reactHome);
+      navigateSettings(mainWindow, reactHome, store);
     });
     // Reload
     globalShortcut.register('CommandOrControl+R', () => {
