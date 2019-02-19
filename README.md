@@ -48,6 +48,8 @@ When running the application you can use a few keyboard shortcuts to control the
 | Cmd + ,  | Settings page                | 𐄂       | 𐄂     | ✓     |
 | Ctrl + R | Reload page                  | ✓       | ✓     | 𐄂     |
 | Cmd + R  | Reload page                  | 𐄂       | 𐄂     | ✓     |
+| Ctrl + Shift + I | Open dev tools       | ✓       | ✓     | 𐄂     |
+| Cmd + Option + I | Open dev tools       | 𐄂       | 𐄂     | ✓     |
 | Ctrl + H | Hide application<sup>*</sup> | ✓       | ✓     | ✓     |
 | Ctrl + Q | Quit application             | ✓       | ✓     | ✓     |
 | Cmd + Q  | Quit application             | 𐄂       | 𐄂     | ✓     |
