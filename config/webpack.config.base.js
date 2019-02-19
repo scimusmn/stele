@@ -4,13 +4,13 @@
 import path from 'path';
 import webpack from 'webpack';
 
-// style files regexes
+// Style files regular expressions
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-// common function to get style loaders
+// Common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
     require.resolve('style-loader'),
