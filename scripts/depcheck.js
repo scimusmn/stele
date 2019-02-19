@@ -27,6 +27,7 @@ const options = {
     'jquery',
     'popper.js',
     'prettier',
+    'run-electron',
     'sass-loader',
     'spectron',
     'style-loader',
