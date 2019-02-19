@@ -42,13 +42,13 @@ When operating the app in kiosk mode use the `Cmd`+`,` keyboard shortcut to acce
 # Keyboard shortcuts
 When running the application you can use a few keyboard shortcuts to control the program. This can be useful when debugging a kiosk application in an exhibit.
 
-| Action                        | Windows & Linux | macOS |
-| ---                           | ---     | ---   |
-| Settings page                 | <kbd>Ctrl</kbd> + <kbd>,</kbd> | <kbd>Cmd</kbd> + <kbd>,</kbd> |
-| Reload page                   | <kbd>Ctrl</kbd> + <kbd>R</kbd> | <kbd>Cmd</kbd> + <kbd>R</kbd> |
-| Open dev tools                | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd> | <kbd>Cmd</kbd> + <kbd>Opt</kbd> + <kbd>I</kbd> |
-| Hide application <sup>*</sup> | <kbd>Ctrl</kbd> + <kbd>H</kbd> | <kbd>Ctrl</kbd> + <kbd>H</kbd> |
-| Quit application              | <kbd>Ctrl</kbd> + <kbd>Q</kbd> | <kbd>Cmd</kbd> + <kbd>Q</kbd> |
+| Action                       | Windows & Linux | macOS |
+| ---                          | ---     | ---   |
+| Settings page                | <kbd>Ctrl</kbd> + <kbd>,</kbd> | <kbd>Cmd</kbd> + <kbd>,</kbd> |
+| Reload page                  | <kbd>Ctrl</kbd> + <kbd>R</kbd> | <kbd>Cmd</kbd> + <kbd>R</kbd> |
+| Open dev tools               | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd> | <kbd>Cmd</kbd> + <kbd>Opt</kbd> + <kbd>I</kbd> |
+| Hide application<sup>*</sup> | <kbd>Ctrl</kbd> + <kbd>H</kbd> | <kbd>Ctrl</kbd> + <kbd>H</kbd> |
+| Quit application             | <kbd>Ctrl</kbd> + <kbd>Q</kbd> | <kbd>Cmd</kbd> + <kbd>Q</kbd> |
 
 \* Hide application works on Windows. On Linux and Mac, we simply open the file explorer, pushing the Stele application into the background.
 
