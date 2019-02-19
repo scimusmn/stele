@@ -329,7 +329,7 @@ app.on('ready', async () => {
   });
 
   // Setup application menu and menu-based keyboard shortcuts
-  if ( process.env.NODE_ENV === 'development' ) {
+  if (process.env.NODE_ENV === 'development') {
     setupDevelopmentEnvironment(mainWindow);
   }
 
