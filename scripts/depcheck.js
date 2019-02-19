@@ -7,7 +7,6 @@ const options = {
   // ignore dependencies that matches these globs
   ignoreMatches: [
     'babel-core',
-    'babel-jest',
     'babel-loader',
     'bootstrap',
     'concurrently',
@@ -19,11 +18,9 @@ const options = {
     'electron-run',
     'eslint-formatter-pretty',
     'eslint-import-resolver-webpack',
-    'eslint-plugin-jest',
     'file-loader',
     'file-loader',
     'husky',
-    'jest',
     'jquery',
     'popper.js',
     'prettier',

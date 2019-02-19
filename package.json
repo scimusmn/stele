@@ -30,9 +30,7 @@
     "prestart": "yarn build",
     "start": "cross-env NODE_ENV=production run-electron ./src/main/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development LOG_RENDER_CONSOLE=true run-electron -r @babel/register ./src/main/main.dev.js",
-    "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.renderer.dev.babel.js",
-    "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 jest",
-    "test-watch": "yarn test --watch"
+    "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.renderer.dev.babel.js"
   },
   "dependencies": {
     "auto-launch": "^5.0.5",
@@ -83,7 +81,6 @@
     "@babel/register": "^7.0.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.20",
@@ -102,13 +99,11 @@
     "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-compat": "^2.6.3",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jest": "^22.0.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.11.1",
     "file-loader": "^2.0.0",
     "husky": "^1.2.0",
-    "jest": "^23.6.0",
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "^0.4.4",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
