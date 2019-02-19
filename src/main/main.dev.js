@@ -25,7 +25,10 @@ import { autoLaunchApp } from './settingsHelpers';
 
 const promisedExec = childProcess.exec;
 
-// Setup global timer container
+//
+// Globals
+//
+// We need a global delay timer so that other spawned actions can reset it on user action.
 global.delayTimer = null;
 
 //
