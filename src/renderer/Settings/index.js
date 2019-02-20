@@ -95,20 +95,24 @@ class Settings extends Component {
               <Row className="mt-3 justify-content-center">
                 <Col xs={10}>
                   <Form
-                    className="border p-3 bg-light" onSubmit={handleSubmit}
+                    className="border p-3 bg-light"
+                    onSubmit={handleSubmit}
                   >
                     <h1 className="text-center">Kiosk settings</h1>
                     <hr />
                     <h2>Display configuration</h2>
 
                     <FieldArray
-                      name="urls" render={() => (
-                      <Fragment>
-                        {
+                      name="urls"
+                      render={() => (
+                        <Fragment>
+                          {
                           values.displays.map((display, index) => (
                             <FormGroup row key={display.id}>
                               <Label
-                                className="text-right" sm={3} for={`displays[${index}].url`}
+                                className="text-right"
+                                sm={3}
+                                for={`displays[${index}].url`}
                               >
                                 {display.id === displayPrimaryID
                                   ? <strong>Primary display</strong>
@@ -120,16 +124,18 @@ class Settings extends Component {
                               </Label>
                               <Col sm={9}>
                                 <Field
-                                  name={`displays[${index}].url`} render={({ field }) => (
-                                  <Input
-                                    {...field} className="form-control"
-                                    type="text"
-                                    invalid={isValid(errors, touched, `displays[${index}].url`)}
-                                    value={values.displays[index].url}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                  />
-                                )}
+                                  name={`displays[${index}].url`}
+                                  render={({ field }) => (
+                                    <Input
+                                      {...field}
+                                      className="form-control"
+                                      type="text"
+                                      invalid={isValid(errors, touched, `displays[${index}].url`)}
+                                      value={values.displays[index].url}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                    />
+                                  )}
                                 />
                                 <FormFeedback invalid={errors.url && touched.url}>
                                   A valid URL is required.
@@ -147,11 +153,12 @@ class Settings extends Component {
                             </FormGroup>
                           ))
                         }
-                        <Alert color="warning">
-                          Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust.
-                        </Alert>
-                      </Fragment>
-                    )}
+                          <Alert color="warning">
+                            Stele is primarily designed for local content that you trust.
+                            Don&squot;t configure it to browse to web content you don&squot;t trust.
+                          </Alert>
+                        </Fragment>
+                      )}
                     />
 
                     <Row>
@@ -184,7 +191,9 @@ class Settings extends Component {
                       </Col>
 
                       <Col>
-                        <Label for="autoLaunch"><h2>Auto Launch</h2></Label>
+                        <Label for="autoLaunch">
+                          <h2>Auto Launch</h2>
+                        </Label>
                         <FormGroup check>
                           <Label check>
                             <Input
@@ -203,7 +212,9 @@ class Settings extends Component {
                       </Col>
                     </Row>
                     <Button
-                      color="primary" type="submit" disabled={isSubmitting}
+                      color="primary"
+                      type="submit"
+                      disabled={isSubmitting}
                     >
                       Save
                     </Button>
