@@ -17,7 +17,7 @@ import { getDelayTime, checkUptime } from './delay';
 import setupDevelopmentEnvironment from './devTools';
 import logger from './logger';
 import installExtensions from './extensions';
-import { autoLaunchApp } from './settingsHelpers';
+import autoLaunch from './autoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor';
 
@@ -262,7 +262,7 @@ app.on('ready', async () => {
     store.set('kiosk.browsingContent', 1);
     mainWindow.loadURL(arg.url);
     loadWindowNow(mainWindow);
-    autoLaunchApp(store.get('kiosk.autoLaunch'), logger);
+    autoLaunch(store.get('kiosk.autoLaunch'), logger);
   });
 
   ipcMain.on('settingsGet', (event) => {
