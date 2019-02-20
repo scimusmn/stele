@@ -13,13 +13,13 @@ import {
 } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
-import { getDelayTime, checkUptime } from './delay';
 import setupDevelopmentEnvironment from './devTools';
 import logger from './logger';
 import installExtensions from './extensions';
 import autoLaunch from './autoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor';
+import { loadWindow, loadWindowNow } from './loadWindow';
 
 //
 // Globals
@@ -39,71 +39,6 @@ if (process.env.NODE_ENV === 'production') {
 // Setup useful Electron debug features in development
 if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
   require('electron-debug')();
-}
-
-// Load the configured kiosk URL immediately.
-function loadWindowNow(mainWindow) {
-  const storeDisplays = store.get('kiosk.displays');
-  logger.info('Window - Immediately loading windows');
-  mainWindow.loadURL(storeDisplays[0].url);
-  const secondaryWindows = [];
-  if (storeDisplays.length > 1) {
-    _.forEach(storeDisplays, (display, index) => {
-      if (index !== 0) {
-        // TODO: Make this work for more than two displays
-        // Right now this will only correctly position a display on the 2nd display
-        secondaryWindows[index] = new BrowserWindow({
-          x: storeDisplays[index].bounds.x,
-          y: 0,
-          show: false,
-        });
-        secondaryWindows[index].loadURL(storeDisplays[index].url);
-        secondaryWindows[index].once('ready-to-show', () => {
-          secondaryWindows[index].show();
-          // Enable fullscreen kiosk mode for secondary windows in production
-          if (process.env.NODE_ENV === 'production') {
-            secondaryWindows[index].setKiosk(true);
-          }
-        });
-      }
-    });
-  }
-}
-
-// Load the configured kiosk URL after a configured delay.
-function loadWindowDelay(mainWindow) {
-  // We set a default here to ensure that we pass a required delay time to the route
-  // even if this gets called with an invalid delay time.
-  const delayTime = getDelayTime(30);
-  logger.info('Window - Delay triggered');
-  mainWindow.webContents.send('navigate', '/delay-start', delayTime);
-  // After delay, load configured content
-  global.delayTimer = setTimeout(() => {
-    store.set('kiosk.browsingContent', 1);
-    loadWindowNow(mainWindow);
-  }, delayTime * 1000);
-}
-
-// Load the appropriate content in the kiosk window based on environment and config settings
-function loadWindow(mainWindow) {
-  if (process.env.NODE_ENV === 'development') {
-    store.set('kiosk.browsingContent', 1);
-    const delayTime = getDelayTime();
-    // In dev we only set a delay if it's explicitly set as an environment variable and
-    // it's a real number greater than 0.
-    if (_.isFinite(delayTime) && delayTime > 0) {
-      loadWindowDelay(mainWindow);
-    } else {
-      loadWindowNow(mainWindow);
-    }
-  }
-  if (process.env.NODE_ENV !== 'development') {
-    if (!checkUptime()) {
-      loadWindowDelay(mainWindow);
-    } else {
-      loadWindowNow(mainWindow);
-    }
-  }
 }
 
 app.on('ready', async () => {
@@ -233,7 +168,7 @@ app.on('ready', async () => {
       logger.info('Window - React router mounted');
       if (_.get(store.get('kiosk'), 'displays[0].url') !== '') {
         logger.info('Window - Display URLs configured, checking delay');
-        loadWindow(mainWindow);
+        loadWindow(mainWindow, store);
         // Done launching
         store.set('kiosk.launching', 0);
       } else {
@@ -247,7 +182,7 @@ app.on('ready', async () => {
   ipcMain.on('skipDelay', () => {
     logger.info('Window - Delay skipped');
     store.set('kiosk.browsingContent', 1);
-    loadWindowNow(mainWindow);
+    loadWindowNow(mainWindow, store);
   });
 
   //
@@ -261,7 +196,7 @@ app.on('ready', async () => {
     });
     store.set('kiosk.browsingContent', 1);
     mainWindow.loadURL(arg.url);
-    loadWindowNow(mainWindow);
+    loadWindowNow(mainWindow, store);
     autoLaunch(store.get('kiosk.autoLaunch'), logger);
   });
 
