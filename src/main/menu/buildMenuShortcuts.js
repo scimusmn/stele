@@ -1,10 +1,10 @@
-import {
-  app, Menu, shell,
-} from 'electron';
-import navigateSettings from './navigate';
+import { app, Menu, shell } from 'electron';
+import navigateSettings from '../navigate';
+import buildShortcutsDev from './buildShortcutsDev';
+import buildShortcutsProd from './buildShortcutsProd';
 
-const buildMenu = (window, reactHome, store) => {
-  const template = [
+const menuBuild = (window, reactHome, store) => {
+  const menuTemplate = [
     {
       label: 'Edit',
       submenu: [
@@ -57,8 +57,12 @@ const buildMenu = (window, reactHome, store) => {
     },
   ];
 
+  //
+  // macOS
+  //
+  // Add macOS specific Menu items and roles that define keyboard shortcuts
   if (process.platform === 'darwin') {
-    template.unshift({
+    menuTemplate.unshift({
       label: app.getName(),
       submenu: [
         { role: 'about' },
@@ -80,7 +84,7 @@ const buildMenu = (window, reactHome, store) => {
     });
 
     // Edit menu
-    template[1].submenu.push(
+    menuTemplate[1].submenu.push(
       { type: 'separator' },
       {
         label: 'Speech',
@@ -92,13 +96,16 @@ const buildMenu = (window, reactHome, store) => {
     );
 
     // Window menu
-    template[3].submenu = [
+    menuTemplate[3].submenu = [
       { role: 'close' },
       { role: 'minimize' },
       { role: 'front' },
     ];
   } else {
-    template[2].submenu.push(
+    //
+    // Windows & Linux
+    //
+    menuTemplate[2].submenu.push(
       {
         label: 'Preferences...',
         accelerator: 'Control+,',
@@ -109,7 +116,30 @@ const buildMenu = (window, reactHome, store) => {
     );
   }
 
-  return Menu.buildFromTemplate(template);
+  return Menu.buildFromTemplate(menuTemplate);
 };
 
-export default buildMenu;
+//
+// Handle OS unique menu behaviors for production kiosk app
+//
+// Windows & Linux: The kiosk mode in these environments shows the menu. We don't want this in
+//   kiosk mode. These OSes will also tolerate running an app with no menu.
+// macOS: macOS (aka Darwin) both hides the menu in kiosk mode and also requires the menu to be
+//   defined so that the app window will render. So we let this fall through and set the menu.
+//
+const buildMenuShortcuts = (mainWindow, appHome, store) => {
+  if (
+    process.env.NODE_ENV === 'development'
+    || (
+      process.env.NODE_ENV !== 'development'
+      && process.platform === 'darwin'
+    )
+  ) {
+    Menu.setApplicationMenu(menuBuild(mainWindow, appHome, store));
+    buildShortcutsDev();
+  } else {
+    buildShortcutsProd(mainWindow, appHome, store);
+  }
+};
+
+export default buildMenuShortcuts;

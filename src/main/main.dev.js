@@ -9,27 +9,22 @@
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
 import {
-  app, BrowserWindow, globalShortcut, ipcMain, Menu, screen,
+  app, BrowserWindow, globalShortcut, ipcMain, screen,
 } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
-import childProcess from 'child_process';
 import { getDelayTime, checkUptime } from './delay';
-import buildMenu from './buildMenu';
 import setupDevelopmentEnvironment from './devTools';
-import navigateSettings from './navigate';
 import logger from './logger';
 import installExtensions from './extensions';
 import { autoLaunchApp } from './settingsHelpers';
+import buildMenuShortcuts from './menu/buildMenuShortcuts';
 
 //
 // Globals
 //
 // We need a global delay timer so that other spawned actions can reset it on user action.
 global.delayTimer = null;
-
-// Setup local execution
-const promisedExec = childProcess.exec;
 
 // Setup local data store
 const store = new Store();
@@ -318,79 +313,8 @@ app.on('ready', async () => {
     setupDevelopmentEnvironment(mainWindow);
   }
 
-  //
-  // Handle OS unique menu behaviors for production kiosk app
-  //
-  // Windows & Linux: The kiosk mode in these environments shows the menu. We don't want this in
-  //   kiosk mode. These OSes will also tolerate running an app with no menu.
-  // macOS: macOS (aka Darwin) both hides the menu in kiosk mode and also requires the menu to be
-  //   defined so that the app window will render. So we let this fall through and set the menu.
-  //
-  if (
-    process.env.NODE_ENV === 'development'
-    || (
-      process.env.NODE_ENV !== 'development'
-      && process.platform === 'darwin'
-    )
-  ) {
-    Menu.setApplicationMenu(buildMenu(mainWindow, appHome, store));
-    // Set shortcuts for alternate quit and hide keyboard shortcuts on the Mac
-    // These are useful when remotely controlling the computer. In this situation the traditional
-    // app shortcuts often don't come through to Stele because they are captured with the
-    // remote control application. This provides an alternate way to quit or hide the app
-    // in this situation.
-    globalShortcut.register('Control+Q', () => {
-      app.quit();
-    });
-    globalShortcut.register('Control+H', () => {
-      promisedExec('open -a Finder ~/');
-    });
-  } else {
-    // Undo
-    globalShortcut.register('CommandOrControl+Z', () => {
-      mainWindow.webContents.undo();
-    });
-    // Redo
-    globalShortcut.register('CommandOrControl+Shift+Z', () => {
-      mainWindow.webContents.redo();
-    });
-    // Cut
-    globalShortcut.register('CommandOrControl+X', () => {
-      mainWindow.webContents.cut();
-    });
-    // Copy
-    globalShortcut.register('CommandOrControl+C', () => {
-      mainWindow.webContents.copy();
-    });
-    // Paste
-    globalShortcut.register('CommandOrControl+V', () => {
-      mainWindow.webContents.paste();
-    });
-    // Select all
-    globalShortcut.register('CommandOrControl+A', () => {
-      mainWindow.webContents.selectAll();
-    });
-    // Settings
-    globalShortcut.register('CommandOrControl+,', () => {
-      navigateSettings(mainWindow, appHome, store);
-    });
-    // Reload
-    globalShortcut.register('CommandOrControl+R', () => {
-      mainWindow.webContents.reload();
-    });
-    // Hide window
-    globalShortcut.register('CommandOrControl+H', () => {
-      if (process.platform === 'linux') {
-        promisedExec('nautilus');
-      } else {
-        mainWindow.blur();
-      }
-    });
-    // Quit
-    globalShortcut.register('CommandOrControl+Q', () => {
-      app.quit();
-    });
-  }
+  // Setup menus and keyboard shortcut actions
+  buildMenuShortcuts(mainWindow, appHome, store);
 
   //
   // Show the app window once everything has loaded
