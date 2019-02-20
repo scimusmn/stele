@@ -163,6 +163,27 @@ class Settings extends Component {
 
                     <Row>
                       <Col>
+                        <Label for="autoLaunch">
+                          <h2>Auto Launch</h2>
+                        </Label>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              onChange={handleChange}
+                              type="checkbox"
+                              id="autoLaunch"
+                              checked={values.autoLaunch}
+                            />
+                            {' '}
+                            Auto launch application on startup
+                          </Label>
+                          <FormText>
+                            Auto launch application on startup.
+                          </FormText>
+                        </FormGroup>
+                      </Col>
+
+                      <Col>
                         <FormGroup>
                           <Label for="cursorVis">
                             <h2>Cursor visibility</h2>
@@ -186,27 +207,6 @@ class Settings extends Component {
 
                           <FormText>
                             Select mouse cursor visibility. Does not work with iFrames.
-                          </FormText>
-                        </FormGroup>
-                      </Col>
-
-                      <Col>
-                        <Label for="autoLaunch">
-                          <h2>Auto Launch</h2>
-                        </Label>
-                        <FormGroup check>
-                          <Label check>
-                            <Input
-                              onChange={handleChange}
-                              type="checkbox"
-                              id="autoLaunch"
-                              checked={values.autoLaunch}
-                            />
-                            {' '}
-                            Auto launch application on startup
-                          </Label>
-                          <FormText>
-                            Auto launch application on startup.
                           </FormText>
                         </FormGroup>
                       </Col>
