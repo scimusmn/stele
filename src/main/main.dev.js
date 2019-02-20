@@ -111,9 +111,6 @@ function loadWindow(mainWindow) {
 }
 
 app.on('ready', async () => {
-  // Define default URL, our compiled React app.
-  const appHome = `file://${__dirname}/index.html`;
-
   //
   // Get display information
   //
@@ -160,8 +157,8 @@ app.on('ready', async () => {
   // This allows us to wait for the React app to start up and send back a signal that it is ready
   // to navigate to the appropriate path.
   store.set('kiosk.launching', 1);
-  const reactHome = `file://${__dirname}/../renderer/index.html`;
-  const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
+  const appHome = `file://${__dirname}/../renderer/index.html`;
+  // const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
 
   // Setup browser extensions
   await installExtensions();
@@ -271,7 +268,7 @@ app.on('ready', async () => {
   // Start by loading the React home page
   store.set('kiosk.browsingContent', 1);
   mainWindow.loadURL(appHome);
-  logger.info(`Window - Load React home - ${reactHome}`);
+  logger.info(`Window - Load React home - ${appHome}`);
 
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
