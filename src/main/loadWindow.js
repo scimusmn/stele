@@ -12,9 +12,6 @@ function loadWindowNow(mainWindow, store) {
   if (storeDisplays.length > 1) {
     _.forEach(storeDisplays, (display, index) => {
       if (index !== 0) {
-        // TODO: Make this work for more than two displays
-        // Right now this will only correctly position a display on the 2nd display
-
         // Don't launch windows that are linked to disconnected displays
         if (display.connected) {
           secondaryWindows[index] = new BrowserWindow({
