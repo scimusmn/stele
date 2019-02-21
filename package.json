@@ -53,7 +53,7 @@
     "valid-url": "^1.0.9",
     "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.5.1",
-    "yup": "^0.26.6"
+    "yup": "0.26.10"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
