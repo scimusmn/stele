@@ -37,7 +37,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.on('ready', async () => {
-
   // Set a boolean for the browsing state. We want to register when the app is looking at the
   // configured content, or when it is on one of the internal settings page. This is primarily
   // used to help with cursor and window lock-down that we want to disable on settings pages.
@@ -46,8 +45,10 @@ app.on('ready', async () => {
   //
   // Get display information
   //
+  // Primary display
   const displaysPrimary = screen.getPrimaryDisplay();
   store.set('kiosk.displayPrimaryID', displaysPrimary.id);
+  // All displays
   const displaysAll = screen.getAllDisplays();
   logger.info(`Displays - ${displaysAll.length} displays connected.`);
   _.forEach(displaysAll, (display, index) => {
@@ -60,22 +61,50 @@ app.on('ready', async () => {
 
   // Store display info on startup
   store.set('kiosk.displayCount', displaysAll.length);
+
+  // Get the displays registered in the app settings
+  const settingDisplaysInitial = _.get(store.get('kiosk'), 'displays');
+  // console.log(settingDisplaysInitial);
+  // console.log('----^ ^ ^ ^ ^ settingDisplaysInitial ^ ^ ^ ^ ^----');
+
   //
   // Handle fresh settings
   //
   // If we're starting the app for the first time the displays setting will be blank
   // in the data store. Create the display settings with our screen information
   // and add a blank URL item.
-  store.set(
-    'kiosk.displays',
-    _.get(
-      store.get('kiosk'),
-      'displays',
-      _.map(
-        displaysAll, item => _.extend({}, item, { url: '' }),
-      ),
-    ),
-  );
+  if (settingDisplaysInitial == null) {
+    console.log('Setting kiosk.displays');
+    store.set(
+      'kiosk.displays',
+      _.map(displaysAll, item => _.extend({}, item, { connected: true, url: '' })),
+    );
+  } else {
+    //
+    // Handle existing settings
+    //
+    // If some displays are already configured in the app, we need to evaluate whether the
+    // configured displays match the hardware connected to the computer.
+    // Start by setting all displays to disconnected
+    // const settingDisplaysIntermediate = _.get(store.get('kiosk'), 'displays');
+
+    // Build collection of displays that are connected
+    const displaysAllConnected = _.map(
+      displaysAll,
+      item => _.extend({}, item, { connected: true }),
+    );
+    // Set all settings displays to disconnected, before merging
+    const settingsDisplays = _.map(
+      settingDisplaysInitial,
+      item => _.extend({}, item, { connected: false }),
+    );
+    const mergedDisplays = _.merge(settingsDisplays, displaysAllConnected);
+    store.set('kiosk.displays', mergedDisplays);
+  }
+
+  // const settingsDisplays = _.get(store.get('kiosk'), 'displays', _.map(
+  //   displaysAll, item => _.extend({}, item, { connected: true, url: '' }),
+  // ));
 
   // TODO: Confirm that this description is correct
   // Set an initial launching state flag.
