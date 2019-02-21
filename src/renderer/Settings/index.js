@@ -11,6 +11,7 @@ import {
   FormText,
   Input,
   Label,
+  Table,
   Row,
   Alert,
 } from 'reactstrap';
@@ -67,23 +68,23 @@ class Settings extends Component {
           }, 500);
         }}
         validationSchema={
-          Yup
-            .object()
-            .shape({
-              displays: Yup.array()
-                .of(
-                  Yup.object().shape({
-                    url: Yup
-                      .string()
-                      .test(
-                        'is-url',
-                        value => (!!((validUrl.isHttpUri(value) || validUrl.isHttpsUri(value)))),
-                      )
-                      .required('Required'),
-                  }),
-                ),
-            })
-        }
+        Yup
+          .object()
+          .shape({
+            displays: Yup.array()
+              .of(
+                Yup.object().shape({
+                  url: Yup
+                    .string()
+                    .test(
+                      'is-url',
+                      value => (!!((validUrl.isHttpUri(value) || validUrl.isHttpsUri(value)))),
+                    )
+                    .required('Required'),
+                }),
+              ),
+          })
+      }
       >
         {(props) => {
           const {
@@ -116,55 +117,85 @@ class Settings extends Component {
                     <FieldArray
                       name="urls"
                       render={() => (
-                        <Fragment>
-                          {
-                          values.displays.map((display, index) => (
-                            <FormGroup row key={display.id}>
-                              <Label
-                                className="text-right"
-                                sm={3}
-                                for={`displays[${index}].url`}
-                              >
-                                {display.id === displayPrimaryID
-                                  ? <strong>Primary display</strong>
-                                  : 'Display'}
-                                <br />
-                                id:
-                                {' '}
-                                {display.id}
-                              </Label>
-                              <Col sm={9}>
-                                <Field
-                                  name={`displays[${index}].url`}
-                                  render={({ field }) => (
-                                    <Input
-                                      {...field}
-                                      className="form-control"
-                                      type="text"
-                                      invalid={isValid(errors, touched, `displays[${index}].url`)}
-                                      value={values.displays[index].url}
-                                      onChange={handleChange}
-                                      onBlur={handleBlur}
-                                    />
-                                  )}
-                                />
-                                <FormFeedback invalid={errors.url && touched.url}>
-                                  A valid URL is required.
-                                  <br />
-                                  The URL should start with http:// or https://
-                                </FormFeedback>
-                                <FormText>
-                                  Enter a URL for
+                        <Table>
+                          <thead>
+                            <tr>
+                              <th>Enabled</th>
+                              <th>ID</th>
+                              <th>Resolution</th>
+                              <th>Orientation</th>
+                              <th>URL</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                            values.displays.map((display, index) => (
+                              <tr key={display.id}>
+                                <td>
+                                  <FormGroup check>
+                                    <Label check>
+                                      <Input
+                                        onChange={handleChange}
+                                        type="checkbox"
+                                        id={`displays[${index}].enabled`}
+                                        checked={`displays[${index}].enabled`}
+                                      />
+                                      {' '}
+                                    </Label>
+                                  </FormGroup>
+                                </td>
+
+                                <td>{display.id}</td>
+                                <td>
+                                  {display.size.width}
                                   {' '}
-                                  {display.id === displayPrimaryID ? 'the primary' : 'this'}
-                                  {' '}
-                                  display
-                                </FormText>
-                              </Col>
-                            </FormGroup>
-                          ))
-                        }
-                        </Fragment>
+                                  x
+                                  {display.size.height}
+                                  {display.id === displayPrimaryID
+                                    ? (
+                                      <Fragment>
+                                        <br />
+                                        <em>Primary display</em>
+                                      </Fragment>
+                                    )
+                                    : ''}
+                                </td>
+                                <td>
+                                  {display.rotation === 0 ? 'Horizontal' : 'Vertical'}
+                                </td>
+                                <td>
+                                  <Field
+                                    name={`displays[${index}].url`}
+                                    render={({ field }) => (
+                                      <Input
+                                        {...field}
+                                        className="form-control"
+                                        type="text"
+                                        invalid={isValid(errors, touched, `displays[${index}].url`)}
+                                        value={values.displays[index].url}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                      />
+                                    )}
+                                  />
+                                  <FormFeedback invalid={errors.url && touched.url}>
+                                    A valid URL is required.
+                                    <br />
+                                    The URL should start with http:// or https://
+                                  </FormFeedback>
+                                  <FormText>
+                                    Enter a URL for
+                                    {' '}
+                                    {display.id === displayPrimaryID ? 'the primary' : 'this'}
+                                    {' '}
+                                    display
+                                  </FormText>
+                                </td>
+                              </tr>
+                            ))
+                          }
+                          </tbody>
+                        </Table>
                       )}
                     />
 
@@ -185,7 +216,7 @@ class Settings extends Component {
                             Auto launch application on startup
                           </Label>
                           <FormText>
-                            Auto launch application on startup.
+                            This change will be made the next time your system restarts.
                           </FormText>
                         </FormGroup>
                       </Col>
