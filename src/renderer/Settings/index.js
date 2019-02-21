@@ -130,68 +130,85 @@ class Settings extends Component {
                           <tbody>
                             {
                             values.displays.map((display, index) => (
-                              <tr key={display.id}>
-                                <td>
-                                  <FormGroup check>
-                                    <Label check>
-                                      <Input
-                                        onChange={handleChange}
-                                        type="checkbox"
-                                        id={`displays[${index}].enabled`}
-                                        checked={`displays[${index}].enabled`}
-                                      />
-                                      {' '}
-                                    </Label>
-                                  </FormGroup>
-                                </td>
+                              <Fragment>
+                                <tr
+                                  className={display.connected
+                                    ? ''
+                                    : 'table-active'}
+                                  key={display.id}
+                                >
+                                  <td>
+                                    <FormGroup check>
+                                      <Label check>
+                                        <Input
+                                          onChange={handleChange}
+                                          type="checkbox"
+                                          id={`displays[${index}].enabled`}
+                                          checked={`displays[${index}].enabled`}
+                                        />
+                                        {' '}
+                                      </Label>
+                                    </FormGroup>
+                                  </td>
 
-                                <td>{display.id}</td>
-                                <td>
-                                  {display.size.width}
-                                  {' '}
-                                  x
-                                  {display.size.height}
-                                  {display.id === displayPrimaryID
-                                    ? (
-                                      <Fragment>
-                                        <br />
-                                        <em>Primary display</em>
-                                      </Fragment>
-                                    )
-                                    : ''}
-                                </td>
-                                <td>
-                                  {display.rotation === 0 ? 'Horizontal' : 'Vertical'}
-                                </td>
-                                <td>
-                                  <Field
-                                    name={`displays[${index}].url`}
-                                    render={({ field }) => (
-                                      <Input
-                                        {...field}
-                                        className="form-control"
-                                        type="text"
-                                        invalid={isValid(errors, touched, `displays[${index}].url`)}
-                                        value={values.displays[index].url}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                      />
-                                    )}
-                                  />
-                                  <FormFeedback invalid={errors.url && touched.url}>
-                                    A valid URL is required.
-                                    <br />
-                                    The URL should start with http:// or https://
-                                  </FormFeedback>
-                                  <FormText>
-                                    Enter a URL for
+                                  <td>{display.id}</td>
+                                  <td>
+                                    {display.size.width}
                                     {' '}
-                                    {display.id === displayPrimaryID ? 'the primary' : 'this'}
-                                    {' '}
-                                    display
-                                  </FormText>
-                                </td>
-                              </tr>
+                                    x
+                                    {display.size.height}
+                                    {display.id === displayPrimaryID
+                                      ? (
+                                        <Fragment>
+                                          <br />
+                                          <em>Primary display</em>
+                                        </Fragment>
+                                      )
+                                      : ''}
+                                    {display.connected
+                                      ? ''
+                                      : (
+                                        <Fragment>
+                                          <br />
+                                          <em>Display disconnected</em>
+                                        </Fragment>
+                                      )
+
+                                    }
+                                  </td>
+                                  <td>
+                                    {display.rotation === 0 ? 'Horizontal' : 'Vertical'}
+                                  </td>
+                                  <td>
+                                    <Field
+                                      name={`displays[${index}].url`}
+                                      render={({ field }) => (
+                                        <Input
+                                          {...field}
+                                          className="form-control"
+                                          type="text"
+                                          invalid={isValid(errors, touched, `displays[${index}].url`)}
+                                          value={values.displays[index].url}
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                        />
+                                      )}
+                                    />
+                                    <FormFeedback invalid={errors.url && touched.url}>
+                                      A valid URL is required.
+                                      <br />
+                                      The URL should start with http:// or https://
+                                    </FormFeedback>
+                                    <FormText>
+                                      Enter a URL for
+                                      {' '}
+                                      {display.id === displayPrimaryID ? 'the primary' : 'this'}
+                                      {' '}
+                                      display
+                                    </FormText>
+                                  </td>
+                                </tr>
+                              </Fragment>
                             ))
                           }
                           </tbody>
