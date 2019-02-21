@@ -37,19 +37,18 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.on('ready', async () => {
-  //
-  // Get display information
-  //
-  const displaysPrimary = screen.getPrimaryDisplay();
-  store.set('kiosk.displayPrimaryID', displaysPrimary.id);
 
   // Set a boolean for the browsing state. We want to register when the app is looking at the
   // configured content, or when it is on one of the internal settings page. This is primarily
   // used to help with cursor and window lock-down that we want to disable on settings pages.
   store.set('kiosk.browsingContent', 0);
 
+  //
+  // Get display information
+  //
+  const displaysPrimary = screen.getPrimaryDisplay();
+  store.set('kiosk.displayPrimaryID', displaysPrimary.id);
   const displaysAll = screen.getAllDisplays();
-
   logger.info(`Displays - ${displaysAll.length} displays connected.`);
   _.forEach(displaysAll, (display, index) => {
     logger.info(
