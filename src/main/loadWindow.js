@@ -14,19 +14,23 @@ function loadWindowNow(mainWindow, store) {
       if (index !== 0) {
         // TODO: Make this work for more than two displays
         // Right now this will only correctly position a display on the 2nd display
-        secondaryWindows[index] = new BrowserWindow({
-          x: storeDisplays[index].bounds.x,
-          y: 0,
-          show: false,
-        });
-        secondaryWindows[index].loadURL(storeDisplays[index].url);
-        secondaryWindows[index].once('ready-to-show', () => {
-          secondaryWindows[index].show();
-          // Enable fullscreen kiosk mode for secondary windows in production
-          if (process.env.NODE_ENV === 'production') {
-            secondaryWindows[index].setKiosk(true);
-          }
-        });
+
+        // Don't launch windows that are linked to disconnected displays
+        if (display.connected) {
+          secondaryWindows[index] = new BrowserWindow({
+            x: storeDisplays[index].bounds.x,
+            y: 0,
+            show: false,
+          });
+          secondaryWindows[index].loadURL(storeDisplays[index].url);
+          secondaryWindows[index].once('ready-to-show', () => {
+            secondaryWindows[index].show();
+            // Enable fullscreen kiosk mode for secondary windows in production
+            if (process.env.NODE_ENV === 'production') {
+              secondaryWindows[index].setKiosk(true);
+            }
+          });
+        }
       }
     });
   }
