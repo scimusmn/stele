@@ -13,7 +13,7 @@ function loadWindowNow(mainWindow, store) {
     _.forEach(storeDisplays, (display, index) => {
       if (index !== 0) {
         // Don't launch windows that are linked to disconnected displays
-        if (display.connected) {
+        if (display.connected && display.enabled) {
           secondaryWindows[index] = new BrowserWindow({
             x: storeDisplays[index].bounds.x,
             y: 0,

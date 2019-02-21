@@ -77,7 +77,7 @@ app.on('ready', async () => {
     console.log('Setting kiosk.displays');
     store.set(
       'kiosk.displays',
-      _.map(displaysAll, item => _.extend({}, item, { connected: true, url: '' })),
+      _.map(displaysAll, item => _.extend({}, item, { connected: true, enabled: true, url: '' })),
     );
   } else {
     //
