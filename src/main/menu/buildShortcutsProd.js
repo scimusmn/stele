@@ -53,7 +53,7 @@ const buildShortcutsProd = (mainWindow, appHome, store) => {
   if (devToolsShortcutSetting) {
     const devToolsOSShortcut = process.platform === 'darwin'
       ? 'Command+Option+I'
-      : 'Command+Option+I';
+      : 'Control+Shift+I';
     globalShortcut.register(devToolsOSShortcut, () => {
       mainWindow.webContents.openDevTools();
     });
