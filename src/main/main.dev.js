@@ -36,11 +36,6 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-// Setup useful Electron debug features in development
-if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-  require('electron-debug')();
-}
-
 app.on('ready', async () => {
   //
   // Get display information
@@ -193,6 +188,7 @@ app.on('ready', async () => {
       'kiosk.displays': arg.displays,
       'kiosk.cursorVisibility': arg.cursorVis,
       'kiosk.autoLaunch': arg.autoLaunch,
+      'kiosk.devToolsShortcut': arg.devToolsShortcut,
     });
     store.set('kiosk.browsingContent', 1);
     mainWindow.loadURL(arg.url);

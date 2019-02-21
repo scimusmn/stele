@@ -25,6 +25,7 @@ class Settings extends Component {
     this.state = {
       cursorVisibility: 'show',
       autoLaunch: false,
+      devToolsShortcut: false,
       displays: [],
       displayPrimaryID: [],
     };
@@ -35,26 +36,30 @@ class Settings extends Component {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
     let {
       displayHome, cursorVisibility, displayCount, displayPrimaryID, displays, autoLaunch,
+      devToolsShortcut,
     } = kioskSettings;
     if (displayHome === undefined) displayHome = '';
     if (cursorVisibility === undefined) cursorVisibility = 'show';
     if (autoLaunch === undefined) autoLaunch = false;
+    if (devToolsShortcut === undefined) devToolsShortcut = false;
     if (displayCount === undefined) displayCount = 1;
     if (displayPrimaryID === undefined) displayPrimaryID = '';
     if (displays === undefined) displays = [];
     this.setState({
-      cursorVisibility, displayPrimaryID, displays, autoLaunch,
+      cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
     });
   }
 
   render() {
     const {
-      cursorVisibility, displayPrimaryID, displays, autoLaunch,
+      cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
     } = this.state;
     const isValid = (errors, touched, name) => !!(_.get(errors, name) && _.get(touched, name));
     return (
       <Formik
-        initialValues={{ displays, cursorVis: cursorVisibility, autoLaunch }}
+        initialValues={{
+          displays, cursorVis: cursorVisibility, autoLaunch, devToolsShortcut,
+        }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
             ipcRenderer.send('updateSettings', values);
@@ -101,6 +106,12 @@ class Settings extends Component {
                     <h1 className="text-center">Kiosk settings</h1>
                     <hr />
                     <h2>Display configuration</h2>
+
+                    <Alert className="text-center" color="warning">
+                      Stele is primarily designed to browser local content that you trust.
+                      <br />
+                      Don&apos;t configure it to browse to web content you don&apos;t trust.
+                    </Alert>
 
                     <FieldArray
                       name="urls"
@@ -153,10 +164,6 @@ class Settings extends Component {
                             </FormGroup>
                           ))
                         }
-                          <Alert color="warning">
-                            Stele is primarily designed for local content that you trust.
-                            Don&squot;t configure it to browse to web content you don&squot;t trust.
-                          </Alert>
                         </Fragment>
                       )}
                     />
@@ -164,7 +171,7 @@ class Settings extends Component {
                     <Row>
                       <Col>
                         <Label for="autoLaunch">
-                          <h2>Auto Launch</h2>
+                          <h2>Auto launch</h2>
                         </Label>
                         <FormGroup check>
                           <Label check>
@@ -179,6 +186,56 @@ class Settings extends Component {
                           </Label>
                           <FormText>
                             Auto launch application on startup.
+                          </FormText>
+                        </FormGroup>
+                      </Col>
+
+                      <Col>
+                        <Label for="devToolsShortcut">
+                          <h2>Dev tools</h2>
+                        </Label>
+                        <FormGroup check>
+                          <Label check>
+                            <Input
+                              onChange={handleChange}
+                              type="checkbox"
+                              id="devToolsShortcut"
+                              checked={values.devToolsShortcut}
+                            />
+                            {' '}
+                            Enable dev tools shortcut
+                          </Label>
+                          <FormText>
+                            In production, the browser dev tools are generally inaccessible, even
+                            when using the default keyboard shortcuts.
+                            <br />
+                            Check this box to enable the keyboard shortcut.
+                            <p>
+                              Windows & Linux -
+                              {' '}
+                              <kbd>Ctrl</kbd>
+                              {' '}
+                              +
+                              {' '}
+                              <kbd>Shift</kbd>
+                              {' '}
+                              +
+                              {' '}
+                              <kbd>I</kbd>
+                            </p>
+                            <p>
+                              macOs -
+                              {' '}
+                              <kbd>Cmd</kbd>
+                              {' '}
+                              +
+                              {' '}
+                              <kbd>Opt</kbd>
+                              {' '}
+                              +
+                              {' '}
+                              <kbd>I</kbd>
+                            </p>
                           </FormText>
                         </FormGroup>
                       </Col>

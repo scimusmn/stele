@@ -6,7 +6,7 @@ import childProcess from 'child_process';
 // app shortcuts often don't come through to Stele because they are captured with the
 // remote control application. This provides an alternate way to quit or hide the app
 // in this situation.
-const buildShortcutsDev = () => {
+const buildShortcutsMac = () => {
   globalShortcut.register('Control+Q', () => {
     app.quit();
   });
@@ -21,4 +21,4 @@ const buildShortcutsDev = () => {
   }
 };
 
-export default buildShortcutsDev;
+export default buildShortcutsMac;

@@ -1,6 +1,7 @@
 import { app, Menu, shell } from 'electron';
+import logger from '../logger';
 import navigateSettings from '../navigate';
-import buildShortcutsDev from './buildShortcutsDev';
+import buildShortcutsMac from './buildShortcutsDev';
 import buildShortcutsProd from './buildShortcutsProd';
 
 const menuBuild = (window, reactHome, store) => {
@@ -128,16 +129,13 @@ const menuBuild = (window, reactHome, store) => {
 //   defined so that the app window will render. So we let this fall through and set the menu.
 //
 const buildMenuShortcuts = (mainWindow, appHome, store) => {
-  if (
-    process.env.NODE_ENV === 'development'
-    || (
-      process.env.NODE_ENV !== 'development'
-      && process.platform === 'darwin'
-    )
-  ) {
+  if (process.env.NODE_ENV === 'development') {
     Menu.setApplicationMenu(menuBuild(mainWindow, appHome, store));
-    buildShortcutsDev();
-  } else {
+  }
+  if (process.platform === 'darwin') {
+    buildShortcutsMac();
+  }
+  if (process.env.NODE_ENV !== 'development') {
     buildShortcutsProd(mainWindow, appHome, store);
   }
 };

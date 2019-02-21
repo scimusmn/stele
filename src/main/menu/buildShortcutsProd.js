@@ -46,6 +46,19 @@ const buildShortcutsProd = (mainWindow, appHome, store) => {
       mainWindow.blur();
     }
   });
+
+  // Dev tools - Optional shortcut, enabled via Settings
+  const devToolsShortcutSetting = _.get(store.get('kiosk'), 'devToolsShortcut');
+
+  if (devToolsShortcutSetting) {
+    const devToolsOSShortcut = process.platform === 'darwin'
+      ? 'Command+Option+I'
+      : 'Command+Option+I';
+    globalShortcut.register(devToolsOSShortcut, () => {
+      mainWindow.webContents.openDevTools();
+    });
+  }
+
   // Quit
   globalShortcut.register('CommandOrControl+Q', () => {
     app.quit();
