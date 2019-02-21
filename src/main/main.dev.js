@@ -219,7 +219,6 @@ app.on('ready', async () => {
       'kiosk.devToolsShortcut': arg.devToolsShortcut,
     });
     store.set('kiosk.browsingContent', 1);
-    mainWindow.loadURL(arg.url);
     loadWindowNow(mainWindow, store);
     autoLaunch(store.get('kiosk.autoLaunch'), logger);
   });
