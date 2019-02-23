@@ -16,7 +16,10 @@ class AppRoutes extends React.Component {
     ipcRenderer.on('navigate', (_, path, param) => {
       const { history } = this.props;
       const navigationPath = param ? `${path}/${param}` : path;
-      history.push(navigationPath);
+      // Only do a push when the path will change
+      if (history.location.pathname !== navigationPath) {
+        history.push(navigationPath);
+      }
     });
   }
 
