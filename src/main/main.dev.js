@@ -120,8 +120,8 @@ app.on('ready', async () => {
   // Setup default window size
   const mainWindow = new BrowserWindow({
     show: false,
-    width: (displaysPrimary.size.width / 2),
-    height: ((displaysPrimary.size.height / 3) * 2),
+    width: (displaysPrimary.size.width),
+    height: (displaysPrimary.size.height),
   });
   logger.info('Window - New browser window');
 
