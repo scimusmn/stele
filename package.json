@@ -46,6 +46,7 @@
     "react-delay": "^0.1.0",
     "react-dom": "^16.6.3",
     "react-hot-loader": "^4.3.12",
+    "react-icons": "^3.4.0",
     "react-router-dom": "^4.3.1",
     "reactstrap": "^6.5.0",
     "run-electron": "^0.1.0",

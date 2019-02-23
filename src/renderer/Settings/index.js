@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import validUrl from 'valid-url';
 import _ from 'lodash';
 import {
+  Tooltip,
   Button,
   Col,
   Container,
@@ -16,6 +17,7 @@ import {
   Alert,
 } from 'reactstrap';
 import { Formik, FieldArray, Field } from 'formik';
+import { FaExclamationTriangle } from 'react-icons/fa';
 import { ipcRenderer } from 'electron';
 import * as Yup from 'yup';
 
@@ -49,6 +51,12 @@ class Settings extends Component {
     this.setState({
       cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
     });
+  }
+
+  toggleDisconnectedDisplayTooltip() {
+    this.setState(prevState => ({
+      disconnectedDisplayTooltipOpen: !prevState.disconnectedDisplayTooltipOpen,
+    }));
   }
 
   render() {
@@ -104,6 +112,7 @@ class Settings extends Component {
             handleBlur,
             handleSubmit,
           } = props;
+          const { disconnectedDisplayTooltipOpen } = this.state;
           return (
             <Container>
               <Row className="mt-3 justify-content-center">
@@ -142,26 +151,52 @@ class Settings extends Component {
                                 key={display.id}
                                 className={display.connected
                                   ? ''
-                                  : 'table-active'}
+                                  : 'text-muted'}
                               >
                                 <td>
-                                  {
-                                    display.id === displayPrimaryID
-                                      ? ''
-                                      : (
-                                        <FormGroup check>
-                                          <Label check>
-                                            <Input
-                                              onChange={handleChange}
-                                              type="checkbox"
-                                              id={`displays[${index}].enabled`}
-                                              checked={display.enabled}
+                                  <Row>
+                                    <Col xs={5}>
+                                      {
+                                        display.id === displayPrimaryID
+                                          ? ''
+                                          : (
+                                            <FormGroup row>
+                                              <Col sm={{ size: 12 }}>
+                                                <FormGroup check>
+                                                  <Input
+                                                    onChange={handleChange}
+                                                    type="checkbox"
+                                                    id={`displays[${index}].enabled`}
+                                                    checked={display.enabled}
+                                                  />
+                                                </FormGroup>
+                                              </Col>
+                                            </FormGroup>
+                                          )
+                                      }
+                                    </Col>
+                                    <Col xs={7}>
+                                      {display.enabled && !display.connected
+                                        ? (
+                                          <>
+                                            <FaExclamationTriangle
+                                              style={{ fontSize: '30px' }}
+                                              className="text-warning"
+                                              id={`displays-${index}-disconnected-warning`}
                                             />
-                                            {' '}
-                                          </Label>
-                                        </FormGroup>
-                                      )
-                                  }
+                                            <Tooltip
+                                              isOpen={disconnectedDisplayTooltipOpen}
+                                              toggle={this.toggleDisconnectedDisplayTooltip}
+                                              placement="top"
+                                              target={`displays-${index}-disconnected-warning`}
+                                            >
+                                              This window won&apos;t be displayed until the
+                                              display is reconnected.
+                                            </Tooltip>
+                                          </>
+                                        ) : ''}
+                                    </Col>
+                                  </Row>
                                 </td>
 
                                 <td>{display.id}</td>

@@ -8084,6 +8084,11 @@ react-hot-loader@^4.3.12:
     shallowequal "^1.0.2"
     source-map "^0.7.3"
 
+react-icons@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.4.0.tgz#3be5139a81bad5fa8ffbc0a87137275dc7a75737"
+  integrity sha512-5cyYrl34KGovU/MH3YO+wN1k787vv3EKLeGDyaGOY92jSTQ/xRjkQ7iim5Ml9rgMLU1i0vszev80kWV4uRZ3Bw==
+
 react-is@^16.8.1:
   version "16.8.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.2.tgz#09891d324cad1cb0c1f2d91f70a71a4bee34df0f"
