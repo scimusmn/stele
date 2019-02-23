@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import validUrl from 'valid-url';
+import classNames from 'classnames';
 import _ from 'lodash';
 import {
-  Tooltip,
+  Alert,
   Button,
   Col,
   Container,
@@ -12,11 +13,11 @@ import {
   FormText,
   Input,
   Label,
-  Table,
   Row,
-  Alert,
+  Table,
+  Tooltip,
 } from 'reactstrap';
-import { Formik, FieldArray, Field } from 'formik';
+import { Field, FieldArray, Formik } from 'formik';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { ipcRenderer } from 'electron';
 import * as Yup from 'yup';
@@ -64,6 +65,31 @@ class Settings extends Component {
       cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
     } = this.state;
     const isValid = (errors, touched, name) => !!(_.get(errors, name) && _.get(touched, name));
+
+    const forgetDisplay = (display) => {
+      const newDisplays = _.map(displays, (d) => {
+        if (d.id === display.id) {
+          return _.extend({}, d, {
+            forgetting: !_.get(d, 'forgetting', false),
+          });
+        }
+        return d;
+      });
+      this.setState({ displays: newDisplays });
+    };
+
+    const generateDisplayRowClass = (display) => {
+      const forgettingValue = _.get(_.find(displays, { id: display.id }), 'forgetting');
+      return classNames(
+        display.connected
+          ? ''
+          : 'text-muted',
+        forgettingValue
+          ? 'table-danger'
+          : '',
+      );
+    };
+
     return (
       <Formik
         initialValues={{
@@ -149,9 +175,7 @@ class Settings extends Component {
                             values.displays.map((display, index) => (
                               <tr
                                 key={display.id}
-                                className={display.connected
-                                  ? ''
-                                  : 'text-muted'}
+                                className={generateDisplayRowClass(display)}
                               >
                                 <td>
                                   <Row>
@@ -197,6 +221,23 @@ class Settings extends Component {
                                         ) : ''}
                                     </Col>
                                   </Row>
+                                  {display.enabled && !display.connected
+                                    ? (
+                                      <Row>
+                                        <Col className="mt-3 text-center">
+                                          <Button
+                                            onClick={() => {
+                                              forgetDisplay(display);
+                                            }}
+                                            color="danger"
+                                          >
+                                            Forget
+                                          </Button>
+                                        </Col>
+                                      </Row>
+                                    )
+                                    : ''
+                                  }
                                 </td>
 
                                 <td>{display.id}</td>
