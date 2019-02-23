@@ -26,26 +26,26 @@ class Settings extends Component {
     super(props);
 
     this.state = {
+      disconnectedDisplayTooltipOpen: false,
       cursorVisibility: 'show',
       autoLaunch: false,
       devToolsShortcut: false,
       displays: [],
       displayPrimaryID: [],
     };
+
+    this.toggleDisconnectedDisplayTooltip = this.toggleDisconnectedDisplayTooltip.bind(this);
   }
 
   // TODO: Cleanup these default checks. Mutating these values isn't the right way here
   componentWillMount() {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
     let {
-      displayHome, cursorVisibility, displayCount, displayPrimaryID, displays, autoLaunch,
-      devToolsShortcut,
+      cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
     } = kioskSettings;
-    if (displayHome === undefined) displayHome = '';
     if (cursorVisibility === undefined) cursorVisibility = 'show';
     if (autoLaunch === undefined) autoLaunch = false;
     if (devToolsShortcut === undefined) devToolsShortcut = false;
-    if (displayCount === undefined) displayCount = 1;
     if (displayPrimaryID === undefined) displayPrimaryID = '';
     if (displays === undefined) displays = [];
     this.setState({
