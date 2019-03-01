@@ -212,8 +212,13 @@ app.on('ready', async () => {
   // Update settings from the client using IPC
   //
   ipcMain.on('updateSettings', (event, arg) => {
+    // Filter out displays that are not connected, and that the user has
+    // marked to forget on the settings page.
+    const displaysRemembered = _.filter(arg.displays, display => display.forgetting !== true);
+
+    // Save updated settings information in the data store
     store.set({
-      'kiosk.displays': arg.displays,
+      'kiosk.displays': displaysRemembered,
       'kiosk.cursorVisibility': arg.cursorVis,
       'kiosk.autoLaunch': arg.autoLaunch,
       'kiosk.devToolsShortcut': arg.devToolsShortcut,

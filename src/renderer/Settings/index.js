@@ -66,7 +66,15 @@ class Settings extends Component {
     } = this.state;
     const isValid = (errors, touched, name) => !!(_.get(errors, name) && _.get(touched, name));
 
-    const forgetDisplay = (display) => {
+    //
+    // Forget disconnected displays if requested
+    //
+    // Handler for the forget button.
+    // This updates the state, so that we can toggle the row style (ready to forget).
+    // We also use Formik's setFieldValue to update the form values. These get sent to the
+    // main process where it will delete this display from the settings store.
+    // process to delete the display from the settings store. We use
+    const forgetDisplay = (index, display, values, setFieldValue) => {
       const newDisplays = _.map(displays, (d) => {
         if (d.id === display.id) {
           return _.extend({}, d, {
@@ -75,6 +83,7 @@ class Settings extends Component {
         }
         return d;
       });
+      setFieldValue(`displays[${index}].forgetting`, true);
       this.setState({ displays: newDisplays });
     };
 
@@ -137,6 +146,7 @@ class Settings extends Component {
             handleChange,
             handleBlur,
             handleSubmit,
+            setFieldValue,
           } = props;
           const { disconnectedDisplayTooltipOpen } = this.state;
           return (
@@ -227,12 +237,16 @@ class Settings extends Component {
                                         <Col className="mt-3 text-center">
                                           <Button
                                             onClick={() => {
-                                              forgetDisplay(display);
+                                              forgetDisplay(index, display, values, setFieldValue);
                                             }}
                                             color="danger"
                                           >
                                             Forget
                                           </Button>
+                                          <Input
+                                            type="hidden"
+                                            id={`displays[${index}].forgetting`}
+                                          />
                                         </Col>
                                       </Row>
                                     )
