@@ -42,6 +42,10 @@ app.on('ready', async () => {
   // used to help with cursor and window lock-down that we want to disable on settings pages.
   store.set('kiosk.browsingContent', 0);
 
+  // Set a default value for the quitting flag.
+  // See quit logic for explanation.
+  store.set('quitting', false);
+
   //
   // Get display information
   //
@@ -110,7 +114,6 @@ app.on('ready', async () => {
   // to navigate to the appropriate path.
   store.set('kiosk.launching', 1);
   const appHome = `file://${__dirname}/../renderer/index.html`;
-  // const mainWindowURL = _.get(store.get('kiosk'), 'displayHome', reactHome);
 
   // Setup browser extensions
   await installExtensions();
@@ -178,24 +181,23 @@ app.on('ready', async () => {
     });
   }
 
-  // Start by loading the React home page
-  store.set('kiosk.browsingContent', 1);
-  mainWindow.loadURL(appHome);
-  logger.info(`Window - Load React home - ${appHome}`);
+  const displays = _.get(store.get('kiosk'), 'displays');
+  const enabledConfiguredDisplay = _.find(displays, d => d.enabled && d.url !== '');
+  if (enabledConfiguredDisplay) {
+    logger.info('Window - Display URLs configured, checking delay');
+    loadWindow(mainWindow, store);
+  } else {
+    // Start by loading the React home page
+    store.set('kiosk.browsingContent', 1);
+    mainWindow.loadURL(appHome);
+    logger.info(`Window - Load React home - ${appHome}`);
+  }
 
   // Once our react app has mounted, we can load kiosk content
   ipcMain.on('routerMounted', () => {
     if (store.get('kiosk.launching', 1)) {
-      logger.info('Window - React router mounted');
-      if (_.get(store.get('kiosk'), 'displays[0].url') !== '') {
-        logger.info('Window - Display URLs configured, checking delay');
-        loadWindow(mainWindow, store);
-        // Done launching
-        store.set('kiosk.launching', 0);
-      } else {
-        logger.info('Window - No URL set, sending React to settings page');
-        mainWindow.webContents.send('navigate', '/settings');
-      }
+      logger.info('Window - No URL set, sending React to settings page');
+      mainWindow.webContents.send('navigate', '/settings');
     }
   });
 
@@ -249,6 +251,20 @@ app.on('ready', async () => {
       mainWindow.setKiosk(true);
     }
   });
+
+  //
+  // Don't close the main window, just hide it.
+  //
+  // This allows us to reopen the window for the settings screen even if we're not using
+  // the primary display for a content window.
+  // We need to check for a flag allowing us to bypass this customization, so that we can
+  // close all windows when quitting the app.
+  mainWindow.on('close', (event) => {
+    if (!store.get('quitting', false)) {
+      mainWindow.hide();
+      event.preventDefault();
+    }
+  });
 });
 
 // Quit the app if all windows are closed
@@ -256,7 +272,10 @@ app.on('window-all-closed', () => {
   app.quit();
 });
 
-// Unregister all shortcuts when the app exits.
-app.on('will-quit', () => {
+// Cleanup before quit
+app.on('before-quit', () => {
+  // Set a flag that lets us close all windows
+  store.set('quitting', true);
+  // Unregister all shortcuts when the app exits.
   globalShortcut.unregisterAll();
 });

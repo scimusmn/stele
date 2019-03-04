@@ -15,6 +15,7 @@ const navigateSettings = (window, reactHome, store) => {
   // TODO: Make this a function
   // Make this little bit a function that you can import and reuse
   store.set('kiosk.browsingContent', 0);
+  window.show();
   window.loadURL(reactHome);
   ipcMain.on('routerMounted', () => {
     clearTimeout(global.delayTimer);

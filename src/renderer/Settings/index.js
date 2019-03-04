@@ -190,24 +190,18 @@ class Settings extends Component {
                                 <td>
                                   <Row>
                                     <Col xs={5}>
-                                      {
-                                        display.id === displayPrimaryID
-                                          ? ''
-                                          : (
-                                            <FormGroup row>
-                                              <Col sm={{ size: 12 }}>
-                                                <FormGroup check>
-                                                  <Input
-                                                    onChange={handleChange}
-                                                    type="checkbox"
-                                                    id={`displays[${index}].enabled`}
-                                                    checked={display.enabled}
-                                                  />
-                                                </FormGroup>
-                                              </Col>
-                                            </FormGroup>
-                                          )
-                                      }
+                                      <FormGroup row>
+                                        <Col sm={{ size: 12 }}>
+                                          <FormGroup check>
+                                            <Input
+                                              onChange={handleChange}
+                                              type="checkbox"
+                                              id={`displays[${index}].enabled`}
+                                              checked={display.enabled}
+                                            />
+                                          </FormGroup>
+                                        </Col>
+                                      </FormGroup>
                                     </Col>
                                     <Col xs={7}>
                                       {display.enabled && !display.connected

@@ -7,7 +7,11 @@ import logger from './logger';
 function loadWindowNow(mainWindow, store) {
   const storeDisplays = store.get('kiosk.displays');
   logger.info('Window - Immediately loading windows');
-  mainWindow.loadURL(storeDisplays[0].url);
+  if (storeDisplays[0].enabled) {
+    mainWindow.loadURL(storeDisplays[0].url);
+  } else {
+    mainWindow.hide();
+  }
   const secondaryWindows = [];
   if (storeDisplays.length > 1) {
     _.forEach(storeDisplays, (display, index) => {
