@@ -64,8 +64,6 @@ app.on('ready', async () => {
 
   // Get the displays registered in the app settings
   const settingDisplaysInitial = _.get(store.get('kiosk'), 'displays');
-  // console.log(settingDisplaysInitial);
-  // console.log('----^ ^ ^ ^ ^ settingDisplaysInitial ^ ^ ^ ^ ^----');
 
   //
   // Handle fresh settings

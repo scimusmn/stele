@@ -5,10 +5,9 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     const {
-      countDownSound, direction, start, end,
+      direction, start, end,
     } = this.props;
     this.state = {
-      countDownSound,
       timer: direction === 'down' ? Math.abs(start - end) : start,
     };
     this.incrementTimer = this.incrementTimer.bind(this);
@@ -67,7 +66,6 @@ class Timer extends React.Component {
 
 Timer.propTypes = {
   direction: PropTypes.oneOf(['up', 'down']).isRequired,
-  countDownSound: PropTypes.bool,
   end: PropTypes.number.isRequired,
   start: PropTypes.number.isRequired,
   completion: PropTypes.func,
@@ -80,7 +78,6 @@ Timer.defaultProps = {
   },
   tick: 100,
   stop: false,
-  countDownSound: false,
 };
 
 export default Timer;

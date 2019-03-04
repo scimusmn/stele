@@ -8,6 +8,7 @@ import childProcess from 'child_process';
 // in this situation.
 const buildShortcutsMac = () => {
   globalShortcut.register('Control+Q', () => {
+    console.log('will quit');
     app.quit();
   });
 

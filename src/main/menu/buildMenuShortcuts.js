@@ -1,5 +1,4 @@
 import { app, Menu, shell } from 'electron';
-import logger from '../logger';
 import navigateSettings from '../navigate';
 import buildShortcutsMac from './buildShortcutsDev';
 import buildShortcutsProd from './buildShortcutsProd';

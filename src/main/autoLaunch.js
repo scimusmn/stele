@@ -28,6 +28,6 @@ const autoLaunch = (autoLaunchSetting, logger) => {
   kioskAutoLaunch.isEnabled()
     .then(isEnabled => whichSetting(isEnabled, autoLaunchSetting))
     .catch(failureCallback);
-}
+};
 
 export default autoLaunch;
