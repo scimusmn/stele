@@ -1,6 +1,6 @@
 {
   "name": "stele",
-  "version": "2.0.3-alpha.6",
+  "version": "2.1.0",
   "private": true,
   "description": "Kiosk app wrapper for museum media exhibits",
   "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
