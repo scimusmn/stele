@@ -1,7 +1,7 @@
 import { app, globalShortcut } from 'electron';
 import childProcess from 'child_process';
 import _ from 'lodash';
-import navigateSettings from '../navigate';
+import { navigateSettings } from '../navigate';
 
 // In production we don't set a menu because it interferes with full screen kiosk mode in
 // various operating systems. Since our menu roles define the keyboard shortcuts for the

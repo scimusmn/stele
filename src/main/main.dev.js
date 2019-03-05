@@ -19,6 +19,7 @@ import installExtensions from './extensions';
 import autoLaunch from './autoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor';
+import { mainWindowNavigateSettings } from './navigate';
 import { loadWindow, loadWindowNow } from './loadWindow';
 
 //
@@ -142,11 +143,7 @@ app.on('ready', async () => {
         logger.info(
           `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`,
         );
-        store.set('kiosk.browsingContent', 0);
-        mainWindow.loadURL(appHome);
-        ipcMain.on('routerMounted', () => {
-          mainWindow.webContents.send('navigate', '/settings');
-        });
+        mainWindowNavigateSettings(mainWindow, appHome, store);
       } else {
         logger.error(`App - Unknown web contents load failure - ${errorDescription}:${errorCode}`);
         app.quit();

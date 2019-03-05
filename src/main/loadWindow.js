@@ -8,6 +8,9 @@ function loadWindowNow(mainWindow, store) {
   const storeDisplays = store.get('kiosk.displays');
   logger.info('Window - Immediately loading windows');
   if (storeDisplays[0].enabled) {
+    if (process.env.NODE_ENV === 'production') {
+      mainWindow.setKiosk(true);
+    }
     mainWindow.loadURL(storeDisplays[0].url);
   } else {
     if (process.env.NODE_ENV === 'production') {
