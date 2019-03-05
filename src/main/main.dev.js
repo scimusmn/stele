@@ -261,6 +261,9 @@ app.on('ready', async () => {
   // close all windows when quitting the app.
   mainWindow.on('close', (event) => {
     if (!store.get('quitting', false)) {
+      if (process.env.NODE_ENV === 'production') {
+        mainWindow.setKiosk(false);
+      }
       mainWindow.hide();
       event.preventDefault();
     }

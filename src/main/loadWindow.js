@@ -10,6 +10,9 @@ function loadWindowNow(mainWindow, store) {
   if (storeDisplays[0].enabled) {
     mainWindow.loadURL(storeDisplays[0].url);
   } else {
+    if (process.env.NODE_ENV === 'production') {
+      mainWindow.setKiosk(false);
+    }
     mainWindow.hide();
   }
   const secondaryWindows = [];
