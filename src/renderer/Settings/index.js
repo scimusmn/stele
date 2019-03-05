@@ -64,7 +64,7 @@ class Settings extends Component {
     const {
       cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
     } = this.state;
-    const isValid = (errors, touched, name) => !!(_.get(errors, name) && _.get(touched, name));
+    const isValid = (errors, name) => !!_.get(errors, name);
 
     //
     // Forget disconnected displays if requested
@@ -140,7 +140,6 @@ class Settings extends Component {
         {(props) => {
           const {
             values,
-            touched,
             errors,
             isSubmitting,
             handleChange,
@@ -284,14 +283,14 @@ class Settings extends Component {
                                         {...field}
                                         className="form-control"
                                         type="text"
-                                        invalid={isValid(errors, touched, `displays[${index}].url`)}
+                                        invalid={isValid(errors, `displays[${index}].url`)}
                                         value={values.displays[index].url}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                       />
                                     )}
                                   />
-                                  <FormFeedback invalid={errors.url && touched.url}>
+                                  <FormFeedback invalid={errors.url}>
                                     A valid URL is required.
                                     <br />
                                     The URL should start with http:// or https://
