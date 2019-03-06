@@ -9,7 +9,7 @@
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
 import {
-  app, BrowserWindow, globalShortcut, ipcMain, screen,
+  app, BrowserWindow, ipcMain, screen,
 } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
@@ -276,6 +276,4 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
   // Set a flag that lets us close all windows
   store.set('quitting', true);
-  // Unregister all shortcuts when the app exits.
-  globalShortcut.unregisterAll();
 });

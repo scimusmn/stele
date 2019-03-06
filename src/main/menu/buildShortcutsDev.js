@@ -1,4 +1,5 @@
-import { app, globalShortcut } from 'electron';
+import { app } from 'electron';
+import electronLocalshortcut from 'electron-localshortcut';
 import childProcess from 'child_process';
 
 // Set shortcuts for alternate quit and hide keyboard shortcuts on the Mac
@@ -7,7 +8,7 @@ import childProcess from 'child_process';
 // remote control application. This provides an alternate way to quit or hide the app
 // in this situation.
 const buildShortcutsMac = () => {
-  globalShortcut.register('Control+Q', () => {
+  electronLocalshortcut.register('Control+Q', () => {
     console.log('will quit');
     app.quit();
   });
@@ -16,7 +17,7 @@ const buildShortcutsMac = () => {
   // See note in application documentation
   // This keyboard shortcut is handles by menu roles on Windows and Linux
   if (process.platform === 'darwin') {
-    globalShortcut.register('Control+H', () => {
+    electronLocalshortcut.register('Control+H', () => {
       childProcess.exec('open -a Finder ~/');
     });
   }

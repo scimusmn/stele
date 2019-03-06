@@ -1,46 +1,51 @@
-import { app, globalShortcut } from 'electron';
+import { app } from 'electron';
+import electronLocalshortcut from 'electron-localshortcut';
 import childProcess from 'child_process';
 import _ from 'lodash';
 import { navigateSettings } from '../navigate';
 
+//
 // In production we don't set a menu because it interferes with full screen kiosk mode in
 // various operating systems. Since our menu roles define the keyboard shortcuts for the
 // application we need to manually define them here for the production app.
+//
+// We use a 3rd party tool to create shortcuts since we don't want these to work globally.
+//
 const buildShortcutsProd = (mainWindow, appHome, store) => {
   // Undo
-  globalShortcut.register('CommandOrControl+Z', () => {
+  electronLocalshortcut.register('CommandOrControl+Z', () => {
     mainWindow.webContents.undo();
   });
   // Redo
-  globalShortcut.register('CommandOrControl+Shift+Z', () => {
+  electronLocalshortcut.register('CommandOrControl+Shift+Z', () => {
     mainWindow.webContents.redo();
   });
   // Cut
-  globalShortcut.register('CommandOrControl+X', () => {
+  electronLocalshortcut.register('CommandOrControl+X', () => {
     mainWindow.webContents.cut();
   });
   // Copy
-  globalShortcut.register('CommandOrControl+C', () => {
+  electronLocalshortcut.register(mainWindow, 'CommandOrControl+C', () => {
     mainWindow.webContents.copy();
   });
   // Paste
-  globalShortcut.register('CommandOrControl+V', () => {
+  electronLocalshortcut.register('CommandOrControl+V', () => {
     mainWindow.webContents.paste();
   });
   // Select all
-  globalShortcut.register('CommandOrControl+A', () => {
+  electronLocalshortcut.register('CommandOrControl+A', () => {
     mainWindow.webContents.selectAll();
   });
   // Settings
-  globalShortcut.register('CommandOrControl+,', () => {
+  electronLocalshortcut.register('CommandOrControl+,', () => {
     navigateSettings(mainWindow, appHome, store);
   });
   // Reload
-  globalShortcut.register('CommandOrControl+R', () => {
+  electronLocalshortcut.register('CommandOrControl+R', () => {
     mainWindow.webContents.reload();
   });
   // Hide window
-  globalShortcut.register('CommandOrControl+H', () => {
+  electronLocalshortcut.register('CommandOrControl+H', () => {
     if (process.platform === 'linux') {
       childProcess.exec('nautilus');
     } else {
@@ -55,13 +60,13 @@ const buildShortcutsProd = (mainWindow, appHome, store) => {
     const devToolsOSShortcut = process.platform === 'darwin'
       ? 'Command+Option+I'
       : 'Control+Shift+I';
-    globalShortcut.register(devToolsOSShortcut, () => {
+    electronLocalshortcut.register(devToolsOSShortcut, () => {
       mainWindow.webContents.openDevTools();
     });
   }
 
   // Quit
-  globalShortcut.register('CommandOrControl+Q', () => {
+  electronLocalshortcut.register('CommandOrControl+Q', () => {
     app.quit();
   });
 };
