@@ -8,6 +8,8 @@ function loadWindowNow(mainWindow, store) {
   const storeDisplays = store.get('kiosk.displays');
   logger.info('Window - Immediately loading windows');
   if (storeDisplays[0].enabled) {
+    // Ensure that the main window is positioned on the primary display
+    mainWindow.setPosition(0, 0);
     if (process.env.NODE_ENV === 'production') {
       mainWindow.setKiosk(true);
     }
