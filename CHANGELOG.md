@@ -1,12 +1,28 @@
 # Change Log
 
-## [Unreleased](https://github.com/scimusmn/stele/tree/HEAD)
-
-[Full Changelog](https://github.com/scimusmn/stele/compare/v2.0.2...HEAD)
+## [2.1.0](https://github.com/scimusmn/stele/tree/2.1.0) (2019-03-06)
+[Full Changelog](https://github.com/scimusmn/stele/compare/v2.0.2...2.1.0)
 
 **Implemented enhancements:**
 
+- Allow configurers to `forget` a display [\#71](https://github.com/scimusmn/stele/issues/71)
 - As a user I want to be able to be able to display the dev tools console when the app is in production so that I can debug the renderer process [\#63](https://github.com/scimusmn/stele/issues/63)
+- Implement window control [\#6](https://github.com/scimusmn/stele/issues/6)
+
+**Fixed bugs:**
+
+- If you move settings window off the primary display the configured URL won't display on the correct display in kiosk mode [\#75](https://github.com/scimusmn/stele/issues/75)
+- Global keyboard shortcuts are blocking copy & paste in other apps [\#74](https://github.com/scimusmn/stele/issues/74)
+- Can't save URLs from the Settings page after multi-display code added [\#70](https://github.com/scimusmn/stele/issues/70)
+
+**Closed issues:**
+
+- Don't require a display to be shown on the primary display [\#72](https://github.com/scimusmn/stele/issues/72)
+- As a person configuring the app, I would like to be able to see when a display is configured in the settings, but the display is no longer connected, so that I can understand why some content isn't displaying. [\#69](https://github.com/scimusmn/stele/issues/69)
+- As a user I would like to disable displays so that I don't have to configure content for a connected monitor [\#68](https://github.com/scimusmn/stele/issues/68)
+- Fix menu code duplication [\#67](https://github.com/scimusmn/stele/issues/67)
+- Handle initial settings setup for window control [\#53](https://github.com/scimusmn/stele/issues/53)
+- Hide cursor feature should only be active on remote pages, not delay or setting pages [\#52](https://github.com/scimusmn/stele/issues/52)
 
 ## [v2.0.2](https://github.com/scimusmn/stele/tree/v2.0.2) (2019-02-19)
 [Full Changelog](https://github.com/scimusmn/stele/compare/v2.0.2-alpha.1...v2.0.2)
