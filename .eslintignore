@@ -1,0 +1,14 @@
+# Don't lint imported modules
+node_modules
+
+#
+# Exclude built files
+#
+dll
+# Production build of the renderer files
+src/dist
+# Production build of the Electron main files
+src/main/main.prod.js
+src/main/main.prod.js.map
+# Production built app binaries and installers
+release
