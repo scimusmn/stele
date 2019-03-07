@@ -27,6 +27,7 @@ import setupDisplays from './displays/setupDisplays';
 // Globals
 //
 // We need a global delay timer so that other spawned actions can reset it on user action.
+// noinspection JSUndefinedPropertyAssignment
 global.delayTimer = null;
 
 // Setup local data store
