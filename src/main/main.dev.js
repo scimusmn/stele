@@ -48,7 +48,7 @@ app.on('ready', async () => {
   // See quit logic for explanation.
   store.set('quitting', false);
 
-  // Find connected displays and save them to the store and then
+  // Find connected displays and save them to the store.
   setupDisplays(store, logger);
 
   // Get the displays registered in the app settings
