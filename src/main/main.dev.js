@@ -87,12 +87,6 @@ app.on('ready', async () => {
   // Window event listeners
   //
 
-  // Handle Electron's did-fail-load event
-  handleWindowLoadFail(mainWindow, appHome, store, logger);
-
-  // Hide or show cursor based on app settings
-  handleCursor(mainWindow, store);
-
   // Ensure the application window has focus as well as the embedded content
   // will be called on settings page and when url is switched to home url
   mainWindow.webContents.on('dom-ready', () => {
@@ -159,6 +153,12 @@ app.on('ready', async () => {
       mainWindow.setKiosk(true);
     }
   });
+
+  // Handle Electron's did-fail-load event
+  handleWindowLoadFail(mainWindow, appHome, store, logger);
+
+  // Hide or show cursor based on app settings
+  handleCursor(mainWindow, store);
 
   //
   // Don't close the main window, just hide it.
