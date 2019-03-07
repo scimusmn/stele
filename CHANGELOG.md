@@ -1,7 +1,17 @@
 # Change Log
 
-## [2.1.0](https://github.com/scimusmn/stele/tree/2.1.0) (2019-03-06)
-[Full Changelog](https://github.com/scimusmn/stele/compare/v2.0.2...2.1.0)
+## [2.1.1](https://github.com/scimusmn/stele/tree/2.1.1) (2019-03-07)
+[Full Changelog](https://github.com/scimusmn/stele/compare/v2.1.0...2.1.1)
+
+**Closed issues:**
+
+- Allow the user to forget a display even if it's not enabled [\#76](https://github.com/scimusmn/stele/issues/76)
+- Simplify webpack and app structure [\#62](https://github.com/scimusmn/stele/issues/62)
+- Clean up keyboard shortcut code [\#61](https://github.com/scimusmn/stele/issues/61)
+- Break the main.dev file into modules [\#51](https://github.com/scimusmn/stele/issues/51)
+
+## [v2.1.0](https://github.com/scimusmn/stele/tree/v2.1.0) (2019-03-06)
+[Full Changelog](https://github.com/scimusmn/stele/compare/v2.0.2...v2.1.0)
 
 **Implemented enhancements:**
 
