@@ -55,9 +55,6 @@ app.on('ready', async () => {
   // Define React App URI
   const appHome = `file://${__dirname}/../renderer/index.html`;
 
-  // Setup browser extensions
-  await setupExtensions();
-
   // Find connected displays and save them to the store.
   setupDisplays(store, logger);
 
@@ -74,6 +71,17 @@ app.on('ready', async () => {
     width: (screen.getPrimaryDisplay().size.width),
     height: (screen.getPrimaryDisplay().size.height),
   });
+
+  // Setup devtools in dev mode
+  if (
+    process.env.NODE_ENV === 'development'
+    || process.env.DEBUG_PROD === 'true'
+  ) {
+    setupDevTools(mainWindow);
+
+    // Setup browser extensions
+    await setupExtensions();
+  }
 
   //
   // Window event listeners
@@ -152,11 +160,6 @@ app.on('ready', async () => {
     /* eslint no-param-reassign: off */
     event.returnValue = store.get('kiosk');
   });
-
-  // Setup application menu and menu-based keyboard shortcuts
-  if (process.env.NODE_ENV === 'development') {
-    setupDevTools(mainWindow);
-  }
 
   // Setup menus and keyboard shortcut actions
   buildMenuShortcuts(mainWindow, appHome, store);

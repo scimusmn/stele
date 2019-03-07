@@ -1,20 +1,16 @@
-// Install extra Chrome dev tools to help us debug our React app
+//
+// Install extra Chrome dev tools to help debug the renderer React app
+//
 const setupExtensions = async () => {
-  if (
-    process.env.NODE_ENV === 'development'
-    || process.env.DEBUG_PROD === 'true'
-  ) {
-    const installer = require('electron-devtools-installer');
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    const extensions = ['REACT_DEVELOPER_TOOLS'];
+  const installer = require('electron-devtools-installer');
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = ['REACT_DEVELOPER_TOOLS'];
 
-    return Promise
-      .all(
-        extensions.map(name => installer.default(installer[name], forceDownload)),
-      )
-      .catch(console.log);
-  }
-  return null;
+  return Promise
+    .all(
+      extensions.map(name => installer.default(installer[name], forceDownload)),
+    )
+    .catch(console.log);
 };
 
 export default setupExtensions;
