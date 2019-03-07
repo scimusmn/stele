@@ -74,6 +74,9 @@ app.on('ready', async () => {
     height: (screen.getPrimaryDisplay().size.height),
   });
 
+  // Setup menus and keyboard shortcut actions
+  buildMenuShortcuts(mainWindow, appHome, store);
+
   // Setup devtools in dev mode
   if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     setupDevTools(mainWindow);
@@ -145,9 +148,6 @@ app.on('ready', async () => {
     /* eslint no-param-reassign: off */
     event.returnValue = store.get('kiosk');
   });
-
-  // Setup menus and keyboard shortcut actions
-  buildMenuShortcuts(mainWindow, appHome, store);
 
   //
   // Show the app window once everything has loaded
