@@ -1,5 +1,5 @@
 // Install extra Chrome dev tools to help us debug our React app
-const installExtensions = async () => {
+const setupExtensions = async () => {
   if (
     process.env.NODE_ENV === 'development'
     || process.env.DEBUG_PROD === 'true'
@@ -17,4 +17,4 @@ const installExtensions = async () => {
   return null;
 };
 
-export default installExtensions;
+export default setupExtensions;

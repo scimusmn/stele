@@ -13,9 +13,9 @@ import {
 } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
-import setupDevelopmentEnvironment from './devTools';
+import setupDevTools from './devTools/setupDevTools';
 import logger from './logger';
-import installExtensions from './extensions';
+import setupExtensions from './devTools/setupExtensions';
 import autoLaunch from './autoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor';
@@ -117,7 +117,7 @@ app.on('ready', async () => {
   const appHome = `file://${__dirname}/../renderer/index.html`;
 
   // Setup browser extensions
-  await installExtensions();
+  await setupExtensions();
 
   // Setup default window size
   const mainWindow = new BrowserWindow({
@@ -232,7 +232,7 @@ app.on('ready', async () => {
 
   // Setup application menu and menu-based keyboard shortcuts
   if (process.env.NODE_ENV === 'development') {
-    setupDevelopmentEnvironment(mainWindow);
+    setupDevTools(mainWindow);
   }
 
   // Setup menus and keyboard shortcut actions

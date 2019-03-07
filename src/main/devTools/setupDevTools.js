@@ -1,6 +1,6 @@
 import { Menu } from 'electron';
 
-const setupDevelopmentEnvironment = (window) => {
+const setupDevTools = (window) => {
   window.webContents.openDevTools();
   window.webContents.on('context-menu', (e, props) => {
     const { x, y } = props;
@@ -17,4 +17,4 @@ const setupDevelopmentEnvironment = (window) => {
   });
 };
 
-export default setupDevelopmentEnvironment;
+export default setupDevTools;
