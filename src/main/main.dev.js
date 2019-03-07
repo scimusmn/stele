@@ -74,13 +74,8 @@ app.on('ready', async () => {
   });
 
   // Setup devtools in dev mode
-  if (
-    process.env.NODE_ENV === 'development'
-    || process.env.DEBUG_PROD === 'true'
-  ) {
+  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     setupDevTools(mainWindow);
-
-    // Setup browser extensions
     await setupExtensions();
   }
 
