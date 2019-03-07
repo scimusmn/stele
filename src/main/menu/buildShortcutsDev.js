@@ -9,7 +9,6 @@ import childProcess from 'child_process';
 // in this situation.
 const buildShortcutsMac = () => {
   electronLocalshortcut.register('Control+Q', () => {
-    console.log('will quit');
     app.quit();
   });
 

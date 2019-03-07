@@ -29,7 +29,6 @@ const setupDisplays = (store, logger) => {
   // If we're starting the app for the first time the displays setting will be blank in the data
   // store. Create the display settings with our screen information and add a blank URL item.
   if (settingDisplaysInitial == null) {
-    console.log('Setting kiosk.displays');
     store.set(
       'kiosk.displays',
       _.map(screen.getAllDisplays(), item => _.extend({}, item, { connected: true, enabled: true, url: '' })),
