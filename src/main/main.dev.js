@@ -23,6 +23,8 @@ import handleCursor from './cursor/handleCursor';
 import { loadWindow, loadWindowNow } from './windows/loadWindow';
 import handleWindowLoadFail from './windows/handleWindowLoadFail';
 import setupDisplays from './displays/setupDisplays';
+import handleWindowClose from './windows/handleWindowClose';
+import handleWindowShow from './windows/handleWindowShow';
 
 //
 // Globals
@@ -143,16 +145,9 @@ app.on('ready', async () => {
     event.returnValue = store.get('kiosk');
   });
 
-  //
-  // Show the app window once everything has loaded
-  //
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-    // Enable fullscreen kiosk mode in production
-    if (process.env.NODE_ENV === 'production') {
-      mainWindow.setKiosk(true);
-    }
-  });
+  // Show the main window once Electron renders the page 'ready-to-show'
+  // This smooths the visual display of the app on loading
+  handleWindowShow(mainWindow, store);
 
   // Handle Electron's did-fail-load event
   handleWindowLoadFail(mainWindow, appHome, store, logger);
@@ -160,22 +155,8 @@ app.on('ready', async () => {
   // Hide or show cursor based on app settings
   handleCursor(mainWindow, store);
 
-  //
-  // Don't close the main window, just hide it.
-  //
-  // This allows us to reopen the window for the settings screen even if we're not using
-  // the primary display for a content window.
-  // We need to check for a flag allowing us to bypass this customization, so that we can
-  // close all windows when quitting the app.
-  mainWindow.on('close', (event) => {
-    if (!store.get('quitting', false)) {
-      if (process.env.NODE_ENV === 'production') {
-        mainWindow.setKiosk(false);
-      }
-      mainWindow.hide();
-      event.preventDefault();
-    }
-  });
+  // Hide windows instead of closing them
+  handleWindowClose(mainWindow, store);
 });
 
 // Quit the app if all windows are closed
