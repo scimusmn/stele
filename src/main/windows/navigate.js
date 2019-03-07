@@ -2,24 +2,33 @@ import { ipcMain, BrowserWindow } from 'electron';
 import _ from 'lodash';
 import log from 'electron-log';
 
-// TODO: Turn this into a general navigation function where you pass in the path
-// Use this for settings and delay
-const mainWindowNavigateSettings = (window, reactHome, store) => {
-  store.set('kiosk.browsingContent', 0);
-  window.show();
+// Navigate the main window to the Settings page
+const mainWindowNavigateSettings = (mainWindow, store, path, args) => {
+  mainWindow.show();
   if (process.env.NODE_ENV === 'production') {
-    window.setKiosk(false);
+    mainWindow.setKiosk(false);
   }
-  window.loadURL(reactHome);
+  mainWindow.loadURL(store.get('appHome'));
   ipcMain.on('routerMounted', () => {
     clearTimeout(global.delayTimer);
-    window.webContents.send('navigate', '/settings');
+    mainWindow.webContents.send('navigate', path, args);
   });
 };
 
-const navigateSettings = (window, reactHome, store) => {
+// Navigate the main window to the Delay page
+const mainWindowNavigateDelay = (mainWindow, store, delayValue) => {
+  mainWindow.loadURL(store.get('appHome'));
+  ipcMain.on('routerMounted', () => {
+    mainWindow.webContents.send('navigate', '/delay-start', delayValue);
+  });
+};
+
+//
+// Close all windows, except for the main window and navigate to the Settings page
+//
+const navigateAppToSettings = (mainWindow, store) => {
   // Navigate to delay message during delay period
-  log.info('Window - Navigating to Settings with keyboard shortcut');
+  log.info('Window - Navigating to Settings');
   // Close windows on the secondary displays
   const windowsToClose = BrowserWindow.getAllWindows();
   _.forEach(windowsToClose, (windowToClose) => {
@@ -31,7 +40,7 @@ const navigateSettings = (window, reactHome, store) => {
       windowToClose.close();
     }
   });
-  mainWindowNavigateSettings(window, reactHome, store);
+  mainWindowNavigateSettings(mainWindow, store, '/settings');
 };
 
-export { navigateSettings, mainWindowNavigateSettings };
+export { mainWindowNavigateSettings, mainWindowNavigateDelay, navigateAppToSettings };

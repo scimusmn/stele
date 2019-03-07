@@ -2,7 +2,7 @@ import { app } from 'electron';
 import electronLocalshortcut from 'electron-localshortcut';
 import childProcess from 'child_process';
 import _ from 'lodash';
-import { navigateSettings } from '../windows/navigate';
+import { navigateAppToSettings } from '../windows/navigate';
 
 //
 // In production we don't set a menu because it interferes with full screen kiosk mode in
@@ -11,7 +11,7 @@ import { navigateSettings } from '../windows/navigate';
 //
 // We use a 3rd party tool to create shortcuts since we don't want these to work globally.
 //
-const buildShortcutsProd = (mainWindow, appHome, store) => {
+const buildShortcutsProd = (mainWindow, store) => {
   // Undo
   electronLocalshortcut.register('CommandOrControl+Z', () => {
     mainWindow.webContents.undo();
@@ -38,7 +38,7 @@ const buildShortcutsProd = (mainWindow, appHome, store) => {
   });
   // Settings
   electronLocalshortcut.register('CommandOrControl+,', () => {
-    navigateSettings(mainWindow, appHome, store);
+    navigateAppToSettings(mainWindow, store);
   });
   // Reload
   electronLocalshortcut.register('CommandOrControl+R', () => {

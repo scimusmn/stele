@@ -8,23 +8,22 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import {
-  app, BrowserWindow, ipcMain, screen,
-} from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import Store from 'electron-store';
-import _ from 'lodash';
 import setupDevTools from './devTools/setupDevTools';
 import logger from './logger/logger';
 import logConsole from './logger/logConsole';
 import setupExtensions from './devTools/setupExtensions';
-import handleAutoLaunch from './autoLaunch/handleAutoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor/handleCursor';
-import { loadWindow, loadWindowNow } from './windows/loadWindow';
+import { loadWindows } from './windows/loadWindows';
 import handleWindowLoadFail from './windows/handleWindowLoadFail';
 import setupDisplays from './displays/setupDisplays';
 import handleWindowClose from './windows/handleWindowClose';
 import handleWindowShow from './windows/handleWindowShow';
+import skipDelay from './ipcHandlers/skipDelay';
+import updateSettings from './ipcHandlers/updateSettings';
+import settingsGet from './ipcHandlers/settingsGet';
 
 //
 // Globals
@@ -57,7 +56,7 @@ app.on('ready', async () => {
   store.set('quitting', false);
 
   // Define React App URI
-  const appHome = `file://${__dirname}/../renderer/index.html`;
+  store.set('appHome', `file://${__dirname}/../renderer/index.html`);
 
   // Find connected displays and save them to the store.
   setupDisplays(store, logger);
@@ -77,7 +76,7 @@ app.on('ready', async () => {
   });
 
   // Setup menus and keyboard shortcut actions
-  buildMenuShortcuts(mainWindow, appHome, store);
+  buildMenuShortcuts(mainWindow, store);
 
   // Setup devtools in dev mode
   if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
@@ -85,72 +84,29 @@ app.on('ready', async () => {
     await setupExtensions();
   }
 
-  //
-  // Window event listeners
-  //
-
-  // Ensure the application window has focus as well as the embedded content
-  // will be called on settings page and when url is switched to home url
-  mainWindow.webContents.on('dom-ready', () => {
-    if (process.env.NODE_ENV === 'production') {
-      mainWindow.focus();
-      mainWindow.webContents.focus();
-    }
-  });
-
   // Setup optional console logging
   logConsole(mainWindow, logger);
 
-  const displays = _.get(store.get('kiosk'), 'displays');
-  const enabledConfiguredDisplay = _.find(displays, d => d.enabled && d.url !== '');
-  if (enabledConfiguredDisplay) {
-    logger.info('Window - Display URLs configured, checking delay');
-    loadWindow(mainWindow, store);
-  } else {
-    // Start by loading the React home page
-    store.set('kiosk.browsingContent', 1);
-    mainWindow.loadURL(appHome);
-    logger.info(`Window - Load React home - ${appHome}`);
-  }
-
-  // Navigate to the main URL if the user clicks on the skip delay button on the delay page
-  ipcMain.on('skipDelay', () => {
-    logger.info('Window - Delay skipped');
-    store.set('kiosk.browsingContent', 1);
-    loadWindowNow(mainWindow, store);
-  });
+  // Load window content
+  loadWindows(mainWindow, store);
 
   //
-  // Update settings from the client using IPC
+  // Inter-process communication (IPC) handlers
   //
-  ipcMain.on('updateSettings', (event, arg) => {
-    // Filter out displays that are not connected, and that the user has
-    // marked to forget on the settings page.
-    const displaysRemembered = _.filter(arg.displays, display => display.forgetting !== true);
+  skipDelay(logger, store, mainWindow);
+  updateSettings(logger, store, mainWindow);
+  settingsGet(store);
 
-    // Save updated settings information in the data store
-    store.set({
-      'kiosk.displays': displaysRemembered,
-      'kiosk.cursorVisibility': arg.cursorVis,
-      'kiosk.autoLaunch': arg.autoLaunch,
-      'kiosk.devToolsShortcut': arg.devToolsShortcut,
-    });
-    store.set('kiosk.browsingContent', 1);
-    loadWindowNow(mainWindow, store);
-    handleAutoLaunch(store.get('kiosk.autoLaunch'), logger);
-  });
-
-  ipcMain.on('settingsGet', (event) => {
-    /* eslint no-param-reassign: off */
-    event.returnValue = store.get('kiosk');
-  });
+  //
+  // Electron event listeners
+  //
 
   // Show the main window once Electron renders the page 'ready-to-show'
   // This smooths the visual display of the app on loading
-  handleWindowShow(mainWindow, store);
+  handleWindowShow(mainWindow, logger);
 
   // Handle Electron's did-fail-load event
-  handleWindowLoadFail(mainWindow, appHome, store, logger);
+  handleWindowLoadFail(mainWindow, store, logger);
 
   // Hide or show cursor based on app settings
   handleCursor(mainWindow, store);

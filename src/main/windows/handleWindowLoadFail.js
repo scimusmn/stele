@@ -8,7 +8,7 @@ import { mainWindowNavigateSettings } from './navigate';
 // If the error is about an invalid URL, return the user to the settings page.
 // Otherwise, log an error and quit Stele.
 //
-const handleWindowLoadFail = (window, appHome, store, logger) => {
+const handleWindowLoadFail = (window, store, logger) => {
   window.webContents.on(
     'did-fail-load', (event, errorCode, errorDescription) => {
       if (
@@ -19,7 +19,7 @@ const handleWindowLoadFail = (window, appHome, store, logger) => {
         logger.info(
           `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`,
         );
-        mainWindowNavigateSettings(window, appHome, store);
+        mainWindowNavigateSettings(window, store);
       } else {
         logger.error(`App - Unknown web contents load failure - ${errorDescription}:${errorCode}`);
         app.quit();

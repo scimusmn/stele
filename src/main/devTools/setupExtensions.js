@@ -2,6 +2,7 @@
 // Install extra Chrome dev tools to help debug the renderer React app
 //
 const setupExtensions = async () => {
+  /* eslint global-require: off */
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS'];

@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import { BrowserWindow } from 'electron';
-import { getDelayTime, checkUptime } from './delay';
+import delay from './delay';
 import logger from '../logger/logger';
+import { mainWindowNavigateDelay, navigateAppToSettings } from './navigate';
 
 // Load the configured kiosk URL immediately.
-function loadWindowNow(mainWindow, store) {
+const loadWindowNow = (mainWindow, store) => {
   const storeDisplays = store.get('kiosk.displays');
   logger.info('Window - Immediately loading windows');
   if (storeDisplays[0].enabled) {
@@ -43,46 +44,56 @@ function loadWindowNow(mainWindow, store) {
       }
     });
   }
-}
+};
 
 // Load the configured kiosk URL after a configured delay.
-function loadWindowDelay(mainWindow, store) {
-  // We set a default here to ensure that we pass a required delay time to the route
-  // even if this gets called with an invalid delay time.
-  const delayTime = getDelayTime(30);
-  logger.info('Window - Delay triggered');
-  console.log('----sending');
-  mainWindow.webContents.send('navigate', '/delay-start', delayTime);
-  console.log('----sent');
+const loadWindowDelay = (mainWindow, store, delayValue) => {
+  logger.info('Window - Delay started');
+  mainWindowNavigateDelay(mainWindow, store, delayValue);
+
   // After delay, load configured content
   global.delayTimer = setTimeout(() => {
-    store.set('kiosk.browsingContent', 1);
+    logger.info('Window - Delay finished, navigating to configured content.');
     loadWindowNow(mainWindow, store);
-  }, delayTime * 1000);
-}
+  }, delayValue * 1000);
+};
+
+//
+// Check whether we should display the delay or navigate to content immediately
+//
+const loadWindowDelayCheck = (mainWindow, store) => {
+  const delayValue = delay();
+  if (delayValue) {
+    loadWindowDelay(mainWindow, store, delayValue);
+  } else {
+    loadWindowNow(mainWindow, store);
+  }
+};
 
 // Load the appropriate content in the kiosk window based on environment and config settings
-function loadWindow(mainWindow, store) {
-  if (process.env.NODE_ENV === 'development') {
-    store.set('kiosk.browsingContent', 1);
-    const delayTime = getDelayTime();
-    console.log(delayTime);
-    console.log('----^ ^ ^ ^ ^ delayTime ^ ^ ^ ^ ^----');
-    // In dev we only set a delay if it's explicitly set as an environment variable and
-    // it's a real number greater than 0.
-    if (_.isFinite(delayTime) && delayTime > 0) {
-      loadWindowDelay(mainWindow, store);
-    } else {
-      loadWindowNow(mainWindow, store);
-    }
-  }
-  if (process.env.NODE_ENV !== 'development') {
-    if (!checkUptime()) {
-      loadWindowDelay(mainWindow, store);
-    } else {
-      loadWindowNow(mainWindow, store);
-    }
+function loadWindows(mainWindow, store) {
+  //
+  // Display React app loading spinner
+  //
+  // Always start by loading the React app
+  // This will display the loading spinner while we check other setting and display details.
+  mainWindow.loadURL(store.get('appHome'));
+
+  //
+  // Load content or go to Settings
+  //
+  // Check if any displays are enabled with content. If so, launch the app with the configured
+  // content. If not, then load the Settings page.
+  if (_.find(
+    _.get(store.get('kiosk'), 'displays'),
+    display => display.enabled && display.url !== '',
+  )) {
+    logger.info('Window - Display URLs configured, checking delay');
+    loadWindowDelayCheck(mainWindow, store);
+  } else {
+    logger.info('Window - No content is configured in the store');
+    navigateAppToSettings(mainWindow, store);
   }
 }
 
-export { loadWindow, loadWindowNow };
+export { loadWindows, loadWindowNow };

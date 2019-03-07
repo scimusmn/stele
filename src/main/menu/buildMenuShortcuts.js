@@ -1,9 +1,9 @@
 import { app, Menu, shell } from 'electron';
-import { navigateSettings } from '../windows/navigate';
+import { navigateAppToSettings } from '../windows/navigate';
 import buildShortcutsMac from './buildShortcutsDev';
 import buildShortcutsProd from './buildShortcutsProd';
 
-const menuBuild = (window, reactHome, store) => {
+const menuBuild = (window, store) => {
   const menuTemplate = [
     {
       label: 'Edit',
@@ -71,7 +71,7 @@ const menuBuild = (window, reactHome, store) => {
           label: 'Preferences...',
           accelerator: 'Command+,',
           click: (() => {
-            navigateSettings(window, reactHome, store);
+            navigateAppToSettings(window, store);
           }),
         },
         { type: 'separator' },
@@ -110,7 +110,7 @@ const menuBuild = (window, reactHome, store) => {
         label: 'Preferences...',
         accelerator: 'Control+,',
         click: (() => {
-          navigateSettings(window, reactHome, store);
+          navigateAppToSettings(window, store);
         }),
       },
     );
@@ -127,15 +127,15 @@ const menuBuild = (window, reactHome, store) => {
 // macOS: macOS (aka Darwin) both hides the menu in kiosk mode and also requires the menu to be
 //   defined so that the app window will render. So we let this fall through and set the menu.
 //
-const buildMenuShortcuts = (mainWindow, appHome, store) => {
+const buildMenuShortcuts = (mainWindow, store) => {
   if (process.env.NODE_ENV === 'development') {
-    Menu.setApplicationMenu(menuBuild(mainWindow, appHome, store));
+    Menu.setApplicationMenu(menuBuild(mainWindow, store));
   }
   if (process.platform === 'darwin') {
     buildShortcutsMac();
   }
   if (process.env.NODE_ENV !== 'development') {
-    buildShortcutsProd(mainWindow, appHome, store);
+    buildShortcutsProd(mainWindow, store);
   }
 };
 
