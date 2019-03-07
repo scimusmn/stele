@@ -9,7 +9,7 @@ const autoLaunch = (autoLaunchSetting, logger) => {
     name: app.getName(),
   });
 
-  function whichSetting(settingsBool, configSetting) {
+  const whichSetting = (settingsBool, configSetting) => {
     if (settingsBool === configSetting) {
       logger.info('App - Auto launch setting already configured');
     } else if (configSetting) {
@@ -19,11 +19,11 @@ const autoLaunch = (autoLaunchSetting, logger) => {
       logger.info('App - Auto launch disabled');
       kioskAutoLaunch.disable();
     }
-  }
+  };
 
-  function failureCallback(error) {
+  const failureCallback = (error) => {
     logger.warn(`App - Auto launch error: ${error}`);
-  }
+  };
 
   kioskAutoLaunch.isEnabled()
     .then(isEnabled => whichSetting(isEnabled, autoLaunchSetting))
