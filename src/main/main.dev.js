@@ -16,7 +16,7 @@ import _ from 'lodash';
 import setupDevTools from './devTools/setupDevTools';
 import logger from './logger';
 import setupExtensions from './devTools/setupExtensions';
-import autoLaunch from './autoLaunch';
+import handleAutoLaunch from './autoLaunch/handleAutoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor/handleCursor';
 import { mainWindowNavigateSettings } from './navigate';
@@ -222,7 +222,7 @@ app.on('ready', async () => {
     });
     store.set('kiosk.browsingContent', 1);
     loadWindowNow(mainWindow, store);
-    autoLaunch(store.get('kiosk.autoLaunch'), logger);
+    handleAutoLaunch(store.get('kiosk.autoLaunch'), logger);
   });
 
   ipcMain.on('settingsGet', (event) => {
