@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { BrowserWindow } from 'electron';
 import { getDelayTime, checkUptime } from './delay';
-import logger from './logger';
+import logger from '../logger';
 
 // Load the configured kiosk URL immediately.
 function loadWindowNow(mainWindow, store) {

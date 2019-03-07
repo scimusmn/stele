@@ -19,8 +19,8 @@ import setupExtensions from './devTools/setupExtensions';
 import handleAutoLaunch from './autoLaunch/handleAutoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor/handleCursor';
-import { mainWindowNavigateSettings } from './navigate';
-import { loadWindow, loadWindowNow } from './loadWindow';
+import { mainWindowNavigateSettings } from './windows/navigate';
+import { loadWindow, loadWindowNow } from './windows/loadWindow';
 
 //
 // Globals

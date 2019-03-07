@@ -2,7 +2,7 @@ import { app } from 'electron';
 import electronLocalshortcut from 'electron-localshortcut';
 import childProcess from 'child_process';
 import _ from 'lodash';
-import { navigateSettings } from '../navigate';
+import { navigateSettings } from '../windows/navigate';
 
 //
 // In production we don't set a menu because it interferes with full screen kiosk mode in
