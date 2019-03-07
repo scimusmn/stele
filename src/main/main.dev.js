@@ -105,10 +105,6 @@ app.on('ready', async () => {
     store.set('kiosk.displays', mergedDisplays);
   }
 
-  // const settingsDisplays = _.get(store.get('kiosk'), 'displays', _.map(
-  //   displaysAll, item => _.extend({}, item, { connected: true, url: '' }),
-  // ));
-
   // TODO: Confirm that this description is correct
   // Set an initial launching state flag.
   // This allows us to wait for the React app to start up and send back a signal that it is ready
