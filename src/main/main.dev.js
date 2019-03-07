@@ -15,6 +15,7 @@ import Store from 'electron-store';
 import _ from 'lodash';
 import setupDevTools from './devTools/setupDevTools';
 import logger from './logger/logger';
+import logConsole from './logger/logConsole';
 import setupExtensions from './devTools/setupExtensions';
 import handleAutoLaunch from './autoLaunch/handleAutoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
@@ -98,20 +99,8 @@ app.on('ready', async () => {
     }
   });
 
-  // Log console messages in the render process
-  if (process.env.LOG_RENDER_CONSOLE === 'true') {
-    mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
-      const levels = {
-        0: 'Info',
-        1: 'Warning',
-        2: 'Error',
-      };
-      const getLevel = numberLevel => (_.has(levels, numberLevel.toString())
-        ? levels[numberLevel]
-        : 'Unknown');
-      logger.info(`Render-${getLevel(level)} - ${message} - ${sourceId}:${line}`);
-    });
-  }
+  // Setup optional console logging
+  logConsole(mainWindow, logger);
 
   const displays = _.get(store.get('kiosk'), 'displays');
   const enabledConfiguredDisplay = _.find(displays, d => d.enabled && d.url !== '');
