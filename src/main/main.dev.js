@@ -8,9 +8,7 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import {
-  app, BrowserWindow, ipcMain, screen,
-} from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
 import setupDevTools from './devTools/setupDevTools';
@@ -21,6 +19,7 @@ import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor/handleCursor';
 import { mainWindowNavigateSettings } from './windows/navigate';
 import { loadWindow, loadWindowNow } from './windows/loadWindow';
+import setDisplays from 'displays/setDisplays';
 
 //
 // Globals
@@ -47,25 +46,8 @@ app.on('ready', async () => {
   // See quit logic for explanation.
   store.set('quitting', false);
 
-  //
-  // Get display information
-  //
-  // Primary display
-  const displaysPrimary = screen.getPrimaryDisplay();
-  store.set('kiosk.displayPrimaryID', displaysPrimary.id);
-  // All displays
-  const displaysAll = screen.getAllDisplays();
-  logger.info(`Displays - ${displaysAll.length} displays connected.`);
-  _.forEach(displaysAll, (display, index) => {
-    logger.info(
-      `Displays - Display ${index + 1}${display.id === displaysPrimary.id
-        ? ' (Primary) '
-        : ' '}- ${display.size.width} x ${display.size.height}`,
-    );
-  });
-
-  // Store display info on startup
-  store.set('kiosk.displayCount', displaysAll.length);
+  // Find connected displays and save them to the store.
+  setDisplays(store, logger);
 
   // Get the displays registered in the app settings
   const settingDisplaysInitial = _.get(store.get('kiosk'), 'displays');
