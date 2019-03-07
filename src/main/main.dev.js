@@ -14,7 +14,7 @@ import {
 import Store from 'electron-store';
 import _ from 'lodash';
 import setupDevTools from './devTools/setupDevTools';
-import logger from './logger';
+import logger from './logger/logger';
 import setupExtensions from './devTools/setupExtensions';
 import handleAutoLaunch from './autoLaunch/handleAutoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
