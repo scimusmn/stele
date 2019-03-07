@@ -224,7 +224,7 @@ class Settings extends Component {
                                         ) : ''}
                                     </Col>
                                   </Row>
-                                  {display.enabled && !display.connected
+                                  {!display.connected
                                     ? (
                                       <Row>
                                         <Col className="mt-3 text-center">
