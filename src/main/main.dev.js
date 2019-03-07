@@ -18,7 +18,7 @@ import logger from './logger';
 import setupExtensions from './devTools/setupExtensions';
 import autoLaunch from './autoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
-import handleCursor from './cursor';
+import handleCursor from './cursor/handleCursor';
 import { mainWindowNavigateSettings } from './navigate';
 import { loadWindow, loadWindowNow } from './loadWindow';
 
