@@ -39,6 +39,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.on('ready', async () => {
+  //
+  // App settings setup
+  //
+
   // Set a boolean for the browsing state. We want to register when the app is looking at the
   // configured content, or when it is on one of the internal settings page. This is primarily
   // used to help with cursor and window lock-down that we want to disable on settings pages.
@@ -48,63 +52,32 @@ app.on('ready', async () => {
   // See quit logic for explanation.
   store.set('quitting', false);
 
-  // Find connected displays and save them to the store.
-  setupDisplays(store, logger);
-
-  // Get the displays registered in the app settings
-  const settingDisplaysInitial = _.get(store.get('kiosk'), 'displays');
-
-  //
-  // Handle fresh settings
-  //
-  // If we're starting the app for the first time the displays setting will be blank
-  // in the data store. Create the display settings with our screen information
-  // and add a blank URL item.
-  if (settingDisplaysInitial == null) {
-    console.log('Setting kiosk.displays');
-    store.set(
-      'kiosk.displays',
-      _.map(screen.getAllDisplays(), item => _.extend({}, item, { connected: true, enabled: true, url: '' })),
-    );
-  } else {
-    //
-    // Handle existing settings
-    //
-    // If some displays are already configured in the app, we need to evaluate whether the
-    // configured displays match the hardware connected to the computer.
-    // Start by setting all displays to disconnected
-    // const settingDisplaysIntermediate = _.get(store.get('kiosk'), 'displays');
-
-    // Build collection of displays that are connected
-    const displaysAllConnected = _.map(
-      screen.getAllDisplays(),
-      item => _.extend({}, item, { connected: true }),
-    );
-    // Set all settings displays to disconnected, before merging
-    const settingsDisplays = _.map(
-      settingDisplaysInitial,
-      item => _.extend({}, item, { connected: false }),
-    );
-    const mergedDisplays = _.merge(settingsDisplays, displaysAllConnected);
-    store.set('kiosk.displays', mergedDisplays);
-  }
-
-  // TODO: Confirm that this description is correct
-  // Set an initial launching state flag.
-  // This allows us to wait for the React app to start up and send back a signal that it is ready
-  // to navigate to the appropriate path.
+  // Define React App URI
   const appHome = `file://${__dirname}/../renderer/index.html`;
 
   // Setup browser extensions
   await setupExtensions();
 
-  // Setup default window size
+  // Find connected displays and save them to the store.
+  setupDisplays(store, logger);
+
+  //
+  // Window setup
+  //
+
+  // Setup main window
+  // We start with a hidden window, filling the entire primary display
   const mainWindow = new BrowserWindow({
     show: false,
+    x: 0,
+    y: 0,
     width: (screen.getPrimaryDisplay().size.width),
     height: (screen.getPrimaryDisplay().size.height),
   });
-  logger.info('Window - New browser window');
+
+  //
+  // Window event listeners
+  //
 
   // Handle Electron's did-fail-load event
   handleWindowLoadFail(mainWindow, appHome, store, logger);

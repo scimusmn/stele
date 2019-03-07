@@ -1,4 +1,5 @@
 import { screen } from 'electron';
+import _ from 'lodash';
 import logDisplays from './logDisplays';
 
 //
@@ -17,6 +18,44 @@ const setupDisplays = (store, logger) => {
 
   // Write display information to the logs
   logDisplays(store, logger, displaysPrimary);
+
+
+  // Get the displays registered in the app settings
+  const settingDisplaysInitial = _.get(store.get('kiosk'), 'displays');
+
+  //
+  // Handle empty display object in settings
+  //
+  // If we're starting the app for the first time the displays setting will be blank in the data
+  // store. Create the display settings with our screen information and add a blank URL item.
+  if (settingDisplaysInitial == null) {
+    console.log('Setting kiosk.displays');
+    store.set(
+      'kiosk.displays',
+      _.map(screen.getAllDisplays(), item => _.extend({}, item, { connected: true, enabled: true, url: '' })),
+    );
+  } else {
+    //
+    // Handle existing settings
+    //
+    // If some displays are already configured in the app, we need to evaluate whether the
+    // configured displays match the hardware connected to the computer.
+    // Start by setting all displays to disconnected
+    // const settingDisplaysIntermediate = _.get(store.get('kiosk'), 'displays');
+
+    // Build collection of displays that are connected
+    const displaysAllConnected = _.map(
+      screen.getAllDisplays(),
+      item => _.extend({}, item, { connected: true }),
+    );
+    // Set all settings displays to disconnected, before merging
+    const settingsDisplays = _.map(
+      settingDisplaysInitial,
+      item => _.extend({}, item, { connected: false }),
+    );
+    const mergedDisplays = _.merge(settingsDisplays, displaysAllConnected);
+    store.set('kiosk.displays', mergedDisplays);
+  }
 };
 
 export default setupDisplays;
