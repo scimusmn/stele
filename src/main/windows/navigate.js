@@ -2,6 +2,8 @@ import { ipcMain, BrowserWindow } from 'electron';
 import _ from 'lodash';
 import log from 'electron-log';
 
+// TODO: Turn this into a general navigation function where you pass in the path
+// Use this for settings and delay
 const mainWindowNavigateSettings = (window, reactHome, store) => {
   store.set('kiosk.browsingContent', 0);
   window.show();

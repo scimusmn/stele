@@ -51,7 +51,9 @@ function loadWindowDelay(mainWindow, store) {
   // even if this gets called with an invalid delay time.
   const delayTime = getDelayTime(30);
   logger.info('Window - Delay triggered');
+  console.log('----sending');
   mainWindow.webContents.send('navigate', '/delay-start', delayTime);
+  console.log('----sent');
   // After delay, load configured content
   global.delayTimer = setTimeout(() => {
     store.set('kiosk.browsingContent', 1);
@@ -64,6 +66,8 @@ function loadWindow(mainWindow, store) {
   if (process.env.NODE_ENV === 'development') {
     store.set('kiosk.browsingContent', 1);
     const delayTime = getDelayTime();
+    console.log(delayTime);
+    console.log('----^ ^ ^ ^ ^ delayTime ^ ^ ^ ^ ^----');
     // In dev we only set a delay if it's explicitly set as an environment variable and
     // it's a real number greater than 0.
     if (_.isFinite(delayTime) && delayTime > 0) {

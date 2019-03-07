@@ -8,7 +8,9 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import { app, BrowserWindow, ipcMain } from 'electron';
+import {
+  app, BrowserWindow, ipcMain, screen,
+} from 'electron';
 import Store from 'electron-store';
 import _ from 'lodash';
 import setupDevTools from './devTools/setupDevTools';
@@ -17,9 +19,9 @@ import setupExtensions from './devTools/setupExtensions';
 import handleAutoLaunch from './autoLaunch/handleAutoLaunch';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor/handleCursor';
-import { mainWindowNavigateSettings } from './windows/navigate';
 import { loadWindow, loadWindowNow } from './windows/loadWindow';
-import setDisplays from 'displays/setDisplays';
+import handleWindowLoadFail from './windows/handleWindowLoadFail';
+import setupDisplays from './displays/setupDisplays';
 
 //
 // Globals
@@ -46,8 +48,8 @@ app.on('ready', async () => {
   // See quit logic for explanation.
   store.set('quitting', false);
 
-  // Find connected displays and save them to the store.
-  setDisplays(store, logger);
+  // Find connected displays and save them to the store and then
+  setupDisplays(store, logger);
 
   // Get the displays registered in the app settings
   const settingDisplaysInitial = _.get(store.get('kiosk'), 'displays');
@@ -62,7 +64,7 @@ app.on('ready', async () => {
     console.log('Setting kiosk.displays');
     store.set(
       'kiosk.displays',
-      _.map(displaysAll, item => _.extend({}, item, { connected: true, enabled: true, url: '' })),
+      _.map(screen.getAllDisplays(), item => _.extend({}, item, { connected: true, enabled: true, url: '' })),
     );
   } else {
     //
@@ -75,7 +77,7 @@ app.on('ready', async () => {
 
     // Build collection of displays that are connected
     const displaysAllConnected = _.map(
-      displaysAll,
+      screen.getAllDisplays(),
       item => _.extend({}, item, { connected: true }),
     );
     // Set all settings displays to disconnected, before merging
@@ -91,7 +93,6 @@ app.on('ready', async () => {
   // Set an initial launching state flag.
   // This allows us to wait for the React app to start up and send back a signal that it is ready
   // to navigate to the appropriate path.
-  store.set('kiosk.launching', 1);
   const appHome = `file://${__dirname}/../renderer/index.html`;
 
   // Setup browser extensions
@@ -100,34 +101,13 @@ app.on('ready', async () => {
   // Setup default window size
   const mainWindow = new BrowserWindow({
     show: false,
-    width: (displaysPrimary.size.width),
-    height: (displaysPrimary.size.height),
+    width: (screen.getPrimaryDisplay().size.width),
+    height: (screen.getPrimaryDisplay().size.height),
   });
   logger.info('Window - New browser window');
 
-  //
-  // Respond to failed window loads
-  //
-  // If the error is about an invalid URL, return the user to the settings page.
-  // Otherwise, log an error and quit Stele.
-  //
-  mainWindow.webContents.on(
-    'did-fail-load', (event, errorCode, errorDescription) => {
-      if (
-        errorDescription === 'ERR_INVALID_URL'
-        || errorDescription === 'ERR_NAME_NOT_RESOLVED'
-      ) {
-        const configuredURL = _.get(store.get('kiosk'), 'displayHome');
-        logger.info(
-          `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`,
-        );
-        mainWindowNavigateSettings(mainWindow, appHome, store);
-      } else {
-        logger.error(`App - Unknown web contents load failure - ${errorDescription}:${errorCode}`);
-        app.quit();
-      }
-    },
-  );
+  // Handle Electron's did-fail-load event
+  handleWindowLoadFail(mainWindow, appHome, store, logger);
 
   // Hide or show cursor based on app settings
   handleCursor(mainWindow, store);
@@ -167,14 +147,6 @@ app.on('ready', async () => {
     mainWindow.loadURL(appHome);
     logger.info(`Window - Load React home - ${appHome}`);
   }
-
-  // Once our react app has mounted, we can load kiosk content
-  ipcMain.on('routerMounted', () => {
-    if (store.get('kiosk.launching', 1)) {
-      logger.info('Window - No URL set, sending React to settings page');
-      mainWindow.webContents.send('navigate', '/settings');
-    }
-  });
 
   // Navigate to the main URL if the user clicks on the skip delay button on the delay page
   ipcMain.on('skipDelay', () => {
