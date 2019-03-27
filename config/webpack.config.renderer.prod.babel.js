@@ -17,6 +17,11 @@ CheckNodeEnv('production');
 export default merge.smart(baseConfig, {
   mode: 'production',
 
+  // Ignore external modules
+  externals: {
+    serialport: 'serialport',
+  },
+
   // Create the slower but suitable for production source-map
   devtool: 'source-map',
 

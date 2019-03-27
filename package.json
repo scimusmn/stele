@@ -30,7 +30,8 @@
     "prestart": "yarn build",
     "start": "cross-env NODE_ENV=production run-electron ./src/main/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development LOG_RENDER_CONSOLE=true run-electron -r @babel/register ./src/main/main.dev.js",
-    "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.renderer.dev.babel.js"
+    "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.renderer.dev.babel.js",
+    "install": "electron-rebuild"
   },
   "dependencies": {
     "auto-launch": "^5.0.5",
@@ -52,6 +53,7 @@
     "react-router-dom": "^4.3.1",
     "reactstrap": "^6.5.0",
     "run-electron": "^0.1.0",
+    "serialport": "^7.1.0",
     "source-map-support": "^0.5.9",
     "valid-url": "^1.0.9",
     "winston": "^3.1.0",
@@ -95,6 +97,7 @@
     "electron": "^3.0.10",
     "electron-builder": "^20.34.0",
     "electron-devtools-installer": "^2.2.4",
+    "electron-rebuild": "^1.8.4",
     "eslint": "5.15.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-formatter-pretty": "^2.0.0",
