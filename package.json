@@ -14,7 +14,7 @@
     "depcheck": "node -r @babel/register scripts/depcheck.js",
     "dev": "cross-env START_HOT=1 node -r @babel/register ./scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
     "dev-delay": "cross-env START_HOT=1 node -r @babel/register ./scripts/CheckPortInUse.js && cross-env START_HOT=1 STELE_DELAY=5 yarn start-renderer-dev",
-    "postinstall": "electron-builder install-app-deps package.json && yarn build-dll && yarn depcheck",
+    "postinstall": "electron-builder install-app-deps package.json && yarn build-dll && ./node_modules/.bin/electron-rebuild && yarn depcheck",
     "lint": "cross-env NODE_ENV=development eslint --cache --format=pretty .",
     "lint-fix": "yarn --silent lint --fix; exit 0",
     "lint-styles": "stylelint --ignore-path .eslintignore '**/*.*(css|scss)' --syntax scss",
@@ -36,6 +36,7 @@
     "auto-launch": "^5.0.5",
     "bootstrap": "^4.1.3",
     "classnames": "^2.2.6",
+    "core-js": "2",
     "devtron": "^1.4.0",
     "electron-localshortcut": "^3.1.0",
     "electron-log": "^2.2.17",
@@ -52,6 +53,7 @@
     "react-router-dom": "^4.3.1",
     "reactstrap": "^6.5.0",
     "run-electron": "^0.1.0",
+    "serialport": "^7.1.4",
     "source-map-support": "^0.5.9",
     "valid-url": "^1.0.9",
     "winston": "^3.1.0",
@@ -59,6 +61,7 @@
     "yup": "0.26.10"
   },
   "devDependencies": {
+    "electron-rebuild": "^1.8.4",
     "@babel/core": "^7.1.6",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-decorators": "^7.1.6",

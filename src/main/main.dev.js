@@ -41,6 +41,10 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
+const serialport = require('serialport');
+
+serialport.list().then(list => console.log(list));
+
 app.on('ready', async () => {
   //
   // App settings setup
