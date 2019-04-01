@@ -3,6 +3,11 @@ import serialport from 'serialport';
 
 let portList;
 
+// Type of parser we use
+// (Looks for new lines '\n')
+const { Readline } = serialport.parsers;
+const parser = new Readline();
+
 // Renderers that have requested
 // communication from serial ports
 const subscribers = {};
@@ -72,5 +77,40 @@ const refreshPortList = () => {
     portList = list;
   });
 };
+
+
+const watchSerialPort = (path, options) => {
+  console.log('watchSerialPort', path);
+  const port = new serialport(path, options);
+  port.pipe(parser);
+
+  // Open errors will be emitted as an error event
+  port.on('error', onOpenPortError);
+
+  // All data events according to parser
+  parser.on('data', onNewSerialData);
+};
+
+const onOpenPortError = (err) => {
+  console.log('Error: ', err.message);
+};
+
+const onNewSerialData = (data) => {
+  console.log('onNewSerialData:', data);
+  broadcast(SERIAL_TO_RENDERER, data);
+};
+
+
+// TODO: The below information could come from
+// Settings screen.
+// const serialPath = '/dev/tty.usbmodem1421';
+const serialPath = '/dev/tty.usbmodem1411';
+const portOpenOptions = {
+  // baudRate: 9600,
+  baudRate: 115200,
+};
+
+// TEMP
+watchSerialPort(serialPath, portOpenOptions);
 
 export default setupSerialComm;
