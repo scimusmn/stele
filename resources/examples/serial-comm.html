@@ -41,6 +41,10 @@
     const SERIAL_TO_RENDERER = 'serial-to-renderer';
     const RENDERER_TO_SERIAL = 'renderer-to-serial';
 
+    // Messages formatted as Arduino expects
+    const ALL_ON_MSG = '<2,1,0><4,1,0>';
+    const ALL_OFF_MSG = '<2,0,0><4,0,0>';
+
     if (process) {
       console.warn('WARNING: unable to access process... ', process);
     } else {
@@ -79,7 +83,6 @@
         // This message must be formatted in
         // the way our Arduino will expect it...
         let fadeArduinoMsg = `<3,0,${slideAmount}>`;
-
 
         if (slideAmount <= 0) {
           fadeArduinoMsg += ALL_OFF_MSG;

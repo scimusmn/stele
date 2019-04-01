@@ -11,6 +11,7 @@ const parser = new Readline();
 // Renderers that have requested
 // communication from serial ports
 const subscribers = {};
+const activePorts = {};
 
 // Key sent from renderer process
 // signalling the desire for communication.
@@ -50,7 +51,8 @@ const setupSerialComm = () => {
   ipcMain.on(RENDERER_TO_SERIAL, (event, arg) => {
     console.log('RENDERER_TO_SERIAL recieved. ', arg);
 
-    // TODO: Pass through to (all?) arduino(s)...
+    // Pass through to all active ports
+    outToSerial(arg);
   });
 
   // Temp test
@@ -71,6 +73,18 @@ const broadcast = (message, value) => {
   }
 };
 
+const outToSerial = (message) => {
+  const keys = Object.keys(activePorts);
+  if (keys.length === 0) {
+    console.log(`Serial message [${message}] could not be written. No active ports...`);
+  } else {
+    keys.forEach((key) => {
+      // Write message to serialport
+      activePorts[key].write(message);
+    });
+  }
+};
+
 const refreshPortList = () => {
   serialport.list().then((list) => {
     console.log(list);
@@ -79,8 +93,8 @@ const refreshPortList = () => {
 };
 
 
-const watchSerialPort = (path, options) => {
-  console.log('watchSerialPort', path);
+const enableSerialPort = (path, options) => {
+  console.log('enableSerialPort', path);
   const port = new serialport(path, options);
   port.pipe(parser);
 
@@ -89,6 +103,11 @@ const watchSerialPort = (path, options) => {
 
   // All data events according to parser
   parser.on('data', onNewSerialData);
+
+  // TODO: Instead of path, we may
+  // want to create our own unique
+  // ID based on serialnumber info....
+  activePorts[path] = port;
 };
 
 const onOpenPortError = (err) => {
@@ -103,14 +122,8 @@ const onNewSerialData = (data) => {
 
 // TODO: The below information could come from
 // Settings screen.
-// const serialPath = '/dev/tty.usbmodem1421';
-const serialPath = '/dev/tty.usbmodem1411';
-const portOpenOptions = {
-  // baudRate: 9600,
-  baudRate: 115200,
-};
-
 // TEMP
-watchSerialPort(serialPath, portOpenOptions);
+enableSerialPort('/dev/tty.usbmodem1421', { baudRate: 9600 });
+enableSerialPort('/dev/tty.usbmodem1411', { baudRate: 115200 });
 
 export default setupSerialComm;
