@@ -19,7 +19,7 @@ import {
 } from 'reactstrap';
 import { Field, FieldArray, Formik } from 'formik';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import * as Yup from 'yup';
 
 class Settings extends Component {
@@ -52,6 +52,38 @@ class Settings extends Component {
     this.setState({
       cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
     });
+  }
+
+  componentDidMount() {
+    // ipcRenderer.on('main-to-renderer', (event, arg) => {
+    //   console.log(arg); // prints "pong"
+    // });
+
+    // ipcRenderer.send('renderer-to-main', `ping_${counter}`);
+
+    /*
+    ipcRenderer.on('main-to-renderer-sync', (event, arg) => {
+      console.log(`mtr->${arg}`); // prints "pong"
+    });
+
+    setInterval(() => {
+      // ipcRenderer.sendSync('renderer-to-main-sync', 'ping-tn_'+counter);
+      ipcRenderer.send('renderer-to-main', 'ping-tn_'+counter);
+      counter++;
+    }, 500); */
+
+    /*  
+    ipcRenderer.on('asynchronous-reply', (event, arg) => {
+      console.log(arg); // prints "pong"
+    });
+
+
+    let counter = 0;
+    setInterval(() => {
+      ipcRenderer.send('asynchronous-message', `ping-${counter}`);
+      counter++;
+    }, 100);
+    */
   }
 
   toggleDisconnectedDisplayTooltip() {

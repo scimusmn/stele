@@ -8,7 +8,9 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import { app, BrowserWindow, screen } from 'electron';
+import {
+  app, BrowserWindow, screen, ipcMain,
+} from 'electron';
 import Store from 'electron-store';
 import setupDevTools from './devTools/setupDevTools';
 import logger from './logger/logger';
@@ -41,9 +43,6 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-const serialport = require('serialport');
-
-serialport.list().then(list => console.log(list));
 
 app.on('ready', async () => {
   //
@@ -117,6 +116,39 @@ app.on('ready', async () => {
 
   // Hide windows instead of closing them
   handleWindowClose(mainWindow, store);
+
+
+  // TEMP - SERIAL_IPC Proof of concept
+
+  console.log('~~~~~~~~~ POC ');
+  const serialport = require('serialport');
+  let portList;
+  serialport.list().then(list => {
+    console.log(list);
+    portList = list;
+  });
+
+  // IPC listener
+  let mySender = null;
+  ipcMain.on('renderer-to-main', (event, arg) => {
+    console.log(`renderer-to-main: ${arg}`);
+    mySender = event.sender;
+    mySender.send('main-to-renderer', 'returned --> '+arg);
+  });
+
+  setInterval( () => {
+    if (mySender) {
+      const msg = Math.round(Math.random()*999);
+      mySender.send('main-to-renderer', 'm2s --> '+ msg);
+    } else {
+      console.log('mySender not set. '+ mySender);
+    }
+  }, 5000);
+
+  ipcMain.on('fetch-serial-ports', (event, arg) => {
+    event.sender.send('update-serial-ports', portList);
+  });
+
 });
 
 // Quit the app if all windows are closed

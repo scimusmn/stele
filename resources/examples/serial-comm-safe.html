@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Serial Comm Example Safe</title>
+  </head>
+  <body>
+    <h1>Hi! Serial Ports Example</h1>
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+    We are using Node.js <script>document.write(process.versions.node)</script>,
+    Chromium <script>document.write(process.versions.chrome)</script>,
+    Electron <script>document.write(process.versions.electron)</script>,
+
+    <div id="error"></div>
+    <div id="ports"></div>
+    <br/>
+    <ul id="myList">
+      <li>No output yet...</li>
+    </ul>
+
+  </body>
+  <script>
+
+    if (process === undefined) {
+      console.warn('WARNING: unable to access process... ', process);
+    }
+
+    const {ipcRenderer} = require('electron');
+
+    if (!ipcRenderer || ipcRenderer === undefined) {
+      console.log('WARNING: unable to import ipcRendered from electron...', ipcRenderer);
+    } else {
+
+      console.log('ipcRenderer available...');
+
+      ipcRenderer.on('main-to-renderer', (event, arg) => {
+        console.log(arg); 
+        htmlOut(arg);
+      });
+
+      ipcRenderer.send('renderer-to-main', `cmon dyngus`);
+
+      setTimeout( () => {
+        ipcRenderer.send('renderer-to-main', 'HOT DISH, ' + window.location.href );
+      }, 6000);
+
+      function htmlOut(content) {
+        const node = document.createElement("LI");
+        const textnode = document.createTextNode(content);
+        node.appendChild(textnode);
+        document.getElementById("myList").appendChild(node);
+      }
+
+    }
+
+  </script>
+
+</html>

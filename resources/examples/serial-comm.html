@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Serial Comm Example</title>
+  </head>
+  <body>
+    <h1>Serial Ports Example</h1>
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+    We are using Node.js <script>document.write(process.versions.node)</script>,
+    Chromium <script>document.write(process.versions.chrome)</script>,
+    Electron <script>document.write(process.versions.electron)</script>,
+    <!-- and Serialport <script>document.write(require('serialport/package').version)</script>. -->
+
+    <div id="error"></div>
+    <div id="ports"></div>
+  </body>
+
+  <script>
+    // You can also require other files to run in this process
+    // require('./renderer.js')
+
+    const {ipcRenderer} = require('electron');
+    const createTable = require('data-table');
+
+    ipcRenderer.on('main-to-renderer', (event, arg) => {
+      console.log(arg); 
+    });
+
+    // Serial Ports
+    let portList;
+    ipcRenderer.on('update-serial-ports', (event, arg) => {
+		console.log('update-serial-ports');
+		console.log(arg);
+		portList = arg;
+		updatePortTable(portList);
+	});
+
+    ipcRenderer.send('fetch-serial-ports', `all`);
+
+
+    function updatePortTable(ports) {
+
+		if (ports.length === 0) {
+			document.getElementById('error').textContent = 'No ports discovered';
+		}
+
+		const headers = Object.keys(ports[0]);
+		const table = createTable(headers);
+		tableHTML = '';
+		table.on('data', data => tableHTML += data);
+
+		table.on('end', () => document.getElementById('ports').innerHTML = tableHTML);
+
+		ports.forEach((port) => {
+			table.write(port);
+		});
+
+		table.end();
+
+	}
+
+  </script>
+</html>
