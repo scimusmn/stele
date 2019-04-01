@@ -2,32 +2,16 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Serial IPC Comm Example</title>
+    <title>IPC Comm Example</title>
   </head>
   <body>
-    <h1>Serial Communication Example</h1>
+    <h1>Hi! IPC Communication Example</h1>
     <div id="error"></div>
     <div id="ports"></div>
     <br/>
     <ul id="myList">
       <li>Messages from Electron...</li>
     </ul>
-
-    <br/>
-    <br/>
-
-    <h3>Analog Output</h3>
-    <input id="slide" type="range" min="0" max="255" step="1" value="10" >
-    <div id="sliderAmount"></div>​
-
-    <br/>
-    <br/>
-
-    <h3>From Electron</h3>
-    <div id="scrollbox" style="height:520px;width:120px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-      
-    </div>
-
 
   </body>
   <script>
@@ -60,40 +44,23 @@
 
       // Listen for all pass-through serial events from Electron
       ipcRenderer.on(SERIAL_TO_RENDERER, (event, arg) => {
-        htmlOut(arg);
-        console.log(SERIAL_TO_RENDERER, ',', arg);
+        onMessageReceived(arg);
       });
 
       // Tell Electron's main process you
       // want to open communication.
       ipcRenderer.send(IPC_HANDSHAKE, window.location.href);
 
-      const sliderInput = document.getElementById('slide');
-      sliderInput.addEventListener('input', updateSlider);
-
-      function updateSlider() {
-        const slideAmount = sliderInput.value;
-        const sliderDiv = document.getElementById('sliderAmount');
-        sliderDiv.innerHTML = slideAmount;
-
-        // This message must be formatted in
-        // the way our Arduino will expect it...
-        let fadeArduinoMsg = `<3,0,${slideAmount}>`;
-
-
-        if (slideAmount <= 0) {
-          fadeArduinoMsg += ALL_OFF_MSG;
-        } if (slideAmount >= 255) {
-          fadeArduinoMsg += ALL_ON_MSG;
-        }
-
-        ipcRenderer.send(RENDERER_TO_SERIAL, fadeArduinoMsg);
-
+      function onMessageReceived(content) {
+        console.log(content); 
+        htmlOut(content);
       }
 
       function htmlOut(content) {
-        const scrollbox = document.getElementById('scrollbox');
-        scrollbox.innerHTML += (`${content}, `);
+        const node = document.createElement("LI");
+        const textnode = document.createTextNode(content);
+        node.appendChild(textnode);
+        document.getElementById("myList").appendChild(node);
       }
 
     }

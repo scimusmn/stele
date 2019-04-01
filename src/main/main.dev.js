@@ -9,7 +9,7 @@
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
 import {
-  app, BrowserWindow, screen, ipcMain,
+  app, BrowserWindow, screen,
 } from 'electron';
 import Store from 'electron-store';
 import setupDevTools from './devTools/setupDevTools';
@@ -21,6 +21,7 @@ import handleCursor from './cursor/handleCursor';
 import { loadWindows } from './windows/loadWindows';
 import handleWindowLoadFail from './windows/handleWindowLoadFail';
 import setupDisplays from './displays/setupDisplays';
+import setupSerialComm from './serial/setupSerialComm';
 import handleWindowClose from './windows/handleWindowClose';
 import handleWindowShow from './windows/handleWindowShow';
 import skipDelay from './ipcHandlers/skipDelay';
@@ -117,37 +118,9 @@ app.on('ready', async () => {
   // Hide windows instead of closing them
   handleWindowClose(mainWindow, store);
 
-
-  // TEMP - SERIAL_IPC Proof of concept
-
-  console.log('~~~~~~~~~ POC ');
-  const serialport = require('serialport');
-  let portList;
-  serialport.list().then(list => {
-    console.log(list);
-    portList = list;
-  });
-
-  // IPC listener
-  let mySender = null;
-  ipcMain.on('renderer-to-main', (event, arg) => {
-    console.log(`renderer-to-main: ${arg}`);
-    mySender = event.sender;
-    mySender.send('main-to-renderer', 'returned --> '+arg);
-  });
-
-  setInterval( () => {
-    if (mySender) {
-      const msg = Math.round(Math.random()*999);
-      mySender.send('main-to-renderer', 'm2s --> '+ msg);
-    } else {
-      console.log('mySender not set. '+ mySender);
-    }
-  }, 5000);
-
-  ipcMain.on('fetch-serial-ports', (event, arg) => {
-    event.sender.send('update-serial-ports', portList);
-  });
+  // Setup ability to pass through serial data 
+  // to/from renderer process and serial ports.
+  setupSerialComm();
 
 });
 
