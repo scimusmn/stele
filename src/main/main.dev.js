@@ -21,7 +21,7 @@ import handleCursor from './cursor/handleCursor';
 import { loadWindows } from './windows/loadWindows';
 import handleWindowLoadFail from './windows/handleWindowLoadFail';
 import setupDisplays from './displays/setupDisplays';
-import setupSerialComm from './serial/setupSerialComm';
+import serialRelay from './serial/serialRelay';
 import handleWindowClose from './windows/handleWindowClose';
 import handleWindowShow from './windows/handleWindowShow';
 import skipDelay from './ipcHandlers/skipDelay';
@@ -118,10 +118,10 @@ app.on('ready', async () => {
   // Hide windows instead of closing them
   handleWindowClose(mainWindow, store);
 
-  // Setup ability to pass through serial data 
+  // Setup ability to pass through serial data
   // to/from renderer process and serial ports.
-  setupSerialComm();
-
+  console.log('serialRelay() setup');
+  serialRelay();
 });
 
 // Quit the app if all windows are closed

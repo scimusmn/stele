@@ -1,3 +1,5 @@
+/* eslint no-use-before-define: 0 */
+
 import { ipcMain } from 'electron';
 import serialport from 'serialport';
 
@@ -13,6 +15,12 @@ const parser = new Readline();
 const subscribers = {};
 const activePorts = {};
 
+// Automatically enable Arduinos when found.
+const autoEnableArduinos = true;
+
+// Usually 9600 or 115200
+const defaultBaudRate = 115200;
+
 // Key sent from renderer process
 // signalling the desire for communication.
 const IPC_HANDSHAKE = 'ipc-handshake';
@@ -22,9 +30,8 @@ const IPC_HANDSHAKE = 'ipc-handshake';
 const SERIAL_TO_RENDERER = 'serial-to-renderer';
 const RENDERER_TO_SERIAL = 'renderer-to-serial';
 
-const setupSerialComm = () => {
-  console.log('setupSerialComm :) ........... ');
-
+const serialRelay = () => {
+  // Gather all detected serial ports
   refreshPortList();
 
   ipcMain.on(IPC_HANDSHAKE, (event, arg) => {
@@ -55,12 +62,12 @@ const setupSerialComm = () => {
     outToSerial(arg);
   });
 
-  // Temp test
+/*  // Temp test
   setInterval(() => {
     const msg = Math.round(Math.random() * 999);
 
     broadcast(SERIAL_TO_RENDERER, `·‡° ${msg}`);
-  }, 5000);
+  }, 5000); */
 };
 
 const broadcast = (message, value) => {
@@ -87,9 +94,31 @@ const outToSerial = (message) => {
 
 const refreshPortList = () => {
   serialport.list().then((list) => {
+    Object.keys(list).forEach((key) => {
+      const portObj = list[key];
+      const { comName, manufacturer, serialNumber } = portObj;
+
+      // Scrape for Arduinos...
+      if (autoEnableArduinos === true
+          && manufacturer !== undefined) {
+        if (manufacturer.indexOf('Arduino') !== -1
+            || manufacturer.indexOf('Silicon Labs') !== -1) {
+          console.log('Auto-enabling Microcontroller:', comName);
+          enableSerialPort(comName, { baudRate: defaultBaudRate });
+        }
+      }
+    });
+
+    console.log('Refreshed Port List:');
     console.log(list);
     portList = list;
-  });
+
+    // Wake Arduinos
+    outToSerial('{wakeArduino}');
+
+    return portList;
+  })
+    .catch(error => console.log(error));
 };
 
 
@@ -123,7 +152,9 @@ const onNewSerialData = (data) => {
 // TODO: The below information could come from
 // Settings screen.
 // TEMP
+/*
 enableSerialPort('/dev/tty.usbmodem1421', { baudRate: 9600 });
 enableSerialPort('/dev/tty.usbmodem1411', { baudRate: 115200 });
+*/
 
-export default setupSerialComm;
+export default serialRelay;

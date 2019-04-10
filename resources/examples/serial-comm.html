@@ -5,7 +5,7 @@
     <title>Serial IPC Comm Example</title>
   </head>
   <body>
-    <h1>Serial Communication Example</h1>
+    <h1>Serial Communication Example...</h1>
     <div id="error"></div>
     <div id="ports"></div>
     <br/>
@@ -19,6 +19,13 @@
     <h3>Analog Output</h3>
     <input id="slide" type="range" min="0" max="255" step="1" value="10" >
     <div id="sliderAmount"></div>​
+
+    <br/>
+    <br/>
+
+    <h3>Call and Response</h3>
+    <button onclick="callAndResponseFunc()">Call</button>
+    <div>Response: <span id='responseTxt' ></span></div>​
 
     <br/>
     <br/>
@@ -42,8 +49,11 @@
     const RENDERER_TO_SERIAL = 'renderer-to-serial';
 
     // Messages formatted as Arduino expects
-    const ALL_ON_MSG = '<2,1,0><4,1,0>';
-    const ALL_OFF_MSG = '<2,0,0><4,0,0>';
+    // const ALL_ON_MSG = '<2,1,0><4,1,0>';
+    const ALL_ON_MSG = '{analogPin:2, state:1, pwm:0, getVal:0}{analogPin:4, state:1, pwm:0, getVal:0}';
+    // const ALL_OFF_MSG = '<2,0,0><4,0,0>';
+    const ALL_OFF_MSG = '{analogPin:2, state:0, pwm:0, getVal:0}{analogPin:4, state:0, pwm:0, getVal:0}';
+
 
     if (process) {
       console.warn('WARNING: unable to access process... ', process);
@@ -64,6 +74,18 @@
 
       // Listen for all pass-through serial events from Electron
       ipcRenderer.on(SERIAL_TO_RENDERER, (event, arg) => {
+        // Check for all and response message
+        
+/*        const formed = '{"message":"pot-rotation", "value":1023},{"message":"pot-rotation", "value":1023},{"message":"pot-rotation", "value":1023}';
+        const json = JSON.parse(formed);
+        console.log(json); 
+        console.log(arg);
+        if (arg.message === 'analog:0') {
+          const responseSpan = document.getElementById('responseTxt');
+          responseSpan.innerHTML = 'MESSAGE:'+arg.message,' VALUE:'+arg.value;
+          return;
+        }*/
+
         htmlOut(arg);
         console.log(SERIAL_TO_RENDERER, ',', arg);
       });
@@ -82,17 +104,28 @@
 
         // This message must be formatted in
         // the way our Arduino will expect it...
-        let fadeArduinoMsg = `<3,0,${slideAmount}>`;
+        // let fadeArduinoMsg = `<3,0,${slideAmount}>`;
+        let fadeArduinoMsg = `{digitalPin:3, state:0, pwm:${slideAmount}, getVal:0}`;
 
-        if (slideAmount <= 0) {
+/*        if (slideAmount <= 0) {
           fadeArduinoMsg += ALL_OFF_MSG;
         } if (slideAmount >= 255) {
           fadeArduinoMsg += ALL_ON_MSG;
-        }
+        }*/
 
         ipcRenderer.send(RENDERER_TO_SERIAL, fadeArduinoMsg);
 
       }
+
+      function callAndResponseFunc() {
+        // Send message to read POT input...
+        ipcRenderer.send(RENDERER_TO_SERIAL, '{analogPin:0, state:0, pwm:0, getVal:1}');
+      }
+
+      // Call-and-response test.
+/*      setInterval( () => {
+        ipcRenderer.send(RENDERER_TO_SERIAL, '{analogPin:0, state:1, pwm:0, getVal:1}');
+      }, 5000);*/
 
       function htmlOut(content) {
         const scrollbox = document.getElementById('scrollbox');
