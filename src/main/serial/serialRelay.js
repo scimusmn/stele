@@ -1,4 +1,5 @@
 /* eslint no-use-before-define: 0 */
+/* eslint new-cap: 0 */
 
 import { ipcMain } from 'electron';
 import serialport from 'serialport';
@@ -61,13 +62,6 @@ const serialRelay = () => {
     // Pass through to all active ports
     outToSerial(arg);
   });
-
-/*  // Temp test
-  setInterval(() => {
-    const msg = Math.round(Math.random() * 999);
-
-    broadcast(SERIAL_TO_RENDERER, `·‡° ${msg}`);
-  }, 5000); */
 };
 
 const broadcast = (message, value) => {
@@ -96,25 +90,25 @@ const refreshPortList = () => {
   serialport.list().then((list) => {
     Object.keys(list).forEach((key) => {
       const portObj = list[key];
-      const { comName, manufacturer, serialNumber } = portObj;
+      const { comName, manufacturer } = portObj;
 
       // Scrape for Arduinos...
       if (autoEnableArduinos === true
           && manufacturer !== undefined) {
         if (manufacturer.indexOf('Arduino') !== -1
             || manufacturer.indexOf('Silicon Labs') !== -1) {
-          console.log('Auto-enabling Microcontroller:', comName);
+          console.log('Auto-enabling:', comName, '-', manufacturer);
           enableSerialPort(comName, { baudRate: defaultBaudRate });
         }
       }
     });
 
-    console.log('Refreshed Port List:');
-    console.log(list);
     portList = list;
+    // console.log('Refreshed Port List:');
+    // console.log(portList);
 
     // Wake Arduinos
-    outToSerial('{wakeArduino}');
+    outToSerial('{“message”:”wake-arduino”, “value”:1}');
 
     return portList;
   })
@@ -148,13 +142,5 @@ const onNewSerialData = (data) => {
   broadcast(SERIAL_TO_RENDERER, data);
 };
 
-
-// TODO: The below information could come from
-// Settings screen.
-// TEMP
-/*
-enableSerialPort('/dev/tty.usbmodem1421', { baudRate: 9600 });
-enableSerialPort('/dev/tty.usbmodem1411', { baudRate: 115200 });
-*/
 
 export default serialRelay;
