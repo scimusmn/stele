@@ -108,6 +108,26 @@ const refreshPortList = () => {
     // console.log(portList);
 
     // Wake Arduinos
+    // TODO: The Arduino does not seem to be ready for the wake
+    // message at this point. We need to check on an interval, 
+    // then mark this "port" as "woke", and cease attempting
+    // to wake.
+    // TODO: Think through what happens if serial connection is reset.
+    // When reset, the arduino needs another handshake.  
+    // --> Upon receipt of a matching {“message”:”arduino-ready”, “value”:1}
+    // message, we could set a flag on that object in the portList
+    // e.g., 
+    // const onNewSerialData = (data) => {
+    //   if (data.message.indexOf("arduino-ready") !== -1) {
+    //    ... we don't know which port this is. 
+    //    ... Doh.
+    //   }
+    //   broadcast(SERIAL_TO_RENDERER, data);
+    // };
+    // On second thought, maybe we should handle the wake handshake
+    // through the client. That would keep this serialRelay class 
+    // completely agnostic to message formatting. Yes. Let's do that.
+    // Picard out.
     outToSerial('{“message”:”wake-arduino”, “value”:1}');
 
     return portList;
