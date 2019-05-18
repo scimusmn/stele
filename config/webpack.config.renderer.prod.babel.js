@@ -20,6 +20,10 @@ export default merge.smart(baseConfig, {
   // Create the slower but suitable for production source-map
   devtool: 'source-map',
 
+  externals: {
+    serialport: 'commonjs serialport',
+  },
+
   output: {
     // Absolute directory path to the compiled renderer files
     path: path.join(__dirname, '..', 'src/dist'),
