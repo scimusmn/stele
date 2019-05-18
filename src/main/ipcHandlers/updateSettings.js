@@ -18,6 +18,9 @@ const updateSettings = (logger, store, mainWindow) => {
       'kiosk.cursorVisibility': arg.cursorVis,
       'kiosk.autoLaunch': arg.autoLaunch,
       'kiosk.devToolsShortcut': arg.devToolsShortcut,
+      'kiosk.cookieName': arg.cookieName,
+      'kiosk.cookieValue': arg.cookieValue,
+      'kiosk.cookieURL': arg.cookieURL,
     });
     store.set('kiosk.browsingContent', 1);
     loadWindowNow(mainWindow, store);

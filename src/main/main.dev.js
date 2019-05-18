@@ -18,6 +18,7 @@ import logConsole from './logger/logConsole';
 import setupExtensions from './devTools/setupExtensions';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor/handleCursor';
+import handleCookies from './cookies/handleCookies';
 import { loadWindows } from './windows/loadWindows';
 import handleWindowLoadFail from './windows/handleWindowLoadFail';
 import setupDisplays from './displays/setupDisplays';
@@ -27,6 +28,8 @@ import handleWindowShow from './windows/handleWindowShow';
 import skipDelay from './ipcHandlers/skipDelay';
 import updateSettings from './ipcHandlers/updateSettings';
 import settingsGet from './ipcHandlers/settingsGet';
+
+// temp
 
 //
 // Globals
@@ -117,6 +120,9 @@ app.on('ready', async () => {
 
   // Hide windows instead of closing them
   handleWindowClose(mainWindow, store);
+
+  // Set/update cookies requested from settings screen
+  handleCookies(mainWindow, store);
 
   // Setup ability to pass through serial data
   // to/from renderer process and serial ports.

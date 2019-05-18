@@ -19,8 +19,10 @@ import {
 } from 'reactstrap';
 import { Field, FieldArray, Formik } from 'formik';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import * as Yup from 'yup';
+import CookieForm from './cookieForm';
+
 
 class Settings extends Component {
   constructor(props) {
@@ -29,6 +31,9 @@ class Settings extends Component {
     this.state = {
       disconnectedDisplayTooltipOpen: false,
       cursorVisibility: 'show',
+      cookieName: 'n',
+      cookieValue: 'v',
+      cookieURL: 'u',
       autoLaunch: false,
       devToolsShortcut: false,
       displays: [],
@@ -42,48 +47,33 @@ class Settings extends Component {
   componentWillMount() {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
     let {
-      cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
+      cursorVisibility,
+      displayPrimaryID,
+      displays,
+      autoLaunch,
+      devToolsShortcut,
+      cookieName,
+      cookieValue,
+      cookieURL,
     } = kioskSettings;
     if (cursorVisibility === undefined) cursorVisibility = 'show';
+    if (cookieName === undefined) cookieName = '';
+    if (cookieValue === undefined) cookieValue = '';
+    if (cookieURL === undefined) cookieURL = '';
     if (autoLaunch === undefined) autoLaunch = false;
     if (devToolsShortcut === undefined) devToolsShortcut = false;
     if (displayPrimaryID === undefined) displayPrimaryID = '';
     if (displays === undefined) displays = [];
     this.setState({
-      cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
+      cursorVisibility,
+      displayPrimaryID,
+      displays,
+      autoLaunch,
+      devToolsShortcut,
+      cookieName,
+      cookieValue,
+      cookieURL,
     });
-  }
-
-  componentDidMount() {
-    // ipcRenderer.on('main-to-renderer', (event, arg) => {
-    //   console.log(arg); // prints "pong"
-    // });
-
-    // ipcRenderer.send('renderer-to-main', `ping_${counter}`);
-
-    /*
-    ipcRenderer.on('main-to-renderer-sync', (event, arg) => {
-      console.log(`mtr->${arg}`); // prints "pong"
-    });
-
-    setInterval(() => {
-      // ipcRenderer.sendSync('renderer-to-main-sync', 'ping-tn_'+counter);
-      ipcRenderer.send('renderer-to-main', 'ping-tn_'+counter);
-      counter++;
-    }, 500); */
-
-    /*  
-    ipcRenderer.on('asynchronous-reply', (event, arg) => {
-      console.log(arg); // prints "pong"
-    });
-
-
-    let counter = 0;
-    setInterval(() => {
-      ipcRenderer.send('asynchronous-message', `ping-${counter}`);
-      counter++;
-    }, 100);
-    */
   }
 
   toggleDisconnectedDisplayTooltip() {
@@ -94,7 +84,14 @@ class Settings extends Component {
 
   render() {
     const {
-      cursorVisibility, displayPrimaryID, displays, autoLaunch, devToolsShortcut,
+      cursorVisibility,
+      displayPrimaryID,
+      displays,
+      autoLaunch,
+      devToolsShortcut,
+      cookieName,
+      cookieValue,
+      cookieURL,
     } = this.state;
     const isValid = (errors, name) => !!_.get(errors, name);
 
@@ -134,7 +131,13 @@ class Settings extends Component {
     return (
       <Formik
         initialValues={{
-          displays, cursorVis: cursorVisibility, autoLaunch, devToolsShortcut,
+          displays,
+          cursorVis: cursorVisibility,
+          autoLaunch,
+          devToolsShortcut,
+          cookieName,
+          cookieValue,
+          cookieURL,
         }}
         onSubmit={(values, { setSubmitting }) => {
           setTimeout(() => {
@@ -443,6 +446,13 @@ class Settings extends Component {
                         </FormGroup>
                       </Col>
                     </Row>
+
+                    <CookieForm
+                      values={values}
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                    />
+
                     <Button
                       color="primary"
                       type="submit"
