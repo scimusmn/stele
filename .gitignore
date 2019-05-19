@@ -13,3 +13,5 @@ src/main/main.prod.js
 src/main/main.prod.js.map
 # Production built app binaries and installers
 release
+# Eslint lint command line from package.json generates this cache
+.eslintcache
