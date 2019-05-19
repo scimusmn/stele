@@ -20,9 +20,8 @@ import {
 import { Field, FieldArray, Formik } from 'formik';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { ipcRenderer } from 'electron';
-import * as Yup from 'yup';
+import { array, object, string } from 'yup';
 import CookieForm from './cookieForm';
-
 
 class Settings extends Component {
   constructor(props) {
@@ -146,19 +145,16 @@ class Settings extends Component {
           }, 500);
         }}
         validationSchema={
-        Yup
-          .object()
+        object()
           .shape({
-            displays: Yup.array()
+            displays: array()
               .of(
-                Yup
-                  .object()
+                object()
                   .shape({
-                    url: Yup
-                      .string()
+                    url: string()
                       .when('enabled', {
                         is: true,
-                        then: Yup.string()
+                        then: string()
                           .test(
                             'is-url',
                             value => (
