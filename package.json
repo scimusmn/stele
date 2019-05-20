@@ -50,7 +50,7 @@
     "react-dom": "^16.6.3",
     "react-hot-loader": "^4.3.12",
     "react-icons": "^3.4.0",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "5.0.0",
     "reactstrap": "8.0.0",
     "run-electron": "1.0.0",
     "serialport": "^7.1.4",
