@@ -9,6 +9,7 @@ const options = {
     'babel-core',
     'babel-loader',
     'bootstrap',
+    'core-js',
     'concurrently',
     'cross-env',
     'css-loader',
