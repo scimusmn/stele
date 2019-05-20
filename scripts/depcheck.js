@@ -22,7 +22,6 @@ const options = {
     'eslint-import-resolver-webpack',
     'file-loader',
     'file-loader',
-    'husky',
     'jquery',
     'popper.js',
     'prettier',
