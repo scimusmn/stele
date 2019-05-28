@@ -29,6 +29,11 @@ const mainWindowNavigateDelay = (mainWindow, store, delayValue) => {
 const navigateAppToSettings = (mainWindow, store) => {
   // Navigate to delay message during delay period
   log.info('Window - Navigating to Settings');
+
+  // Set a boolean to show we are no longer
+  // looking at browsing content.
+  store.set('kiosk.browsingContent', 0);
+
   // Close windows on the secondary displays
   const windowsToClose = BrowserWindow.getAllWindows();
   _.forEach(windowsToClose, (windowToClose) => {

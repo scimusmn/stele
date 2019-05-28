@@ -56,7 +56,7 @@ app.on('ready', async () => {
   // Set a boolean for the browsing state. We want to register when the app is looking at the
   // configured content, or when it is on one of the internal settings page. This is primarily
   // used to help with cursor and window lock-down that we want to disable on settings pages.
-  store.set('kiosk.browsingContent', 0);
+  store.set('kiosk.browsingContent', 1);
 
   // Set a default value for the quitting flag.
   // See quit logic for explanation.
