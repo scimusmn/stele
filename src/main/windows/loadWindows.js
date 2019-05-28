@@ -8,6 +8,7 @@ import { mainWindowNavigateDelay, navigateAppToSettings } from './navigate';
 // Load the configured kiosk URL immediately.
 const loadWindowNow = (mainWindow, store) => {
   const storeDisplays = store.get('kiosk.displays');
+
   logger.info('Window - Immediately loading windows');
   if (storeDisplays[0].enabled) {
     // Ensure that the main window is positioned on the primary display
@@ -19,7 +20,7 @@ const loadWindowNow = (mainWindow, store) => {
 
     // Setup force focus if necessary
     if (storeDisplays[0].forceFocus === true) {
-      forceFocus(mainWindow, logger);
+      forceFocus(mainWindow, logger, store);
     }
   } else {
     if (process.env.NODE_ENV === 'production') {
@@ -49,7 +50,7 @@ const loadWindowNow = (mainWindow, store) => {
 
           // Setup force focus if necessary
           if (storeDisplays[index].forceFocus === true) {
-            forceFocus(secondaryWindows[index], logger);
+            forceFocus(secondaryWindows[index], logger, store);
           }
         }
       }
@@ -102,6 +103,7 @@ function loadWindows(mainWindow, store) {
     logger.info('Window - Display URLs configured, checking delay');
     loadWindowDelayCheck(mainWindow, store);
   } else {
+    store.set('kiosk.browsingContent', 0);
     logger.info('Window - No content is configured in the store');
     navigateAppToSettings(mainWindow, store);
   }
