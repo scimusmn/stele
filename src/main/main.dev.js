@@ -126,7 +126,6 @@ app.on('ready', async () => {
 
   // Setup ability to pass through serial data
   // to/from renderer process and serial ports.
-  console.log('serialRelay() setup');
   serialRelay(logger);
 });
 

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { BrowserWindow } from 'electron';
 import delay from './delay';
 import logger from '../logger/logger';
+import forceFocus from '../focus/forceFocus';
 import { mainWindowNavigateDelay, navigateAppToSettings } from './navigate';
 
 // Load the configured kiosk URL immediately.
@@ -15,6 +16,11 @@ const loadWindowNow = (mainWindow, store) => {
       mainWindow.setKiosk(true);
     }
     mainWindow.loadURL(storeDisplays[0].url);
+
+    // Setup force focus if necessary
+    if (storeDisplays[0].forceFocus === true) {
+      forceFocus(mainWindow, logger);
+    }
   } else {
     if (process.env.NODE_ENV === 'production') {
       mainWindow.setKiosk(false);
@@ -40,6 +46,11 @@ const loadWindowNow = (mainWindow, store) => {
               secondaryWindows[index].setKiosk(true);
             }
           });
+
+          // Setup force focus if necessary
+          if (storeDisplays[index].forceFocus === true) {
+            forceFocus(secondaryWindows[index], logger);
+          }
         }
       }
     });
