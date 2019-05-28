@@ -36,7 +36,6 @@ const ensureWindowFocus = () => {
   focusInterval = setInterval(() => {
     const isBrowsingContent = store.get('kiosk.browsingContent');
     if (isBrowsingContent === true || isBrowsingContent === 1) {
-      console.log('forcing focus');
       // First, tell OS to focus on this window
       focusWindow.focus();
 
