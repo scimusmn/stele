@@ -208,6 +208,7 @@ class Settings extends Component {
                               <th>Resolution</th>
                               <th>Orientation</th>
                               <th>URL</th>
+                              <th>Keep Focus</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -236,7 +237,7 @@ class Settings extends Component {
                                     <Col xs={7}>
                                       {display.enabled && !display.connected
                                         ? (
-                                          <>
+                                          <React.Fragment>
                                             <FaExclamationTriangle
                                               style={{ fontSize: '30px' }}
                                               className="text-warning"
@@ -251,7 +252,7 @@ class Settings extends Component {
                                               This window won&apos;t be displayed until the
                                               display is reconnected.
                                             </Tooltip>
-                                          </>
+                                          </React.Fragment>
                                         ) : ''}
                                     </Col>
                                   </Row>
@@ -334,7 +335,24 @@ class Settings extends Component {
                                     display
                                   </FormText>
                                 </td>
+                                <td>
+                                  <Col xs={5}>
+                                    <FormGroup row>
+                                      <Col sm={{ size: 12 }}>
+                                        <FormGroup check>
+                                          <Input
+                                            onChange={handleChange}
+                                            type="checkbox"
+                                            id={`displays[${index}].forceFocus`}
+                                            checked={display.forceFocus}
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    </FormGroup>
+                                  </Col>
+                                </td>
                               </tr>
+
                             ))
                           }
                           </tbody>
