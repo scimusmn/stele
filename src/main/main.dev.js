@@ -127,7 +127,7 @@ app.on('ready', async () => {
   // Setup ability to pass through serial data
   // to/from renderer process and serial ports.
   console.log('serialRelay() setup');
-  serialRelay();
+  serialRelay(logger);
 });
 
 // Quit the app if all windows are closed
