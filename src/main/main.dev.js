@@ -29,8 +29,6 @@ import skipDelay from './ipcHandlers/skipDelay';
 import updateSettings from './ipcHandlers/updateSettings';
 import settingsGet from './ipcHandlers/settingsGet';
 
-// temp
-
 //
 // Globals
 //
