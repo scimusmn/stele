@@ -47,14 +47,14 @@ const serialRelay = (_logger) => {
   refreshPortList();
 
   ipcMain.on(IPC_HANDSHAKE, (event, arg) => {
-    console.log('IPC_HANDSHAKE recieved. Adding to subscribers:', arg.toString());
-    logger.info('serialRelay: IPC_HANDSHAKE recieved. Adding renderer subscriber.');
+    console.log('IPC_HANDSHAKE received. Adding to subscribers:', arg.toString());
+    logger.info('serialRelay: IPC_HANDSHAKE received. Adding renderer subscriber.');
 
     const subscriber = event.sender;
 
     // NOTE: We overwrite any subscriber that
     // requests communication using the sender.id.
-    // This prevents subscriver duplicates when a window
+    // This prevents subscriber duplicates when a window
     // reloads the page and requests communication again...
     // TODO: It seems like you can rely on the primary display
     // always subscribing with the same id to overwrite, but
@@ -67,7 +67,7 @@ const serialRelay = (_logger) => {
     console.log('Requesting subscriber id:', subscriber.id);
     console.log('Total subscribers:', Object.keys(subscribers).length);
 
-    // It isn't necessary for renderer to recieve
+    // It isn't necessary for renderer to receive
     // this response, but is useful for debugging
     subscriber.send(IPC_HANDSHAKE, 'handshake-confirmed');
   });
@@ -75,8 +75,8 @@ const serialRelay = (_logger) => {
   // Listen for renderer generated messages
   // and pass along to Arduino without manipulating
   ipcMain.on(RENDERER_TO_SERIAL, (event, arg) => {
-    console.log('RENDERER_TO_SERIAL recieved. ', arg);
-    logger.info(`serialRelay: RENDERER_TO_SERIAL recieved. ${arg.toString()}`);
+    console.log('RENDERER_TO_SERIAL received. ', arg);
+    logger.info(`serialRelay: RENDERER_TO_SERIAL received. ${arg.toString()}`);
 
     // Catch special commands
     if (arg === FLUSH_COMMAND) {
@@ -212,7 +212,7 @@ const enableSerialPort = (path, options) => {
 
   // TODO: Instead of path, we may
   // want to create our own unique
-  // ID based on serialnumber info....
+  // ID based on serial number info....
   activePorts[path] = port;
 };
 
