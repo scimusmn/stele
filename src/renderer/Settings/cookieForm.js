@@ -37,7 +37,9 @@ const CookieForm = (props) => {
                   )}
                 />
                 <FormText>
-                  (&rsquo;access-token&rsquo;)
+                  e.g.,
+                  {' '}
+                  <i>access-token</i>
                 </FormText>
               </td>
               <td>
@@ -55,7 +57,9 @@ const CookieForm = (props) => {
                   )}
                 />
                 <FormText>
-                  (&rsquo;my-token-ABC123&rsquo;)
+                  e.g.,
+                  {' '}
+                  <i>my-token-ABC123</i>
                 </FormText>
               </td>
               <td>
@@ -73,8 +77,14 @@ const CookieForm = (props) => {
                 />
                 <FormText>
                   Base URL of associated site.
+                  <br />
+                  e.g.,
                   {' '}
-                  (e.g, &rsquo;http://localhost&rsquo;, &rsquo;http://smm.org&rsquo;)
+                  <i>http://localhost</i>
+                  {' '}
+                  or
+                  {' '}
+                  <i>http://smm.org</i>
                 </FormText>
               </td>
             </tr>
