@@ -47,7 +47,6 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-
 app.on('ready', async () => {
   //
   // App settings setup
