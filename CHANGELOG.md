@@ -1,7 +1,26 @@
 # Change Log
 
-## [2.1.1](https://github.com/scimusmn/stele/tree/2.1.1) (2019-03-07)
-[Full Changelog](https://github.com/scimusmn/stele/compare/v2.1.0...2.1.1)
+## [2.1.6](https://github.com/scimusmn/stele/tree/2.1.6) (2019-05-31)
+[Full Changelog](https://github.com/scimusmn/stele/compare/v2.1.1...2.1.6)
+
+**Fixed bugs:**
+
+- Window hiding doesn't work as expected in fullscreen kiosk mode [\#73](https://github.com/scimusmn/stele/issues/73)
+
+**Closed issues:**
+
+- Update jQuery for security issues [\#83](https://github.com/scimusmn/stele/issues/83)
+- Unable to build serial-comm branch for production.  [\#82](https://github.com/scimusmn/stele/issues/82)
+- As a media developer, I need a way to listen for data streams on USB and SerialPorts, so my software can react to physical input. [\#79](https://github.com/scimusmn/stele/issues/79)
+- Evaluate upgrading Electron to v4 [\#47](https://github.com/scimusmn/stele/issues/47)
+
+**Merged pull requests:**
+
+- No longer continuuing force focus on settings screen. [\#93](https://github.com/scimusmn/stele/pull/93) ([tnordberg](https://github.com/tnordberg))
+- Setting: force focus [\#92](https://github.com/scimusmn/stele/pull/92) ([tnordberg](https://github.com/tnordberg))
+
+## [v2.1.1](https://github.com/scimusmn/stele/tree/v2.1.1) (2019-03-07)
+[Full Changelog](https://github.com/scimusmn/stele/compare/v2.1.0...v2.1.1)
 
 **Closed issues:**
 
