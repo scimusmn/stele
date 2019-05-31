@@ -53,27 +53,7 @@ When running the application you can use a few keyboard shortcuts to control the
 This app is under active development, but doesn't yet follow all of Electron's best-practices around system security. Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust. Web content theoretically could have access to execute system commands on your local machine. [Better checks, will be added in future releases.](https://github.com/scimusmn/stele/issues/20)
 
 # Development
-## Setup
-
-Clone the repo and run `yarn`
-In dev mode the application will not launch full-screen and the Chrome developer console/inspector will automatically display.
-
-To launch in dev mode:
-
-    yarn dev
-
-### Build production app
-If you've made changes to the application and are ready to release a new version, first change the version number in the `/app/package.json` file. Then build the application with:
-
-    yarn package
-
-This will save either a `.dmg` (macOS), `.exe` (Windows 10).
-
-## Change kiosk URL
-When you start the app, and no URL is set, you will be directed to the settings page to enter a URL for your kiosk view.
-
-When operating the app in kiosk mode use the `Cmd`+`,` keyboard shortcut to access the settings page.
-
+Follow the [development instructions](documentation/development.md) to work on the Stele source code.
 
 # Credit
 ## What's a Stele?
