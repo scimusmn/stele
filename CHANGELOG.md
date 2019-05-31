@@ -9,6 +9,8 @@
 
 **Closed issues:**
 
+- Document requirements and process for Stele dev setup on Windows [\#97](https://github.com/scimusmn/stele/issues/97)
+- Refactor Stele documentation into usage/development focus, adding notes on Windows [\#96](https://github.com/scimusmn/stele/issues/96)
 - Update jQuery for security issues [\#83](https://github.com/scimusmn/stele/issues/83)
 - Unable to build serial-comm branch for production.  [\#82](https://github.com/scimusmn/stele/issues/82)
 - As a media developer, I need a way to listen for data streams on USB and SerialPorts, so my software can react to physical input. [\#79](https://github.com/scimusmn/stele/issues/79)
