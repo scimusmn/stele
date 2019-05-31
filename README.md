@@ -2,47 +2,44 @@
 
 <img align="right" alt="Image of a Maya stele at Copan, by Frederick Catherwood" src="/resources/copan.png" />
 
-Wrapper application for the [Electron runtime](http://electron.atom.io), focused on museum kiosk use.
+Stele is an exhibit kiosk browser, built for the museum environment.
 
-This app is meant to serve as a kiosk wrapper that simply views an existing web application.
-
-Download the [latest release for Windows, Linux, or macOS](https://github.com/scimusmn/stele/releases/latest).
-
-# Setup
-
-Clone the repo and run `yarn`
+This app is meant to serve as a full-screen wrapper that simply views an existing web application.
 
 # Usage
-Once you setup the app you can run it in two modes, development or production.
 
-## Development mode
-In dev mode the application will not launch full-screen and the Chrome developer console/inspector will automatically display.
+Download the [latest release for Windows or macOS](https://github.com/scimusmn/stele/releases/latest).
 
-To launch in dev mode:
+## OS Specific Instructions
 
-    yarn dev
+### Windows 10
+Use the latest `stele-win-#.#.#-installer.exe` file to install the app on Windows 10.
 
-## Production mode
-In production mode the application is compiled for the appropriate operating system. When this compiled binary is run, the application will display fullscreen in your operating system's kiosk mode.
+This will install Stele in the active user's AppData folder: `C:\Users\username\AppData\Local\Programs\stele\Stele.exe`
 
-**WARNING**: Running the application in production can prevent you from switching out of the application. Use the [keyboard shortcuts](#keyboard-shortcuts) to exit the app in kiosk mode.
+This folder is often hidden from non-admin users. 
 
-### Build production app
-If you've made changes to the application and are ready to release a new version, first change the version number in the `/app/package.json` file. Then build the application with:
+The installer will also add a Stele menu item in the Windows Start menu.
 
-    yarn package
+#### Start on boot
+If you configure Stele to start on boot via the Stele Settings page, the Windows app will create a registry entry at:
+`\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`
 
-This will save either a `.dmg` (macOS), `.exe` (Windows 10), or an `.zip` (Linux) in the `release` directory.
+### macOS
+Use the latest `.dmg` file to install the app on macOS.
 
-## Change kiosk URL
-When you start the app, and no URL is set, you will be directed to the settings page to enter a URL for your kiosk view.
+This will prompt you to copy the Stele.app into the root `/Applications` folder.
 
-When operating the app in kiosk mode use the `Cmd`+`,` keyboard shortcut to access the settings page.
+#### Start on boot
+If you configure Stele to start on boot via the Stele Settings page, the Mac app will create an entry for Stele in your user's Login Items. 
+`System Preferences > Users & Groups > Login Items`
 
 # Keyboard shortcuts
+**WARNING**: The application tries to enter kiosk mode (full-screen) after you configure a URL to browse. Use these keyboard shortcuts to exit or hide the app.
+
 When running the application you can use a few keyboard shortcuts to control the program. This can be useful when debugging a kiosk application in an exhibit.
 
-| Action                       | Windows & Linux | macOS |
+| Action                       | Windows | macOS |
 | ---                          | ---     | ---   |
 | Settings page                | <kbd>Ctrl</kbd> + <kbd>,</kbd> | <kbd>Cmd</kbd> + <kbd>,</kbd> |
 | Reload page                  | <kbd>Ctrl</kbd> + <kbd>R</kbd> | <kbd>Cmd</kbd> + <kbd>R</kbd> |
@@ -50,10 +47,33 @@ When running the application you can use a few keyboard shortcuts to control the
 | Hide application<sup>*</sup> | <kbd>Ctrl</kbd> + <kbd>H</kbd> | <kbd>Ctrl</kbd> + <kbd>H</kbd> |
 | Quit application             | <kbd>Ctrl</kbd> + <kbd>Q</kbd> | <kbd>Cmd</kbd> + <kbd>Q</kbd> |
 
-\* Hide application works on Windows. On Linux and Mac, we simply open the file explorer, pushing the Stele application into the background.
+\* Hide application works on Windows. On Mac, we simply open the file explorer, pushing the Stele application into the background.
 
 # Security warning
 This app is under active development, but doesn't yet follow all of Electron's best-practices around system security. Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust. Web content theoretically could have access to execute system commands on your local machine. [Better checks, will be added in future releases.](https://github.com/scimusmn/stele/issues/20)
+
+# Development
+## Setup
+
+Clone the repo and run `yarn`
+In dev mode the application will not launch full-screen and the Chrome developer console/inspector will automatically display.
+
+To launch in dev mode:
+
+    yarn dev
+
+### Build production app
+If you've made changes to the application and are ready to release a new version, first change the version number in the `/app/package.json` file. Then build the application with:
+
+    yarn package
+
+This will save either a `.dmg` (macOS), `.exe` (Windows 10).
+
+## Change kiosk URL
+When you start the app, and no URL is set, you will be directed to the settings page to enter a URL for your kiosk view.
+
+When operating the app in kiosk mode use the `Cmd`+`,` keyboard shortcut to access the settings page.
+
 
 # Credit
 ## What's a Stele?
