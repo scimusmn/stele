@@ -38,7 +38,7 @@ When running the application you can use a few keyboard shortcuts to control the
 This app is built on the Electron runtime and is under active development. It doesn't yet follow all of Electron's best-practices around system security. Stele is primarily designed for local content that you trust. Don't configure it to browse to web content you don't trust. Web content theoretically could have access to execute system commands on your local machine. [Better checks, will be added in future releases.](https://github.com/scimusmn/stele/issues/20)
 
 # Development
-Follow the [development instructions](docs/development.md) to work on the Stele source code.
+Follow the [development instructions](docs/development.md) to make changes to the Stele source code.
 
 # Credit
 ## What's a Stele?
