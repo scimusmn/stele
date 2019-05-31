@@ -6,33 +6,13 @@ Stele is an exhibit kiosk browser, built for the museum environment.
 
 This app is meant to serve as a full-screen wrapper that simply views an existing web application.
 
-# Usage
-
 Download the [latest release for Windows or macOS](https://github.com/scimusmn/stele/releases/latest).
 
-## OS Specific Instructions
+# Install and setup
+Detailed instructions for:
 
-### Windows 10
-Use the latest `stele-win-#.#.#-installer.exe` file to install the app on Windows 10.
-
-This will install Stele in the active user's AppData folder: `C:\Users\username\AppData\Local\Programs\stele\Stele.exe`
-
-This folder is often hidden from non-admin users. 
-
-The installer will also add a Stele menu item in the Windows Start menu.
-
-#### Start on boot
-If you configure Stele to start on boot via the Stele Settings page, the Windows app will create a registry entry at:
-`\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`
-
-### macOS
-Use the latest `.dmg` file to install the app on macOS.
-
-This will prompt you to copy the Stele.app into the root `/Applications` folder.
-
-#### Start on boot
-If you configure Stele to start on boot via the Stele Settings page, the Mac app will create an entry for Stele in your user's Login Items. 
-`System Preferences > Users & Groups > Login Items`
+- [Windows 10](docs/install-win.md)
+- [macOS](docs/install-mac.md)
 
 # Keyboard shortcuts
 **WARNING**: The application tries to enter kiosk mode (full-screen) after you configure a URL to browse. Use these keyboard shortcuts to exit or hide the app.
