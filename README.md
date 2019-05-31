@@ -14,6 +14,11 @@ Detailed instructions for:
 - [Windows 10](docs/install-win.md)
 - [macOS](docs/install-mac.md)
 
+## Change kiosk URL
+When you start the app, and no URL is set, you will be directed to the settings page to enter a URL for your kiosk view.
+
+When operating the app in kiosk mode use the `Cmd`+`,` keyboard shortcut to access the settings page.
+
 # Keyboard shortcuts
 **WARNING**: The application tries to enter kiosk mode (full-screen) after you configure a URL to browse. Use these keyboard shortcuts to exit or hide the app.
 
