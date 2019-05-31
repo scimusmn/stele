@@ -66,7 +66,14 @@ Enter a descriptive title for the release following this template:
 Don't worry about entering a description for the draft release at this stage.
 
 Don't Publish, yet. Click **Save Draft**.
+
 ## Update CHANGELOG
+Update the Changelog with your commits and issues since the last version release.
+`export CHANGELOG_GITHUB_TOKEN="###"; github_changelog_generator --future-release 4.5.23`
+
+Where ### is your own Github user token.
+
+Commit these changes and push them to the trunk branch.
 
 ## Publish release to Github
 In the description field enter more details about the release with a link to release's section in the [CHANGELOG.md](https://github.com/scimusmn/stele/blob/master/CHANGELOG.md).
