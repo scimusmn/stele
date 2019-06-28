@@ -45,6 +45,8 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
+app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required');
+
 app.on('ready', async () => {
   //
   // App settings setup
