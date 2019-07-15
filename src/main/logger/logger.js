@@ -13,6 +13,10 @@ import os from 'os';
 // https://github.com/electron/electron/issues/15877
 // So we manually configure the ~/.config/Stele/ folder the standard app logging folder.
 //
+// We aren't supporting Linux going forward, but we're keeping this here in case
+// we have an exhibit project where we need to support this again.
+// It doesn't affect the other OS builds.
+//
 const baseLogPath = process.platform === 'linux'
   ? path.join(os.homedir(), '.config', app.getName())
   : app.getPath('logs');
