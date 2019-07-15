@@ -99,9 +99,9 @@ const flushBuffers = () => {
     keys.forEach((key) => {
       const port = activePorts[key];
       // Flush and serial scraps from serial buffer
-      port.flush((err, results) => {
+      port.flush((err) => {
         if (err) logger.info(`serialRelay: flush error: ${err.toString()}`);
-        logger.info(`serialRelay: port was flushed: ${results.toString()}`);
+        logger.info('serialRelay: port was flushed');
       });
     });
   }
