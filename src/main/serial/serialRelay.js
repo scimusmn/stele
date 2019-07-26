@@ -6,11 +6,12 @@ import serialport from 'serialport';
 
 let portList;
 let logger;
+let refreshInterval;
 
 // Type of parser we use
 // (Looks for new lines '\n')
 const { Readline } = serialport.parsers;
-const parser = new Readline();
+let parser = new Readline();
 
 // Renderers that have requested
 // communication from serial ports
@@ -108,6 +109,9 @@ const flushBuffers = () => {
 };
 
 const resetPorts = () => {
+  // Reset the parser so we don't get a bunch of duplicate messages
+  parser = new Readline();
+
   const keys = Object.keys(activePorts);
   logger.info(`serialRelay: resetPorts: ${keys.toString()}`);
   if (keys.length === 0) {
@@ -129,9 +133,7 @@ const resetPorts = () => {
 
     // Give ports 3 seconds to gracefully
     // close before re-opening.
-    setTimeout(() => {
-      refreshPortList();
-    }, 1000);
+    refreshInterval = setInterval(refreshPortList, 3000);
   }
 };
 
@@ -167,6 +169,7 @@ const outToSerial = (message) => {
 
 const refreshPortList = () => {
   logger.info('serialRelay: refreshPortList');
+
   serialport.list().then((list) => {
     Object.keys(list).forEach((key) => {
       const portObj = list[key];
@@ -187,11 +190,10 @@ const refreshPortList = () => {
     portList = list;
 
     return portList;
-  })
-    .catch((error) => {
-      console.log(error);
-      logger.info(`serialRelay: Error refreshing port list: ${error.toString()}`);
-    });
+  }).catch((error) => {
+    console.log(error);
+    logger.info(`serialRelay: Error refreshing port list: ${error.toString()}`);
+  });
 };
 
 const enableSerialPort = (path, options) => {
@@ -214,6 +216,8 @@ const enableSerialPort = (path, options) => {
   // want to create our own unique
   // ID based on serial number info....
   activePorts[path] = port;
+
+  clearInterval(refreshInterval);
 };
 
 const onOpenPortError = (err) => {
