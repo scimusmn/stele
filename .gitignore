@@ -15,3 +15,5 @@ src/main/main.prod.js.map
 release
 # Eslint lint command line from package.json generates this cache
 .eslintcache
+
+.DS_Store
