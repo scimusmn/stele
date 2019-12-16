@@ -25,6 +25,7 @@
     "package-all-publish": "yarn build && electron-builder build --mac --win --publish always",
     "package-ci": "yarn postinstall && yarn build && electron-builder --publish never",
     "package-mac": "yarn build && electron-builder build --mac",
+    "package-rpi": "yarn build && electron-builder build --linux --armv7l --publish never",
     "package-win": "yarn build && electron-builder build --win --x64",
     "prestart": "yarn build",
     "start": "cross-env NODE_ENV=production run-electron ./src/main/main.prod.js",
@@ -138,6 +139,17 @@
       "src/main/main.prod.js.map",
       "package.json"
     ],
+    "linux": {
+      "target": [
+        "deb"
+      ]
+    },
+    "deb": {
+      "fpm": [
+        "--architecture",
+        "armhf"
+      ]
+    },
     "mac": {
       "target": [
         "dmg"

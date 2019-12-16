@@ -141,6 +141,9 @@ const broadcast = (message, value) => {
   if (Object.keys(subscribers).length === 0) {
     console.log(`Message [${message}] could not be broadcast. No subscribers...`);
     logger.info(`serialRelay: Message [${message}] could not be broadcast. No subscribers...`);
+
+    console.log('Does a reference to an ipcRenderer exist? https://github.com/scimusmn/arduino-base#setting-up-an-app');
+    logger.info('Does a reference to an ipcRenderer exist? https://github.com/scimusmn/arduino-base#setting-up-an-app');
   } else {
     Object.keys(subscribers).forEach((key) => {
       // Will error out if a subscribers is no longer available
