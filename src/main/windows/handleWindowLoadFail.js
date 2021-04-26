@@ -20,6 +20,12 @@ const handleWindowLoadFail = (window, store, logger) => {
           `App - Stele is configured to load an invalid URL(${configuredURL}) - ${errorDescription}:${errorCode}`,
         );
         mainWindowNavigateSettings(window, store);
+      } else if (errorCode === -3) {
+        // This errorCode is a false positive.
+        // A 'did-finish-load' event will fire immediately after.
+        // This seems to happen while using a hot-reload development server.
+        // https://github.com/electron/electron/issues/4396
+        console.log('Ignoring "did-fail-load" error code: -3.');
       } else {
         logger.error(`App - Unknown web contents load failure - ${errorDescription}:${errorCode}`);
         app.quit();
