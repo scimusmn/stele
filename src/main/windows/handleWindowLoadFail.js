@@ -14,6 +14,7 @@ const handleWindowLoadFail = (window, store, logger) => {
       if (
         errorDescription === 'ERR_INVALID_URL'
         || errorDescription === 'ERR_NAME_NOT_RESOLVED'
+        || errorDescription === 'ERR_ADDRESS_UNREACHABLE'
       ) {
         const configuredURL = _.get(store.get('kiosk'), 'displayHome');
         logger.info(
@@ -25,7 +26,7 @@ const handleWindowLoadFail = (window, store, logger) => {
         // A 'did-finish-load' event will fire immediately after.
         // This seems to happen while using a hot-reload development server.
         // https://github.com/electron/electron/issues/4396
-        console.log('Ignoring "did-fail-load" error code: -3.');
+        logger.info('App - Ignoring "did-fail-load" error code: -3.');
       } else {
         logger.error(`App - Unknown web contents load failure - ${errorDescription}:${errorCode}`);
         app.quit();
