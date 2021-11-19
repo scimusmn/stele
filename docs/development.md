@@ -1,7 +1,7 @@
 # Development
 
 ## Requirements and setup
-Ensure you have Git, Node, NPM, and Yarn installed on your development machine.
+Ensure you have Git, Node **12**, NPM, and Yarn installed on your development machine.
 
 On macOS, you should be able to clone the git repo, install the dependencies and get going right away.
 
