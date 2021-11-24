@@ -22,7 +22,6 @@ const options = {
     'eslint-import-resolver-webpack',
     'file-loader',
     'file-loader',
-    'jquery',
     'popper.js',
     'prettier',
     'run-electron',
