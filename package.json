@@ -5,6 +5,9 @@
   "description": "Kiosk app wrapper for museum media exhibits",
   "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
   "main": "./src/main/main.prod.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./config/webpack.config.renderer.dev.dll.babel.js --colors",
