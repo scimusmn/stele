@@ -106,7 +106,7 @@
     "eslint-import-resolver-webpack": "0.11.1",
     "eslint-plugin-compat": "3.1.1",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "6.2.1",
+    "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.11.1",
     "file-loader": "^2.0.0",
@@ -172,7 +172,10 @@
       ]
     },
     "win": {
-      "target": ["nsis", "msi"]
+      "target": [
+        "nsis",
+        "msi"
+      ]
     },
     "nsis": {
       "artifactName": "${productName}-${os}-${version}-installer.${ext}"
