@@ -6,7 +6,7 @@
   "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
   "main": "./src/main/main.prod.js",
   "engines": {
-    "node": "12.x"
+    "node": "14.x"
   },
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
@@ -17,7 +17,7 @@
     "depcheck": "node -r @babel/register scripts/depcheck.js",
     "dev": "cross-env START_HOT=1 node -r @babel/register ./scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
     "dev-delay": "cross-env START_HOT=1 node -r @babel/register ./scripts/CheckPortInUse.js && cross-env START_HOT=1 STELE_DELAY=5 yarn start-renderer-dev",
-    "postinstall": "electron-builder install-app-deps package.json && yarn build-dll && ./node_modules/.bin/electron-rebuild && yarn depcheck",
+    "postinstall": "electron-builder install-app-deps && yarn build-dll && ./node_modules/.bin/electron-rebuild && yarn depcheck",
     "lint": "cross-env NODE_ENV=development eslint --cache --format=pretty .",
     "lint-fix": "yarn --silent lint --fix; exit 0",
     "lint-styles": "stylelint --ignore-path .eslintignore '**/*.*(css|scss)' --syntax scss",
@@ -55,7 +55,7 @@
     "react-router-dom": "5.0.0",
     "reactstrap": "8.0.0",
     "run-electron": "1.0.0",
-    "serialport": "^7.1.4",
+    "serialport": "^9.2.7",
     "source-map-support": "^0.5.9",
     "valid-url": "^1.0.9",
     "winston": "^3.1.0",
@@ -97,7 +97,7 @@
     "depcheck": "0.8.0",
     "detect-port": "^1.3.0",
     "electron": "4.2.2",
-    "electron-builder": "20.41.0",
+    "electron-builder": "^22.13.1",
     "electron-devtools-installer": "^2.2.4",
     "electron-rebuild": "^1.8.4",
     "eslint": "5.16.0",
