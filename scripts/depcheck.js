@@ -20,6 +20,7 @@ const options = {
     'electron-run',
     'eslint-formatter-pretty',
     'eslint-import-resolver-webpack',
+    'esm',
     'file-loader',
     'file-loader',
     'popper.js',
