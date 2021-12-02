@@ -166,11 +166,13 @@ export default {
     ],
   },
 
+  optimization: {
+    moduleIds: 'named',
+  },
+
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
     }),
-
-    new webpack.NamedModulesPlugin(),
   ],
 };
