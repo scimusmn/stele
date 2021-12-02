@@ -10,10 +10,10 @@
   },
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
-    "build-dll": "cross-env NODE_ENV=development webpack --config ./config/webpack.config.renderer.dev.dll.babel.js --colors",
+    "build-dll": "cross-env NODE_ENV=development webpack --config ./config/webpack.config.renderer.dev.dll.babel.js --color",
     "build-e2e": "cross-env E2E_BUILD=true yarn build",
-    "build-main": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.main.prod.babel.js --colors",
-    "build-renderer": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.renderer.prod.babel.js --colors",
+    "build-main": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.main.prod.babel.js --color",
+    "build-renderer": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.renderer.prod.babel.js --color",
     "depcheck": "node -r esm scripts/depcheck.js",
     "dev": "cross-env START_HOT=1 node -r esm ./scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
     "dev-delay": "cross-env START_HOT=1 node -r esm ./scripts/CheckPortInUse.js && cross-env START_HOT=1 STELE_DELAY=5 yarn start-renderer-dev",
