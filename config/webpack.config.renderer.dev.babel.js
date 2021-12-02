@@ -14,8 +14,11 @@ import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
 import webpackPaths from './webpack.paths';
 
-// Ensure we're setting the correct environment
-CheckNodeEnv('development');
+// When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
+// at the dev webpack config is not accidentally run in a production environment
+if (process.env.NODE_ENV === 'production') {
+  CheckNodeEnv('development');
+}
 
 // Development Hot Module Replacement server
 const port = process.env.PORT || 1212;
