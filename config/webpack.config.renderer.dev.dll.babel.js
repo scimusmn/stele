@@ -30,9 +30,11 @@ export default merge(baseConfig, {
     'bootstrap-css-only',
     'crypto-browserify',
     'electron-debug',
+    'electron-store',
     'fsevents',
     'run-electron',
     'write-file-atomic',
+    'winston',
   ],
 
   //
