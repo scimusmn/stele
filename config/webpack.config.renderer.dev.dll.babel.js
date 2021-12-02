@@ -27,7 +27,7 @@ export default merge(baseConfig, {
 
   // Ignore imported modules that don't support DLL features
   externals: [
-    'bootstrap',
+    'bootstrap-css-only',
     'crypto-browserify',
     'electron-debug',
     'fsevents',
