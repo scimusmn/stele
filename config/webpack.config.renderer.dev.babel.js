@@ -12,6 +12,7 @@ import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
+import webpackPaths from './webpack.paths';
 
 // Ensure we're setting the correct environment
 CheckNodeEnv('development');
@@ -46,9 +47,12 @@ export default merge(baseConfig, {
   devtool: 'cheap-module-source-map',
 
   output: {
-    // Path to generated images, fonts, and other files. Served by HMR in development.
-    publicPath: `http://localhost:${port}/dist/`,
+    path: webpackPaths.distRendererPath,
+    publicPath: '/',
     filename: 'renderer.dev.js',
+    library: {
+      type: 'umd',
+    },
   },
 
   plugins: [
