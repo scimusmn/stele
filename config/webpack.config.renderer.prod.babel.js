@@ -10,9 +10,11 @@ import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
+import deleteSourceMaps from '../scripts/delete-source-maps';
 
 // Ensure we're setting the correct environment
 CheckNodeEnv('production');
+deleteSourceMaps();
 
 export default merge(baseConfig, {
   mode: 'production',
