@@ -12,6 +12,7 @@ import { merge } from 'webpack-merge';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
 import deleteSourceMaps from '../scripts/delete-source-maps';
+import webpackPaths from './webpack.paths';
 
 // Ensure we're setting the correct environment
 CheckNodeEnv('production');
