@@ -29,6 +29,7 @@ export default merge(baseConfig, {
 
   mode: 'production',
 
+  target: ['electron-renderer'],
 
   externals: {
     serialport: 'commonjs serialport',
