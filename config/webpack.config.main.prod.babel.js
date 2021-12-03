@@ -8,44 +8,51 @@ import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
+import deleteSourceMaps from '../scripts/delete-source-maps';
+import webpackPaths from './webpack.paths';
 
 CheckNodeEnv('production');
+deleteSourceMaps();
+
+const devtoolsConfig = process.env.DEBUG_PROD === 'true'
+  ? {
+    devtool: 'source-map',
+  }
+  : {};
 
 export default merge(baseConfig, {
+  ...devtoolsConfig,
+
   mode: 'production',
-
-  devtool: 'source-map',
-
-  entry: './src/main/main.dev',
-
-  externals: {
-    serialport: 'commonjs serialport',
-  },
 
   target: 'electron-main',
 
+  entry: {
+    main: path.join(webpackPaths.srcMainPath, 'main.dev.js'),
+    preload: path.join(webpackPaths.srcMainPath, 'preload.js'),
+  },
+
   output: {
-    path: path.join(__dirname, '..'),
-    filename: './src/main/main.prod.js',
+    path: webpackPaths.distMainPath,
+    filename: '[name].js',
   },
 
   optimization: {
-    minimizer: process.env.E2E_BUILD
-      ? []
-      : [
-        new TerserPlugin({
-          parallel: true,
-          sourceMap: true,
-          cache: true,
-        }),
-      ],
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+      }),
+    ],
   },
+
+  // TODO see if this is blocking
+  // externals: {
+  //   serialport: 'electron-store commonjs serialport',
+  // },
 
   plugins: [
     new BundleAnalyzerPlugin({
-      analyzerMode:
-        process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
-      openAnalyzer: process.env.OPEN_ANALYZER === 'true',
+      analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
     }),
 
     //
