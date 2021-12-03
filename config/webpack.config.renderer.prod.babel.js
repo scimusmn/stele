@@ -18,11 +18,17 @@ import webpackPaths from './webpack.paths';
 CheckNodeEnv('production');
 deleteSourceMaps();
 
+const devtoolsConfig = process.env.DEBUG_PROD === 'true'
+  ? {
+    devtool: 'source-map',
+  }
+  : {};
+
 export default merge(baseConfig, {
+  ...devtoolsConfig,
+
   mode: 'production',
 
-  // Create the slower but suitable for production source-map
-  devtool: 'source-map',
 
   externals: {
     serialport: 'commonjs serialport',
