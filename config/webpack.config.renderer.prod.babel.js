@@ -127,5 +127,19 @@ export default merge(baseConfig, {
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
     }),
+
+    // TODO: Enable this if we decide to switch to an ejs template in the app for index.html
+    // new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+    //   minify: {
+    //     collapseWhitespace: true,
+    //     removeAttributeQuotes: true,
+    //     removeComments: true,
+    //   },
+    //   isBrowser: false,
+    //   isDevelopment: process.env.NODE_ENV !== 'production',
+    // }),
+
   ],
 });
