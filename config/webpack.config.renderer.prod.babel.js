@@ -3,11 +3,12 @@
 //
 import path from 'path';
 import webpack from 'webpack';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
-import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../scripts/CheckNodeEnv';
 import deleteSourceMaps from '../scripts/delete-source-maps';
@@ -34,25 +35,19 @@ export default merge(baseConfig, {
     filename: 'renderer.prod.js',
   },
 
-  // Optimize code for production build
-  optimization: {
-    minimizer: process.env.E2E_BUILD
-      ? []
-      : [
-        new TerserPlugin({
-          parallel: true,
-          sourceMap: true,
-          cache: true,
-        }),
-        new OptimizeCSSAssetsPlugin({
-          cssProcessorOptions: {
-            map: {
-              inline: false,
-              annotation: true,
             },
           },
         }),
       ],
+  // Optimize code for production build
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+      }),
+      new CssMinimizerPlugin(),
+    ],
   },
 
   plugins: [
