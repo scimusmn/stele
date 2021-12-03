@@ -31,9 +31,12 @@ export default merge(baseConfig, {
 
   target: ['electron-renderer'],
 
-  externals: {
-    serialport: 'commonjs serialport',
-  },
+  // TODO: Re-enable serialport by moving to package.json in renderer App
+  //
+  // Right now this needs to be commented out to get the build to work.
+  // externals: {
+  //   serialport: 'commonjs serialport',
+  // },
   entry: [
     'core-js',
     'regenerator-runtime/runtime',
