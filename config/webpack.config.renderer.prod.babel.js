@@ -34,13 +34,19 @@ export default merge(baseConfig, {
   externals: {
     serialport: 'commonjs serialport',
   },
+  entry: [
+    'core-js',
+    'regenerator-runtime/runtime',
+    path.join(webpackPaths.srcRendererPath, 'index.js'),
+  ],
 
   output: {
-    // Absolute directory path to the compiled renderer files
-    path: path.join(__dirname, '..', 'src/dist'),
-    // Path to generated images, fonts, and other files. Relative to renderer source
-    publicPath: '../dist/',
-    filename: 'renderer.prod.js',
+    path: webpackPaths.distRendererPath,
+    publicPath: './',
+    filename: 'renderer.js',
+    library: {
+      type: 'umd',
+    },
   },
 
             },
