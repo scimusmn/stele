@@ -28,6 +28,7 @@ import handleWindowShow from './windows/handleWindowShow';
 import skipDelay from './ipcHandlers/skipDelay';
 import updateSettings from './ipcHandlers/updateSettings';
 import settingsGet from './ipcHandlers/settingsGet';
+import { resolveHtmlPath } from './util';
 
 //
 // Globals
