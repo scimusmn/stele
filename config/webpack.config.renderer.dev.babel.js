@@ -48,6 +48,16 @@ export default merge(baseConfig, {
 
   mode: 'development',
 
+  target: ['web', 'electron-renderer'],
+
+  entry: [
+    `webpack-dev-server/client?http://localhost:${port}/dist`,
+    'webpack/hot/only-dev-server',
+    'core-js',
+    'regenerator-runtime/runtime',
+    path.join(webpackPaths.srcRendererPath, 'index.js'),
+  ],
+
   output: {
     path: webpackPaths.distRendererPath,
     publicPath: '/',
@@ -57,7 +67,53 @@ export default merge(baseConfig, {
     },
   },
 
+  module: {
+    rules: [
       {
+        test: /\.s?css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              sourceMap: true,
+              importLoaders: 1,
+            },
+          },
+          'sass-loader',
+        ],
+        include: /\.module\.s?(c|a)ss$/,
+      },
+      {
+        test: /\.s?css$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+        exclude: /\.module\.s?(c|a)ss$/,
+      },
+      // Font Loader
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
+      // SVG Font
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'image/svg+xml',
+          },
+        },
+      },
+      // Common Image Formats
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
+        use: 'url-loader',
+      },
+    ],
+  },
+
   plugins: [
     requiredByDLLConfig
       ? null
@@ -66,10 +122,6 @@ export default merge(baseConfig, {
         manifest: require(manifest),
         sourceType: 'var',
       }),
-
-    new webpack.HotModuleReplacementPlugin({
-      multiStep: true,
-    }),
 
     new webpack.NoEmitOnErrorsPlugin(),
 
@@ -115,41 +167,27 @@ export default merge(baseConfig, {
 
   devServer: {
     port,
-    publicPath,
-    // Enable gzip compression of generated files.
     compress: true,
-    // Help with DLL features
-    noInfo: true,
-    stats: 'errors-only',
-    inline: true,
-    lazy: false,
-    // Enable Hot Module Reload
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    // TODO: update this when we refactor React app folder
-    contentBase: path.join(__dirname, 'dist'),
-    watchOptions: {
-      aggregateTimeout: 300,
-      ignored: /node_modules/,
-      poll: 100,
+    static: {
+      publicPath: '/',
     },
     historyApiFallback: {
       verbose: true,
       disableDotRule: false,
     },
-
     // Start the main Electron process before running the dev server
-    before() {
-      if (process.env.START_HOT) {
-        console.log('Starting Main Process...');
-        spawn('npm', ['run', 'start-main-dev'], {
-          shell: true,
-          env: process.env,
-          stdio: 'inherit',
-        })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
-      }
+    onBeforeSetupMiddleware() {
+      console.log('Starting Main Process...');
+      spawn('npm', ['run', 'start:main'], {
+        shell: true,
+        env: process.env,
+        stdio: 'inherit',
+      })
+        .on('close', (code) => process.exit(code))
+        .on('error', (spawnError) => console.error(spawnError));
     },
   },
+
 });
