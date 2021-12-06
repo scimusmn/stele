@@ -8,6 +8,8 @@ import path from 'path';
 import fs from 'fs';
 import webpack from 'webpack';
 import chalk from 'chalk';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
@@ -87,6 +89,22 @@ export default merge(baseConfig, {
 
     new webpack.LoaderOptionsPlugin({
       debug: true,
+    }),
+
+    new ReactRefreshWebpackPlugin(),
+
+    new HtmlWebpackPlugin({
+      filename: path.join('index.html'),
+      template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      env: process.env.NODE_ENV,
+      isDevelopment: process.env.NODE_ENV !== 'production',
+      nodeModules: webpackPaths.appNodeModulesPath,
     }),
   ],
 
