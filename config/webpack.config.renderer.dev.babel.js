@@ -22,16 +22,15 @@ if (process.env.NODE_ENV === 'production') {
 
 // Development Hot Module Replacement server
 const port = process.env.PORT || 1212;
-const publicPath = `http://localhost:${port}/dist`;
+const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
+const requiredByDLLConfig = module.parent.filename.includes(
+  'webpack.config.renderer.dev.dll',
+);
 
 //
 // Define DLL helper configs
 //
 const dll = path.join(__dirname, '..', 'dll');
-const manifest = path.resolve(dll, 'renderer.json');
-const requiredByDLLConfig = module.parent.filename.includes(
-  'webpack.config.renderer.dev.dll',
-);
 // Warn if the DLL is not built
 if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
   console.log(
@@ -56,11 +55,12 @@ export default merge(baseConfig, {
     },
   },
 
+      {
   plugins: [
     requiredByDLLConfig
       ? null
       : new webpack.DllReferencePlugin({
-        context: path.join(__dirname, '..', 'dll'),
+        context: webpackPaths.dllPath,
         manifest: require(manifest),
         sourceType: 'var',
       }),
