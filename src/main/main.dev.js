@@ -30,6 +30,8 @@ import updateSettings from './ipcHandlers/updateSettings';
 import settingsGet from './ipcHandlers/settingsGet';
 import { resolveHtmlPath } from './util';
 
+let mainWindow = null;
+
 //
 // Globals
 //
@@ -46,7 +48,30 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-app.on('ready', async () => {
+const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+
+if (isDevelopment) {
+  require('electron-debug')();
+}
+
+const installExtensions = async () => {
+  const installer = require('electron-devtools-installer');
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = ['REACT_DEVELOPER_TOOLS'];
+
+  return installer
+    .default(
+      extensions.map((name) => installer[name]),
+      forceDownload,
+    )
+    .catch(console.log);
+};
+
+const createWindows = async () => {
+  if (isDevelopment) {
+    await installExtensions();
+  }
+
   //
   // App settings setup
   //
@@ -67,13 +92,18 @@ app.on('ready', async () => {
   // Find connected displays and save them to the store.
   setupDisplays(store, logger);
 
-  //
-  // Window setup
-  //
+  // TODO: Test these out
+  const RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets')
+    : path.join(__dirname, '../../assets');
+
+  const getAssetPath = (...paths) => {
+    return path.join(RESOURCES_PATH, ...paths);
+  };
 
   // Setup main window
   // We start with a hidden window, filling the entire primary display
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     show: false,
     x: 0,
     y: 0,
@@ -82,6 +112,7 @@ app.on('ready', async () => {
   });
 
   // Setup menus and keyboard shortcut actions
+  // TODO: Confirm that these are working once the app builds
   buildMenuShortcuts(mainWindow, store);
 
   // Setup devtools in dev mode
