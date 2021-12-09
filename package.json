@@ -6,7 +6,7 @@
   "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
   "main": "./src/main/main.prod.js",
   "engines": {
-    "node": ">14.x"
+    "node": ">=14.x"
   },
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
