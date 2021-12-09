@@ -179,3 +179,13 @@ app.on('before-quit', () => {
   // Set a flag that lets us close all windows
   store.set('quitting', true);
 });
+
+//
+// Startup
+//
+// When the app starts up, load the windows
+app.whenReady()
+  .then(() => {
+    createWindows();
+  })
+  .catch(console.log);
