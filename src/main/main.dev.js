@@ -8,9 +8,7 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
-import {
-  app, BrowserWindow, screen,
-} from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import Store from 'electron-store';
 import setupDevTools from './devTools/setupDevTools';
 import logger from './logger/logger';
