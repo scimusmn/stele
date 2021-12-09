@@ -26,6 +26,7 @@ import handleWindowShow from './windows/handleWindowShow';
 import skipDelay from './ipcHandlers/skipDelay';
 import updateSettings from './ipcHandlers/updateSettings';
 import settingsGet from './ipcHandlers/settingsGet';
+import path from 'path';
 import { resolveHtmlPath } from './util';
 
 let mainWindow = null;
