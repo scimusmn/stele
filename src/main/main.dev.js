@@ -85,8 +85,7 @@ const createWindows = async () => {
   store.set('quitting', false);
 
   // Define React App URI
-  // TODO: Update this to match the utils value
-  store.set('appHome', `file://${__dirname}/../renderer/index.html`);
+  store.set('appHome', resolveHtmlPath('index.html'));
 
   // Find connected displays and save them to the store.
   setupDisplays(store, logger);
