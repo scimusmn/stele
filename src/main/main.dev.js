@@ -157,11 +157,23 @@ const createWindows = async () => {
   serialRelay(logger);
 });
 
+};
+
+//
+// Event listeners
+//
+
+//
+// Quit
+//
 // Quit the app if all windows are closed
 app.on('window-all-closed', () => {
   app.quit();
 });
 
+//
+// Before Quit
+//
 // Cleanup before quit
 app.on('before-quit', () => {
   // Set a flag that lets us close all windows
