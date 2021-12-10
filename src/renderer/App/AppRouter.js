@@ -7,21 +7,19 @@ import DelayStart from '../DelayStart';
 import NoMatch from '../NoMatch';
 import Loading from '../Loading';
 
-class AppRoutes extends React.Component {
-  componentDidMount() {
+const AppRoutes = function ({ history }) {
+  useEffect(() => {
     // Tell the main process that the render process is ready for navigation commands
-    ipcRenderer.send('routerMounted');
+    window.api.send('routerMounted');
 
-    // Navigate to a route based on IPC commands from the main process
-    ipcRenderer.on('navigate', (_, path, param) => {
-      const { history } = this.props;
+    window.api.receive('navigate', (_, path, param) => {
       const navigationPath = param ? `${path}/${param}` : path;
       // Only do a push when the path will change
       if (history.location.pathname !== navigationPath) {
         history.push(navigationPath);
       }
     });
-  }
+  }, []);
 
   render() {
     return (

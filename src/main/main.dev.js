@@ -107,6 +107,10 @@ const createWindows = async () => {
     y: 0,
     width: (screen.getPrimaryDisplay().size.width),
     height: (screen.getPrimaryDisplay().size.height),
+    // Preload whitelisted IPC channels for communication between the main and renderer processes
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+    },
   });
 
   // Setup menus and keyboard shortcut actions
