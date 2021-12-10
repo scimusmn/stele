@@ -13,7 +13,6 @@ const options = {
     'concurrently',
     'cross-env',
     'css-loader',
-    'devtron',
     'electron-builder',
     'electron-log',
     'electron-rebuild',
