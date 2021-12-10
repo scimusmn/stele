@@ -40,7 +40,6 @@
     "bootstrap-css-only": "^4.4.1",
     "classnames": "^2.2.6",
     "core-js": "2",
-    "devtron": "^1.4.0",
     "electron-localshortcut": "^3.1.0",
     "electron-log": "3.0.5",
     "electron-store": "^8.0.1",
