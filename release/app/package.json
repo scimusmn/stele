@@ -1,0 +1,13 @@
+{
+  "name": "stele",
+  "version": "2.1.6",
+  "description": "Kiosk app wrapper for museum media exhibits",
+  "main": "./dist/main/main.js",
+  "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
+  "scripts": {
+    "electron-rebuild": "node -r esm ../../scripts/electron-rebuild.js",
+    "link-modules": "node -r esm ../../scripts/link-modules.js",
+    "postinstall": "npm run electron-rebuild && npm run link-modules"
+  },
+  "license": "MIT"
+}
