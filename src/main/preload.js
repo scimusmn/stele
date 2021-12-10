@@ -17,7 +17,7 @@ contextBridge.exposeInMainWorld(
   'api', {
     // API messages sent from the React Renderer process
     send: (channel, data) => {
-      const validChannels = ['routerMounted'];
+      const validChannels = ['routerMounted', 'skipDelay'];
       if (validChannels.includes(channel)) {
         ipcRenderer.send(channel, data);
       }
