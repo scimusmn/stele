@@ -173,6 +173,12 @@ const outToSerial = (message) => {
 const refreshPortList = () => {
   logger.info('serialRelay: refreshPortList');
 
+  const allowedManufacturers = [
+    'Arduino',
+    'Silicon Labs',
+    'Silicon Laboratories',
+  ];
+
   serialport.list().then((list) => {
     Object.keys(list).forEach((key) => {
       const portObj = list[key];
@@ -181,8 +187,9 @@ const refreshPortList = () => {
       // Scrape for Arduinos...
       if (autoEnableArduinos === true
           && manufacturer !== undefined) {
-        if (manufacturer.indexOf('Arduino') !== -1
-            || manufacturer.indexOf('Silicon Labs') !== -1) {
+        if (allowedManufacturers
+          .some(allowedManufacturer => manufacturer
+            .includes(allowedManufacturer))) {
           console.log(`Auto-enabling: ${comName} - ${manufacturer}`);
           logger.info(`serialRelay: Auto-enabling: ${comName} - ${manufacturer}`);
           enableSerialPort(comName, { baudRate: defaultBaudRate });
