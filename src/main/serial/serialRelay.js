@@ -2,7 +2,7 @@
 /* eslint new-cap: 0 */
 
 import { ipcMain } from 'electron';
-import serialport from 'serialport';
+import { SerialPort, ReadlineParser } from 'serialport';
 
 let portList;
 let logger;
@@ -10,8 +10,7 @@ let refreshInterval;
 
 // Type of parser we use
 // (Looks for new lines '\n')
-const { Readline } = serialport.parsers;
-let parser = new Readline();
+let parser = new ReadlineParser();
 
 // Renderers that have requested
 // communication from serial ports
@@ -110,7 +109,7 @@ const flushBuffers = () => {
 
 const resetPorts = () => {
   // Reset the parser so we don't get a bunch of duplicate messages
-  parser = new Readline();
+  parser = new ReadlineParser();
 
   const keys = Object.keys(activePorts);
   logger.info(`serialRelay: resetPorts: ${keys.toString()}`);
@@ -173,10 +172,10 @@ const outToSerial = (message) => {
 const refreshPortList = () => {
   logger.info('serialRelay: refreshPortList');
 
-  serialport.list().then((list) => {
+  SerialPort.list().then((list) => {
     Object.keys(list).forEach((key) => {
       const portObj = list[key];
-      const { comName, manufacturer } = portObj;
+      const { path: comName, manufacturer } = portObj;
 
       // Scrape for Arduinos...
       if (autoEnableArduinos === true
@@ -202,7 +201,7 @@ const refreshPortList = () => {
 const enableSerialPort = (path, options) => {
   console.log('enableSerialPort', path);
   logger.info(`serialRelay: enableSerialPort: ${path.toString()}`);
-  const port = new serialport(path, options);
+  const port = new SerialPort(path, options);
   port.pipe(parser);
 
   // Open errors will be emitted as an error event
