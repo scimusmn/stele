@@ -8,7 +8,6 @@ dll
 # Production build of the renderer files
 src/dist
 # Production build of the Electron main files
-src/main/main.prod.js
-src/main/main.prod.js.map
+src/main/main.prod.js*
 # Production built app binaries and installers
 release
