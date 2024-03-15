@@ -77,6 +77,10 @@ app.on('ready', async () => {
     y: 0,
     width: (screen.getPrimaryDisplay().size.width),
     height: (screen.getPrimaryDisplay().size.height),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   });
 
   // Setup menus and keyboard shortcut actions
