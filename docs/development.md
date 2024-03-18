@@ -3,17 +3,6 @@
 ## Requirements and setup
 Ensure you have Git, Node **18 or higher**, NPM, and Yarn installed on your development machine.
 
-On macOS, you should be able to clone the git repo, install the dependencies and get going right away.
-
-On Windows, you will need to install some global dev tools before you can get started.
-
-### Windows setup
-We use [node-gyp](https://github.com/nodejs/node-gyp) to help build various binaries used by Electron. To do this build step, you need to install some global system tools for Windows before you can run Stele in dev mode.
-
-1. Open the Start menu and type `cmd`.
-1. Right click on `Command Prompt` and select `Run as administrator`.
-1. npm install --global --production windows-build-tools
-
 ## Install repo and packages
 Clone the repo and run `yarn`
 
