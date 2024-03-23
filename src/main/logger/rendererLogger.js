@@ -2,10 +2,14 @@ import { ipcMain } from 'electron';
 import { createLogger, format } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import path from 'path';
+import fs from 'fs';
 import os from 'os';
 
 const RENDERER_LOG_EVENT = 'renderer-log-event';
 const logDirectory = path.join(os.homedir(), 'kiosk-logs');
+
+// Ensure log directory exists
+if (!fs.existsSync(logDirectory)) fs.mkdirSync(logDirectory, { recursive: true });
 
 const rendererLogger = createLogger({
   level: 'info',
