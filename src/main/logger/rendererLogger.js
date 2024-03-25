@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import os from 'os';
 
-const RENDERER_LOG_EVENT = 'renderer-log-event';
+const RENDERER_LOG_CHANNEL = 'renderer-log-channel';
 const logDirectory = path.join(os.homedir(), 'kiosk-logs');
 
 // Ensure log directory exists
@@ -28,9 +28,9 @@ const rendererLogger = createLogger({
 });
 
 // Listening for log events from the renderer process
-ipcMain.on(RENDERER_LOG_EVENT, (event, data) => {
+ipcMain.on(RENDERER_LOG_CHANNEL, (event, data) => {
   const dataString = JSON.stringify(data);
-  console.log(`RENDERER_LOG_EVENT: ${dataString}`);
+  console.log(`RENDERER_LOG_CHANNEL: ${dataString}`);
   rendererLogger.info(dataString);
 });
 
