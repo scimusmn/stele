@@ -15,6 +15,7 @@ import Store from 'electron-store';
 import setupDevTools from './devTools/setupDevTools';
 import logger from './logger/logger';
 import logConsole from './logger/logConsole';
+import './logger/rendererLogger';
 import setupExtensions from './devTools/setupExtensions';
 import buildMenuShortcuts from './menu/buildMenuShortcuts';
 import handleCursor from './cursor/handleCursor';
@@ -77,7 +78,14 @@ app.on('ready', async () => {
     y: 0,
     width: (screen.getPrimaryDisplay().size.width),
     height: (screen.getPrimaryDisplay().size.height),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   });
+
+  // Hide the menu bar
+  mainWindow.setMenuBarVisibility(false);
 
   // Setup menus and keyboard shortcut actions
   buildMenuShortcuts(mainWindow, store);
