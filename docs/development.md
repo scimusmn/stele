@@ -47,23 +47,18 @@ Commit this change and push it to Github.
 ## Create draft release in Github
 [Draft a new Github release](https://github.com/scimusmn/stele/releases/new).
 
-In the version field, enter the same version number from the package.json, but prepend it with a `v`. E.g., if your version number is `4.5.23` in package.json, then the release version number should be `v4.5.23`.
+In the `Choose a tag` dropdown, enter the same version number from the package.json, but prepend it with a `v`. E.g., if your version number is `4.5.23` in package.json, then the release version number should be `v4.5.23`.
 
 Enter a descriptive title for the release following this template:
 `stele v4.5.23 - Very short high level description of the release`
 
-Don't worry about entering a description for the draft release at this stage.
+### Create release notes
+Click the `Generate release notes`
+Clean up the auto-generated release notes to be human-readable if necessary.
 
-Don't Publish, yet. Click **Save Draft**.
-
-## Update CHANGELOG
-Update the Changelog with your commits and issues since the last version release.
-`export CHANGELOG_GITHUB_TOKEN="###"; github_changelog_generator --future-release 4.5.23`
-
-Where ### is your own Github user token.
-
-Commit these changes and push them to the trunk branch.
+### Upload binaries
+Attach the newly generated Stele binaries in the Attachment section
 
 ## Publish release to Github
-In the description field enter more details about the release with a link to release's section in the [CHANGELOG.md](https://github.com/scimusmn/stele/blob/master/CHANGELOG.md).
+Click `Publish release`
 
