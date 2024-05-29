@@ -178,7 +178,7 @@ const refreshPortList = () => {
     'Silicon Laboratories',
   ];
 
-  Serialport.list().then((list) => {
+  SerialPort.list().then((list) => {
     Object.keys(list).forEach((key) => {
       const portObj = list[key];
       const { path: comName, manufacturer } = portObj;
