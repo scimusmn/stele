@@ -1,7 +1,7 @@
 # Development
 
 ## Requirements and setup
-Ensure you have Git, Node **18 or higher**, NPM, and Yarn installed on your development machine.
+Ensure you have Git, Node **20 or higher**, NPM, and Yarn installed on your development machine.
 
 ## Install repo and packages
 Clone the repo and run `yarn`
