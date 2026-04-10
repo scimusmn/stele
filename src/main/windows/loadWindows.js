@@ -36,9 +36,17 @@ const loadWindowNow = (mainWindow, store) => {
         if (display.connected && display.enabled) {
           secondaryWindows[index] = new BrowserWindow({
             x: storeDisplays[index].bounds.x,
-            y: 0,
+            // y: 0, // If running into issues with y positioning, hard-set to 0
+            y: storeDisplays[index].bounds.y,
             show: false,
+            autoHideMenuBar: true,
+            webPreferences: {
+              nodeIntegration: true,
+              contextIsolation: false,
+            },
           });
+          secondaryWindows[index].setMenuBarVisibility(false);
+          secondaryWindows[index].removeMenu();
           secondaryWindows[index].loadURL(storeDisplays[index].url);
           secondaryWindows[index].once('ready-to-show', () => {
             secondaryWindows[index].show();
