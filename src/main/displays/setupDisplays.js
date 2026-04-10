@@ -34,25 +34,29 @@ const setupDisplays = (store, logger) => {
       _.map(screen.getAllDisplays(), item => _.extend({}, item, { connected: true, enabled: true, url: '' })),
     );
   } else {
-    //
-    // Handle existing settings
-    //
-    // If some displays are already configured in the app, we need to evaluate whether the
-    // configured displays match the hardware connected to the computer.
-    // Start by setting all displays to disconnected
-    // const settingDisplaysIntermediate = _.get(store.get('kiosk'), 'displays');
 
     // Build collection of displays that are connected
-    const displaysAllConnected = _.map(
-      screen.getAllDisplays(),
-      item => _.extend({}, item, { connected: true }),
-    );
-    // Set all settings displays to disconnected, before merging
-    const settingsDisplays = _.map(
-      settingDisplaysInitial,
-      item => _.extend({}, item, { connected: false }),
-    );
-    const mergedDisplays = _.merge(settingsDisplays, displaysAllConnected);
+    const displaysAllConnected = screen.getAllDisplays();
+
+    const mergedDisplays = _.map(settingDisplaysInitial, (savedDisplay) => {
+      const match = _.find(displaysAllConnected, { id: savedDisplay.id });
+      if (match) {
+        return _.extend({}, savedDisplay, {
+          bounds: match.bounds,
+          size: match.size,
+          rotation: match.rotation,
+          connected: true,
+        });
+      }
+      return _.extend({}, savedDisplay, { connected: false });
+    });
+
+    _.forEach(displaysAllConnected, (connectedDisplay) => {
+      if (!_.find(mergedDisplays, { id: connectedDisplay.id })) {
+        mergedDisplays.push(_.extend({}, connectedDisplay, { connected: true, enabled: true, url: '' }));
+      }
+    });
+
     store.set('kiosk.displays', mergedDisplays);
   }
 };
