@@ -1,6 +1,6 @@
 {
   "name": "stele",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": true,
   "description": "Kiosk app wrapper for museum media exhibits",
   "author": "Science Museum of Minnesota <exhibit.media@smm.org>",
@@ -169,7 +169,10 @@
       ]
     },
     "win": {
-      "target": ["nsis", "msi"]
+      "target": [
+        "nsis",
+        "msi"
+      ]
     },
     "nsis": {
       "artifactName": "${productName}-${os}-${version}-installer.${ext}"
