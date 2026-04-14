@@ -21,6 +21,18 @@ const loadWindowNow = (mainWindow, store) => {
     // Setup force focus if necessary
     if (storeDisplays[0].forceFocus === true) {
       forceFocus(mainWindow, logger, store);
+
+      // Simulate a user gesture after page load to ensure media autoplay works.
+      // This acts as a fallback in case the command-line switch and webPreferences
+      // autoplayPolicy don't fully bypass Chromium's autoplay restrictions.
+      mainWindow.webContents.on('did-finish-load', () => {
+        mainWindow.webContents.sendInputEvent({
+          type: 'mouseDown', x: 1, y: 1, button: 'left', clickCount: 1,
+        });
+        mainWindow.webContents.sendInputEvent({
+          type: 'mouseUp', x: 1, y: 1, button: 'left', clickCount: 1,
+        });
+      });
     }
   } else {
     if (process.env.NODE_ENV === 'production') {
@@ -43,6 +55,7 @@ const loadWindowNow = (mainWindow, store) => {
             webPreferences: {
               nodeIntegration: true,
               contextIsolation: false,
+              autoplayPolicy: 'no-user-gesture-required',
             },
           });
           secondaryWindows[index].setMenuBarVisibility(false);
@@ -59,6 +72,16 @@ const loadWindowNow = (mainWindow, store) => {
           // Setup force focus if necessary
           if (storeDisplays[index].forceFocus === true) {
             forceFocus(secondaryWindows[index], logger, store);
+
+            // Simulate a user gesture to ensure media autoplay works
+            secondaryWindows[index].webContents.on('did-finish-load', () => {
+              secondaryWindows[index].webContents.sendInputEvent({
+                type: 'mouseDown', x: 1, y: 1, button: 'left', clickCount: 1,
+              });
+              secondaryWindows[index].webContents.sendInputEvent({
+                type: 'mouseUp', x: 1, y: 1, button: 'left', clickCount: 1,
+              });
+            });
           }
         }
       }

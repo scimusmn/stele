@@ -85,6 +85,7 @@ app.on('ready', async () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      autoplayPolicy: 'no-user-gesture-required',
     },
   });
 
