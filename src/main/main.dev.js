@@ -46,6 +46,10 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
+// Bypass Chromium's autoplay policy so that audio/video can play immediately
+// on page load without requiring a user gesture.
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+
 app.on('ready', async () => {
   //
   // App settings setup
