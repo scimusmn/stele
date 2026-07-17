@@ -37,6 +37,9 @@ class Settings extends Component {
       devToolsShortcut: false,
       displays: [],
       displayPrimaryID: [],
+      steleVersion: '',
+      electronVersion: '',
+      chromeVersion: '',
     };
 
     this.toggleDisconnectedDisplayTooltip = this.toggleDisconnectedDisplayTooltip.bind(this);
@@ -45,6 +48,11 @@ class Settings extends Component {
   // TODO: Cleanup these default checks. Mutating these values isn't the right way here
   componentWillMount() {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
+    const {
+      stele: steleVersion,
+      electron: electronVersion,
+      chrome: chromeVersion,
+    } = ipcRenderer.sendSync('appVersions');
     let {
       cursorVisibility,
       displayPrimaryID,
@@ -72,6 +80,9 @@ class Settings extends Component {
       cookieName,
       cookieValue,
       cookieURL,
+      steleVersion,
+      electronVersion,
+      chromeVersion,
     });
   }
 
@@ -91,6 +102,9 @@ class Settings extends Component {
       cookieName,
       cookieValue,
       cookieURL,
+      steleVersion,
+      electronVersion,
+      chromeVersion,
     } = this.state;
     const isValid = (errors, name) => !!_.get(errors, name);
 
@@ -188,6 +202,19 @@ class Settings extends Component {
                     onSubmit={handleSubmit}
                   >
                     <h1 className="text-center">Kiosk settings</h1>
+                    <p className="text-center text-muted">
+                      Stele
+                      {' '}
+                      {steleVersion}
+                      {' · '}
+                      Electron
+                      {' '}
+                      {electronVersion}
+                      {' · '}
+                      Chromium
+                      {' '}
+                      {chromeVersion}
+                    </p>
                     <hr />
                     <h2>Display configuration</h2>
 

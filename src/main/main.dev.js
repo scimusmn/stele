@@ -29,6 +29,7 @@ import handleWindowShow from './windows/handleWindowShow';
 import skipDelay from './ipcHandlers/skipDelay';
 import updateSettings from './ipcHandlers/updateSettings';
 import settingsGet from './ipcHandlers/settingsGet';
+import appVersions from './ipcHandlers/appVersions';
 
 //
 // Globals
@@ -113,6 +114,7 @@ app.on('ready', async () => {
   skipDelay(logger, store, mainWindow);
   updateSettings(logger, store, mainWindow);
   settingsGet(store);
+  appVersions();
 
   //
   // Electron event listeners
