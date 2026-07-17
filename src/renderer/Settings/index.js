@@ -22,6 +22,8 @@ import { FaExclamationTriangle } from 'react-icons/fa';
 import { ipcRenderer } from 'electron';
 import { array, object, string } from 'yup';
 import CookieForm from './cookieForm';
+import logo from '../assets/smm_logo.png';
+import './Settings.css';
 
 class Settings extends Component {
   constructor(props) {
@@ -180,39 +182,45 @@ class Settings extends Component {
           } = props;
           const { disconnectedDisplayTooltipOpen } = this.state;
           return (
-            <Container>
-              <Row className="mt-3 justify-content-center">
-                <Col xs={10}>
-                  <Form
-                    className="border p-3 bg-light"
-                    onSubmit={handleSubmit}
-                  >
-                    <h1 className="text-center">Kiosk settings</h1>
-                    <hr />
-                    <h2>Display configuration</h2>
+            <div className="kiosk-page settings-page">
+              <Container fluid>
+                <Row>
+                  <Col xs={12}>
+                    <Form
+                      className="kiosk-card"
+                      onSubmit={handleSubmit}
+                    >
+                      <img
+                        className="kiosk-logo"
+                        src={logo}
+                        alt="Science Museum of Minnesota"
+                      />
+                      <h1 className="settings-page__title">Stele</h1>
+                      <hr />
+                      <h2 className="settings-page__section-title">Kiosk display configuration</h2>
 
-                    <Alert className="text-center" color="warning">
-                      Stele is primarily designed to browser local content that you trust.
-                      <br />
-                      Don&apos;t configure it to browse to web content you don&apos;t trust.
-                    </Alert>
+                      <Alert color="warning">
+                        Stele is primarily designed to browser local content that you trust.
+                        <br />
+                        Don&apos;t configure it to browse to web content you don&apos;t trust.
+                      </Alert>
 
-                    <FieldArray
-                      name="urls"
-                      render={() => (
-                        <Table>
-                          <thead>
-                            <tr>
-                              <th>Enabled</th>
-                              <th>ID</th>
-                              <th>Resolution</th>
-                              <th>Orientation</th>
-                              <th>URL</th>
-                              <th>Keep Focus</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {
+                      <FieldArray
+                        name="urls"
+                        render={() => (
+                          <Table className="settings-displays-table">
+                            <thead>
+                              <tr>
+                                <th>Enabled</th>
+                                <th>ID</th>
+                                <th>Resolution</th>
+                                <th>Orientation</th>
+                                <th>URL</th>
+                                <th>Keep Focus</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {
                             values.displays.map((display, index) => (
                               <tr
                                 key={display.id}
@@ -355,129 +363,130 @@ class Settings extends Component {
 
                             ))
                           }
-                          </tbody>
-                        </Table>
-                      )}
-                    />
+                            </tbody>
+                          </Table>
+                        )}
+                      />
 
-                    <Row>
-                      <Col>
-                        <Label for="autoLaunch">
-                          <h2>Auto launch</h2>
-                        </Label>
-                        <FormGroup check>
-                          <Label check>
-                            <Input
+                      <Row>
+                        <Col>
+                          <Label for="autoLaunch">
+                            <h2 className="settings-page__section-title">Auto launch</h2>
+                          </Label>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                onChange={handleChange}
+                                type="checkbox"
+                                id="autoLaunch"
+                                checked={values.autoLaunch}
+                              />
+                              {' '}
+                              Auto launch application on startup
+                            </Label>
+                            <FormText>
+                              This change will be made the next time your system restarts.
+                            </FormText>
+                          </FormGroup>
+                        </Col>
+
+                        <Col>
+                          <Label for="devToolsShortcut">
+                            <h2 className="settings-page__section-title">Dev tools</h2>
+                          </Label>
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                onChange={handleChange}
+                                type="checkbox"
+                                id="devToolsShortcut"
+                                checked={values.devToolsShortcut}
+                              />
+                              {' '}
+                              Enable dev tools shortcut
+                            </Label>
+                            <FormText>
+                              In production, the browser dev tools are generally inaccessible, even
+                              when using the default keyboard shortcuts.
+                              <br />
+                              Check this box to enable the keyboard shortcut.
+                              <p>
+                                Windows & Linux -
+                                {' '}
+                                <kbd>Ctrl</kbd>
+                                {' '}
+                                +
+                                {' '}
+                                <kbd>Shift</kbd>
+                                {' '}
+                                +
+                                {' '}
+                                <kbd>I</kbd>
+                              </p>
+                              <p>
+                                macOs -
+                                {' '}
+                                <kbd>Cmd</kbd>
+                                {' '}
+                                +
+                                {' '}
+                                <kbd>Opt</kbd>
+                                {' '}
+                                +
+                                {' '}
+                                <kbd>I</kbd>
+                              </p>
+                            </FormText>
+                          </FormGroup>
+                        </Col>
+
+                        <Col>
+                          <FormGroup>
+                            <Label for="cursorVis">
+                              <h2 className="settings-page__section-title">Cursor visibility</h2>
+                            </Label>
+                            <select
+                              name="cursorVis"
+                              id="cursorVis"
+                              value={values.cursorVis}
                               onChange={handleChange}
-                              type="checkbox"
-                              id="autoLaunch"
-                              checked={values.autoLaunch}
-                            />
-                            {' '}
-                            Auto launch application on startup
-                          </Label>
-                          <FormText>
-                            This change will be made the next time your system restarts.
-                          </FormText>
-                        </FormGroup>
-                      </Col>
+                              onBlur={handleBlur}
+                              style={{ display: 'block' }}
+                            >
+                              <option value="show" label="Show" />
+                              <option value="hide" label="Hide" />
+                              <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
+                              <option
+                                value="hide_after_60"
+                                label="Hide after 60 seconds inactivity"
+                              />
+                            </select>
 
-                      <Col>
-                        <Label for="devToolsShortcut">
-                          <h2>Dev tools</h2>
-                        </Label>
-                        <FormGroup check>
-                          <Label check>
-                            <Input
-                              onChange={handleChange}
-                              type="checkbox"
-                              id="devToolsShortcut"
-                              checked={values.devToolsShortcut}
-                            />
-                            {' '}
-                            Enable dev tools shortcut
-                          </Label>
-                          <FormText>
-                            In production, the browser dev tools are generally inaccessible, even
-                            when using the default keyboard shortcuts.
-                            <br />
-                            Check this box to enable the keyboard shortcut.
-                            <p>
-                              Windows & Linux -
-                              {' '}
-                              <kbd>Ctrl</kbd>
-                              {' '}
-                              +
-                              {' '}
-                              <kbd>Shift</kbd>
-                              {' '}
-                              +
-                              {' '}
-                              <kbd>I</kbd>
-                            </p>
-                            <p>
-                              macOs -
-                              {' '}
-                              <kbd>Cmd</kbd>
-                              {' '}
-                              +
-                              {' '}
-                              <kbd>Opt</kbd>
-                              {' '}
-                              +
-                              {' '}
-                              <kbd>I</kbd>
-                            </p>
-                          </FormText>
-                        </FormGroup>
-                      </Col>
+                            <FormText>
+                              Select mouse cursor visibility. Does not work with iFrames.
+                            </FormText>
+                          </FormGroup>
+                        </Col>
+                      </Row>
 
-                      <Col>
-                        <FormGroup>
-                          <Label for="cursorVis">
-                            <h2>Cursor visibility</h2>
-                          </Label>
-                          <select
-                            name="cursorVis"
-                            id="cursorVis"
-                            value={values.cursorVis}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            style={{ display: 'block' }}
-                          >
-                            <option value="show" label="Show" />
-                            <option value="hide" label="Hide" />
-                            <option value="hide_after_5" label="Hide after 5 seconds inactivity" />
-                            <option
-                              value="hide_after_60"
-                              label="Hide after 60 seconds inactivity"
-                            />
-                          </select>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        Save
+                      </Button>
 
-                          <FormText>
-                            Select mouse cursor visibility. Does not work with iFrames.
-                          </FormText>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-
-                    <CookieForm
-                      values={values}
-                      handleChange={handleChange}
-                      handleBlur={handleBlur}
-                    />
-
-                    <Button
-                      color="primary"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      Save
-                    </Button>
-                  </Form>
-                </Col>
-              </Row>
-            </Container>
+                      <CookieForm
+                        values={values}
+                        handleChange={handleChange}
+                        handleBlur={handleBlur}
+                      />
+                    </Form>
+                  </Col>
+                </Row>
+              </Container>
+            </div>
           );
         }}
       </Formik>
