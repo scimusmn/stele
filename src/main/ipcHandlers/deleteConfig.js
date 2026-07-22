@@ -9,6 +9,10 @@ import { navigateAppToSettings } from '../windows/navigate';
 //
 const deleteConfig = (logger, store, mainWindow) => {
   ipcMain.on('deleteConfig', () => {
+    // Cancel any pending delay so it cannot load blank URLs after the reset
+    clearTimeout(global.delayTimer);
+    global.delayTimer = null;
+
     const appHome = store.get('appHome');
     const configPath = store.path;
 

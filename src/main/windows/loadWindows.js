@@ -8,9 +8,21 @@ import { mainWindowNavigateDelay, navigateAppToSettings } from './navigate';
 // Load the configured kiosk URL immediately.
 const loadWindowNow = (mainWindow, store) => {
   const storeDisplays = store.get('kiosk.displays');
+  const hasConfiguredContent = _.find(
+    storeDisplays,
+    display => display.enabled && display.url !== '',
+  );
+
+  // Never load blank URLs (e.g. after delete-config resets displays to enabled + empty url)
+  if (!hasConfiguredContent) {
+    store.set('kiosk.browsingContent', 0);
+    logger.info('Window - No content is configured, navigating to Settings');
+    navigateAppToSettings(mainWindow, store);
+    return;
+  }
 
   logger.info('Window - Immediately loading windows');
-  if (storeDisplays[0].enabled) {
+  if (storeDisplays[0].enabled && storeDisplays[0].url !== '') {
     // Ensure that the main window is positioned on the primary display
     mainWindow.setPosition(0, 0);
     if (process.env.NODE_ENV === 'production') {
@@ -45,7 +57,8 @@ const loadWindowNow = (mainWindow, store) => {
     _.forEach(storeDisplays, (display, index) => {
       if (index !== 0) {
         // Don't launch windows that are linked to disconnected displays
-        if (display.connected && display.enabled) {
+        // or that have no content URL configured
+        if (display.connected && display.enabled && display.url !== '') {
           secondaryWindows[index] = new BrowserWindow({
             x: storeDisplays[index].bounds.x,
             // y: 0, // If running into issues with y positioning, hard-set to 0
