@@ -8,6 +8,8 @@
 // When running `yarn build` or `yarn build-main`, this file is compiled to
 // `./app/main.prod.js` using webpack. This gives us some performance wins.
 //
+import path from 'path';
+import { pathToFileURL } from 'url';
 import {
   app, BrowserWindow, screen,
 } from 'electron';
@@ -65,8 +67,11 @@ app.on('ready', async () => {
   // See quit logic for explanation.
   store.set('quitting', false);
 
-  // Define React App URI
-  store.set('appHome', `file://${__dirname}/../renderer/index.html`);
+  // Define React App URI (pathToFileURL handles Windows drive letters / backslashes)
+  store.set(
+    'appHome',
+    pathToFileURL(path.join(__dirname, '../renderer/index.html')).href,
+  );
 
   // Find connected displays and save them to the store.
   setupDisplays(store, logger);
@@ -86,6 +91,7 @@ app.on('ready', async () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      sandbox: false,
       autoplayPolicy: 'no-user-gesture-required',
     },
   });

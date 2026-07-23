@@ -55,6 +55,7 @@ const loadWindowNow = (mainWindow, store) => {
             webPreferences: {
               nodeIntegration: true,
               contextIsolation: false,
+              sandbox: false,
               autoplayPolicy: 'no-user-gesture-required',
             },
           });
