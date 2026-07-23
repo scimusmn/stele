@@ -1,41 +1,57 @@
-body {
-  background-image: url("./copan.png");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: left bottom;
-  font-family: "FiraSans-Regular", sans-serif;
+.delay-start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  text-align: center;
 }
 
-h1 {
-  font-family: "Merriweather-Black", sans-serif;
+.delay-start__panel {
+  max-width: 560px;
+  width: 100%;
 }
 
-.vert-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -moz-transform: translateX(-50%) translateY(-50%);
-  -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-50%) translateY(-50%);
+.delay-start__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
 }
 
-pre {
-  font-size: 30px;
-  line-height: 16px;
-  padding: 20px;
+.delay-start__subtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--kiosk-muted);
+  margin-bottom: 1.5rem;
 }
 
-@font-face {
-  font-family: FiraSans-Regular;
-  src: url(FiraSans-Regular.ttf);
+.delay-start__label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--kiosk-muted);
+  margin-bottom: 0.75rem;
 }
 
-@font-face {
-  font-family: Merriweather-Regular;
-  src: url(Merriweather-Regular.ttf);
+.delay-start__timer {
+  margin: 0 auto 1.75rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--kiosk-surface);
+  border: 1px solid var(--kiosk-border);
+  border-radius: 12px;
+  font-family: var(--kiosk-font);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--kiosk-accent);
 }
 
-@font-face {
-  font-family: Merriweather-Black;
-  src: url(Merriweather-Black.ttf);
+.delay-start__timer-unit {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--kiosk-muted);
 }

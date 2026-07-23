@@ -1,0 +1,199 @@
+@font-face {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 400;
+  src: url("../assets/fonts/Montserrat-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../assets/fonts/Montserrat-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 600;
+  src: url("../assets/fonts/Montserrat-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 700;
+  src: url("../assets/fonts/Montserrat-Bold.woff2") format("woff2");
+}
+
+:root {
+  --kiosk-bg: #0b0d10;
+  --kiosk-surface: #14181e;
+  --kiosk-surface-raised: #1c222b;
+  --kiosk-border: #2a323c;
+  --kiosk-text: #e8eaed;
+  --kiosk-muted: #9aa3ad;
+  --kiosk-accent: #28a8e0;
+  --kiosk-accent-hover: #3bb4e8;
+  --kiosk-danger: #e35d6a;
+  --kiosk-warning: #e6a23c;
+  --kiosk-font: "Proxima Nova", Montserrat, "Helvetica Neue", sans-serif;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background-color: var(--kiosk-bg);
+  color: var(--kiosk-text);
+  font-family: var(--kiosk-font);
+}
+
+body {
+  margin: 0;
+}
+
+.kiosk-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(40, 168, 224, 0.18), transparent 60%),
+    var(--kiosk-bg);
+  color: var(--kiosk-text);
+  font-family: var(--kiosk-font);
+}
+
+.kiosk-page h1,
+.kiosk-page h2,
+.kiosk-page h3,
+.kiosk-page h4 {
+  font-family: var(--kiosk-font);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--kiosk-text);
+}
+
+.kiosk-logo {
+  display: block;
+  width: min(420px, 70vw);
+  height: auto;
+  margin: 0 auto 1.5rem;
+}
+
+.kiosk-card {
+  background: var(--kiosk-surface);
+  border: 1px solid var(--kiosk-border);
+  border-radius: 12px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+  padding: 1.75rem;
+}
+
+.kiosk-page .table {
+  color: var(--kiosk-text);
+}
+
+.kiosk-page .table thead th {
+  border-top: 0;
+  border-bottom-color: var(--kiosk-border);
+  color: var(--kiosk-muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kiosk-page .table td,
+.kiosk-page .table th {
+  border-top-color: var(--kiosk-border);
+  vertical-align: middle;
+}
+
+.kiosk-page .table-danger,
+.kiosk-page .table-danger > td,
+.kiosk-page .table-danger > th {
+  background-color: rgba(227, 93, 106, 0.2);
+}
+
+.kiosk-page .form-control,
+.kiosk-page select {
+  background-color: var(--kiosk-surface-raised);
+  border: 1px solid var(--kiosk-border);
+  color: var(--kiosk-text);
+  border-radius: 8px;
+}
+
+.kiosk-page .form-control:focus,
+.kiosk-page select:focus {
+  background-color: var(--kiosk-surface-raised);
+  border-color: var(--kiosk-accent);
+  color: var(--kiosk-text);
+  box-shadow: 0 0 0 0.2rem rgba(40, 168, 224, 0.25);
+}
+
+.kiosk-page .form-control::placeholder {
+  color: var(--kiosk-muted);
+}
+
+.kiosk-page .form-text,
+.kiosk-page .text-muted {
+  color: var(--kiosk-muted) !important;
+}
+
+.kiosk-page hr {
+  border-top-color: var(--kiosk-border);
+}
+
+.kiosk-page .alert-warning {
+  background-color: rgba(230, 162, 60, 0.12);
+  border-color: rgba(230, 162, 60, 0.35);
+  color: #f0d19a;
+}
+
+.kiosk-page .btn-primary {
+  background-color: var(--kiosk-accent);
+  border-color: var(--kiosk-accent);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.55rem 1.4rem;
+}
+
+.kiosk-page .btn-primary:hover,
+.kiosk-page .btn-primary:focus {
+  background-color: var(--kiosk-accent-hover);
+  border-color: var(--kiosk-accent-hover);
+}
+
+.kiosk-page .btn-danger {
+  border-radius: 8px;
+}
+
+.kiosk-page .btn-accent {
+  background-color: var(--kiosk-accent);
+  border-color: var(--kiosk-accent);
+  color: #041018;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.kiosk-page .btn-accent:hover,
+.kiosk-page .btn-accent:focus {
+  background-color: var(--kiosk-accent-hover);
+  border-color: var(--kiosk-accent-hover);
+  color: #041018;
+}
+
+.kiosk-page kbd {
+  background-color: var(--kiosk-surface-raised);
+  color: var(--kiosk-text);
+  border: 1px solid var(--kiosk-border);
+  box-shadow: none;
+}
+
+.kiosk-page .card {
+  background-color: var(--kiosk-surface-raised);
+  border-color: var(--kiosk-border);
+  color: var(--kiosk-text);
+}
+
+.kiosk-page .card-header {
+  color: var(--kiosk-text);
+}
