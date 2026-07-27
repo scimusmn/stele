@@ -9,6 +9,8 @@ import { loadWindowNow } from '../windows/loadWindows';
 const skipDelay = (logger, store, mainWindow) => {
   ipcMain.on('skipDelay', () => {
     logger.info('Window - Delay skipped');
+    clearTimeout(global.delayTimer);
+    global.delayTimer = null;
     store.set('kiosk.browsingContent', 1);
     loadWindowNow(mainWindow, store);
   });

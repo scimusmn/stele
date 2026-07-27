@@ -13,6 +13,10 @@ import {
   FormText,
   Input,
   Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Row,
   Table,
   Tooltip,
@@ -31,6 +35,7 @@ class Settings extends Component {
 
     this.state = {
       disconnectedDisplayTooltipOpen: false,
+      deleteConfigModalOpen: false,
       cursorVisibility: 'show',
       cookieName: 'n',
       cookieValue: 'v',
@@ -39,14 +44,24 @@ class Settings extends Component {
       devToolsShortcut: false,
       displays: [],
       displayPrimaryID: [],
+      steleVersion: '',
+      electronVersion: '',
+      chromeVersion: '',
     };
 
     this.toggleDisconnectedDisplayTooltip = this.toggleDisconnectedDisplayTooltip.bind(this);
+    this.toggleDeleteConfigModal = this.toggleDeleteConfigModal.bind(this);
+    this.handleDeleteConfig = this.handleDeleteConfig.bind(this);
   }
 
   // TODO: Cleanup these default checks. Mutating these values isn't the right way here
   componentWillMount() {
     const kioskSettings = ipcRenderer.sendSync('settingsGet', 'kiosk');
+    const {
+      stele: steleVersion,
+      electron: electronVersion,
+      chrome: chromeVersion,
+    } = ipcRenderer.sendSync('appVersions');
     let {
       cursorVisibility,
       displayPrimaryID,
@@ -74,6 +89,9 @@ class Settings extends Component {
       cookieName,
       cookieValue,
       cookieURL,
+      steleVersion,
+      electronVersion,
+      chromeVersion,
     });
   }
 
@@ -81,6 +99,17 @@ class Settings extends Component {
     this.setState(prevState => ({
       disconnectedDisplayTooltipOpen: !prevState.disconnectedDisplayTooltipOpen,
     }));
+  }
+
+  toggleDeleteConfigModal() {
+    this.setState(prevState => ({
+      deleteConfigModalOpen: !prevState.deleteConfigModalOpen,
+    }));
+  }
+
+  handleDeleteConfig() {
+    this.setState({ deleteConfigModalOpen: false });
+    ipcRenderer.send('deleteConfig');
   }
 
   render() {
@@ -93,6 +122,9 @@ class Settings extends Component {
       cookieName,
       cookieValue,
       cookieURL,
+      steleVersion,
+      electronVersion,
+      chromeVersion,
     } = this.state;
     const isValid = (errors, name) => !!_.get(errors, name);
 
@@ -180,7 +212,7 @@ class Settings extends Component {
             handleSubmit,
             setFieldValue,
           } = props;
-          const { disconnectedDisplayTooltipOpen } = this.state;
+          const { disconnectedDisplayTooltipOpen, deleteConfigModalOpen } = this.state;
           return (
             <div className="kiosk-page settings-page">
               <Container fluid>
@@ -196,6 +228,19 @@ class Settings extends Component {
                         alt="Science Museum of Minnesota"
                       />
                       <h1 className="settings-page__title">Stele</h1>
+                      <p className="text-center text-muted">
+                        Stele
+                        {' '}
+                        {steleVersion}
+                        {' · '}
+                        Electron
+                        {' '}
+                        {electronVersion}
+                        {' · '}
+                        Chromium
+                        {' '}
+                        {chromeVersion}
+                      </p>
                       <hr />
                       <h2 className="settings-page__section-title">Kiosk display configuration</h2>
 
@@ -476,6 +521,44 @@ class Settings extends Component {
                       >
                         Save
                       </Button>
+                      {' '}
+                      <Button
+                        color="danger"
+                        type="button"
+                        onClick={this.toggleDeleteConfigModal}
+                      >
+                        Delete config
+                      </Button>
+
+                      <Modal
+                        isOpen={deleteConfigModalOpen}
+                        toggle={this.toggleDeleteConfigModal}
+                        contentClassName="kiosk-modal"
+                      >
+                        <ModalHeader toggle={this.toggleDeleteConfigModal}>
+                          Delete config file?
+                        </ModalHeader>
+                        <ModalBody>
+                          Are you sure you want to delete the config file?
+                          This will reset all kiosk settings to their defaults
+                          and cannot be undone.
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button
+                            color="danger"
+                            onClick={this.handleDeleteConfig}
+                          >
+                            Delete config
+                          </Button>
+                          {' '}
+                          <Button
+                            color="secondary"
+                            onClick={this.toggleDeleteConfigModal}
+                          >
+                            Cancel
+                          </Button>
+                        </ModalFooter>
+                      </Modal>
 
                       <CookieForm
                         values={values}

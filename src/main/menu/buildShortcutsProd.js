@@ -12,30 +12,6 @@ import { navigateAppToSettings } from '../windows/navigate';
 // We use a 3rd party tool to create shortcuts since we don't want these to work globally.
 //
 const buildShortcutsProd = (mainWindow, store) => {
-  // Undo
-  electronLocalshortcut.register('CommandOrControl+Z', () => {
-    mainWindow.webContents.undo();
-  });
-  // Redo
-  electronLocalshortcut.register('CommandOrControl+Shift+Z', () => {
-    mainWindow.webContents.redo();
-  });
-  // Cut
-  electronLocalshortcut.register('CommandOrControl+X', () => {
-    mainWindow.webContents.cut();
-  });
-  // Copy
-  electronLocalshortcut.register(mainWindow, 'CommandOrControl+C', () => {
-    mainWindow.webContents.copy();
-  });
-  // Paste
-  electronLocalshortcut.register('CommandOrControl+V', () => {
-    mainWindow.webContents.paste();
-  });
-  // Select all
-  electronLocalshortcut.register('CommandOrControl+A', () => {
-    mainWindow.webContents.selectAll();
-  });
   // Settings
   electronLocalshortcut.register('CommandOrControl+,', () => {
     navigateAppToSettings(mainWindow, store);
