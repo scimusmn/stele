@@ -29,6 +29,7 @@ import handleWindowShow from './windows/handleWindowShow';
 import skipDelay from './ipcHandlers/skipDelay';
 import updateSettings from './ipcHandlers/updateSettings';
 import settingsGet from './ipcHandlers/settingsGet';
+import deleteConfig from './ipcHandlers/deleteConfig';
 import appVersions from './ipcHandlers/appVersions';
 
 //
@@ -114,6 +115,7 @@ app.on('ready', async () => {
   skipDelay(logger, store, mainWindow);
   updateSettings(logger, store, mainWindow);
   settingsGet(store);
+  deleteConfig(logger, store, mainWindow);
   appVersions();
 
   //

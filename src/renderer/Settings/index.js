@@ -13,6 +13,10 @@ import {
   FormText,
   Input,
   Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Row,
   Table,
   Tooltip,
@@ -29,6 +33,7 @@ class Settings extends Component {
 
     this.state = {
       disconnectedDisplayTooltipOpen: false,
+      deleteConfigModalOpen: false,
       cursorVisibility: 'show',
       cookieName: 'n',
       cookieValue: 'v',
@@ -43,6 +48,8 @@ class Settings extends Component {
     };
 
     this.toggleDisconnectedDisplayTooltip = this.toggleDisconnectedDisplayTooltip.bind(this);
+    this.toggleDeleteConfigModal = this.toggleDeleteConfigModal.bind(this);
+    this.handleDeleteConfig = this.handleDeleteConfig.bind(this);
   }
 
   // TODO: Cleanup these default checks. Mutating these values isn't the right way here
@@ -90,6 +97,17 @@ class Settings extends Component {
     this.setState(prevState => ({
       disconnectedDisplayTooltipOpen: !prevState.disconnectedDisplayTooltipOpen,
     }));
+  }
+
+  toggleDeleteConfigModal() {
+    this.setState(prevState => ({
+      deleteConfigModalOpen: !prevState.deleteConfigModalOpen,
+    }));
+  }
+
+  handleDeleteConfig() {
+    this.setState({ deleteConfigModalOpen: false });
+    ipcRenderer.send('deleteConfig');
   }
 
   render() {
@@ -192,7 +210,7 @@ class Settings extends Component {
             handleSubmit,
             setFieldValue,
           } = props;
-          const { disconnectedDisplayTooltipOpen } = this.state;
+          const { disconnectedDisplayTooltipOpen, deleteConfigModalOpen } = this.state;
           return (
             <Container>
               <Row className="mt-3 justify-content-center">
@@ -501,6 +519,43 @@ class Settings extends Component {
                     >
                       Save
                     </Button>
+                    {' '}
+                    <Button
+                      color="danger"
+                      type="button"
+                      onClick={this.toggleDeleteConfigModal}
+                    >
+                      Delete config
+                    </Button>
+
+                    <Modal
+                      isOpen={deleteConfigModalOpen}
+                      toggle={this.toggleDeleteConfigModal}
+                    >
+                      <ModalHeader toggle={this.toggleDeleteConfigModal}>
+                        Delete config file?
+                      </ModalHeader>
+                      <ModalBody>
+                        Are you sure you want to delete the config file?
+                        This will reset all kiosk settings to their defaults
+                        and cannot be undone.
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button
+                          color="danger"
+                          onClick={this.handleDeleteConfig}
+                        >
+                          Delete config
+                        </Button>
+                        {' '}
+                        <Button
+                          color="secondary"
+                          onClick={this.toggleDeleteConfigModal}
+                        >
+                          Cancel
+                        </Button>
+                      </ModalFooter>
+                    </Modal>
                   </Form>
                 </Col>
               </Row>
