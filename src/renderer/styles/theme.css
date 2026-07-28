@@ -164,6 +164,7 @@ body {
 
 .kiosk-page .btn-danger {
   border-radius: 8px;
+  padding: 0.55rem 1.4rem;
 }
 
 .kiosk-page .btn-accent {
