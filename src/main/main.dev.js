@@ -25,6 +25,7 @@ import handleWindowLoadFail from './windows/handleWindowLoadFail';
 import setupDisplays from './displays/setupDisplays';
 import handleWindowClose from './windows/handleWindowClose';
 import handleWindowShow from './windows/handleWindowShow';
+import grantWebSerial from './serial/grantWebSerial';
 import skipDelay from './ipcHandlers/skipDelay';
 import updateSettings from './ipcHandlers/updateSettings';
 import settingsGet from './ipcHandlers/settingsGet';
@@ -70,6 +71,9 @@ app.on('ready', async () => {
 
   // Find connected displays and save them to the store.
   setupDisplays(store, logger);
+
+  // Let exhibit pages use navigator.serial without a chooser UI.
+  grantWebSerial(logger);
 
   //
   // Window setup
