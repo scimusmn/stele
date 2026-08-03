@@ -18,10 +18,6 @@ export default merge.smart(baseConfig, {
 
   entry: './src/main/main.dev',
 
-  externals: {
-    serialport: 'commonjs serialport',
-  },
-
   target: 'electron-main',
 
   output: {
